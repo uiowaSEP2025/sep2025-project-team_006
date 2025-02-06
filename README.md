@@ -26,3 +26,14 @@
 6. Run the command `npm install` to get all the dependencies
 
 7. Run the command `npm start` which will run the project on [http://localhost:3000](http://localhost:3000) to verify everything is working properly
+
+## Commands
+To install dependencies for **both frontend and backend** run:
+```sh
+npm run install:all
+```
+
+To run the project for **both frontend and backend**, run:
+```sh
+npm run dev
+```
