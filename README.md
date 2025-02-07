@@ -36,3 +36,4 @@ To run the project for **both frontend and backend**, run:
 ```sh
 npm run dev
 ```
+
