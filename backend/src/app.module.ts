@@ -12,4 +12,4 @@ ConfigModule.forRoot();
   controllers: [AppController, TestController],
   providers: [AppService, TestService],
 })
-export class AppModule {}
+export class AppModule { }
