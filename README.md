@@ -69,22 +69,3 @@ You can use tools like [pgAdmin](https://www.pgadmin.org/) to connect and view y
 5. Run the command `npm install` to get all the dependencies
 
 6. Run the command `npm start` which will run the project on [http://localhost:3000](http://localhost:3000) to verify everything is working properly
-
-## Commands
-The root of the repository has npm scripts to interact with both the frontend and backend; open a terminal in this directory to run the following, or execute them in their own directories to do it one at at time.
-
-Install dependencies;
-```sh
-npm run install:all
-```
-
-Build the projects;
-```sh
-npm run build
-``` 
-
-Run the projects;
-```sh
-npm run dev
-```
-
