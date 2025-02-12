@@ -1,9 +1,45 @@
+# GAP
+The **Graduate Admission Portal** (shortened to "GAP") is a portal reviewers to track grad students in every part of life; from a students submission and admission, to their career outside of school, to their end-of-life.
+
 [![Review Assignment Due Date](https://classroom.github.com/assets/deadline-readme-button-22041afd0340ce965d47ae6ef1cefeee28c7c493a6346c4f15d667ab976d596c.svg)](https://classroom.github.com/a/4tPelvOm)
 
-# Setup Instructions
+## Setup Instructions
 
-## NPM/Node.js Setup
+### Installing postgres
+We'll be using WSL with Debian or Ubuntu. Most of this was adapted from this [StackOverflow](https://stackoverflow.com/a/12670521) answer.
 
+1. `sudo apt update && sudo apt upgrade`
+2. `sudo apt install postgresql` - this will install a stable version of postgres and create the `postgres` user on your installation of WSL.
+3. Connect to the database under the **postgres** user; `sudo -u postgres psql template1` (template1 is an included database)
+4. Inside the postgres shell, change the password of the default user; `ALTER USER postgres with encrypted password '%YOUR_PASSWORD%';`
+5. Edit the postgres config, located at `/etc/postgresql/%PG_VERSION%/main/pg_hba.conf`. Find the line that says something like the following;
+```
+local      all     postgres     peer
+```
+...change `peer` to say `md5`. This changes your authentication method from unix sockets to MD5 authentication.
+
+Now you have postgres installed and some default database to use.
+
+> [!NOTE]
+> Going forward, this guide will change as we update and harden our database.
+
+### Connecting it to the backend
+1. Create a file named `.env` in the `backend` folder.
+2. In that folder, place the following things (replace the placeholders);
+```sh
+# most of these are defaults; change them to your usecase!
+PGSQL_USER = "postgres" # or whatever you name your postgres user...
+PGSQL_PASSWORD = "%YOUR_PASSWORD%"
+PGSQL_HOST = 127.0.0.1
+PGSQL_PORT = 5432
+PGSQL_DATABASE = "postgres"
+```
+
+Now when you run the app, things will work as expected.
+
+You can use tools like [pgAdmin](https://www.pgadmin.org/) to connect and view your databases with a UI.
+
+### Installing node.js/NPM
 1. Download and install `node.js`
 
     - [Download link](https://nodejs.org/en/download/)
@@ -20,19 +56,24 @@
 
 4. Clone this repository
 
-5. Open project folder in `VS Code`
+5. Run the command `npm install` to get all the dependencies
 
-6. Run the command `npm install` to get all the dependencies
-
-7. Run the command `npm start` which will run the project on [http://localhost:3000](http://localhost:3000) to verify everything is working properly
+6. Run the command `npm start` which will run the project on [http://localhost:3000](http://localhost:3000) to verify everything is working properly
 
 ## Commands
-To install dependencies for **both frontend and backend** run:
+The root of the repository has npm scripts to interact with both the frontend and backend; open a terminal in this directory to run the following, or execute them in their own directories to do it one at at time.
+
+Install dependencies;
 ```sh
 npm run install:all
 ```
 
-To run the project for **both frontend and backend**, run:
+Build the projects;
+```sh
+npm run build
+``` 
+
+Run the projects;
 ```sh
 npm run dev
 ```
