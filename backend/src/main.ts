@@ -16,7 +16,7 @@ async function bootstrap() {
   const pgsql_client = await pool.connect();
 
   // sample query + response - will be removed
-  console.log(await pgsql_client.query(`CREATE TABLE cars (
+  console.log(await pgsql_client.query(`CREATE TABLE IF NOT EXISTS cars (
     brand VARCHAR(255),
     model VARCHAR(255),
     year INT

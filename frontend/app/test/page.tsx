@@ -37,7 +37,8 @@ export default function TestPage() {
         }
         try {
             const data = JSON.stringify({ message: putMessage })
-            const response = await apiPUT(`${webService.TEST_PUT}/${putId}`, data);
+            // note: the putId may not always be a string in actual code, but the input needs to be
+            const response = await apiPUT(webService.TEST_PUT, `${putId}`, data);
             console.log("PUT Response: ", response);
             setMessage(`PUT Successful: ${response.updatedEntry.message}`);
         } catch (error) {

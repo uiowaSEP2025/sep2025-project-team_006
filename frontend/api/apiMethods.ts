@@ -20,10 +20,12 @@ export const apiGET = async (webService: string) => {
  * If you perform a `PUT` request, the server updates an entry in the database and informs you if the update is successful.
  * 
  * @param webService API link from `WebService.ts`
+ * @param id identifier token of the data to be modified
  * @returns Server response as JSON
  */
-export const apiPUT = async (webService: string, data: string) => {
-    const response = await axios.put(webService, data, {
+export const apiPUT = async (webService: string, id: string, data: string) => {
+    const formatted_url = webService.replace(":id", id);
+    const response = await axios.put(formatted_url, data, {
         headers: {
             'Content-Type': 'application/json',
         },
