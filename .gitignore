@@ -1,2 +1,88 @@
-# Root
+###########
+#  Root   #
+###########
 /node_modules
+
+###########
+# Backend #
+###########
+/backend/dist
+/backend/node_modules
+/backend/build
+# Logs
+/backend/logs
+/backend/*.log
+/backend/npm-debug.log*
+/backend/pnpm-debug.log*
+/backend/yarn-debug.log*
+/backend/yarn-error.log*
+/backend/lerna-debug.log*
+# OS
+/backend/.DS_Store
+# Tests
+/backend/coverage
+/backend/.nyc_output
+# IDEs and editors
+/backend/.idea
+/backend/.project
+/backend/.classpath
+/backend/.c9/
+/backend/*.launch
+/backend/.settings/
+/backend/*.sublime-workspace
+# IDE - VSCode
+/backend/.vscode/*
+!/backend/.vscode/settings.json
+!/backend/.vscode/tasks.json
+!/backend/.vscode/launch.json
+!/backend/.vscode/extensions.json
+# dotenv environment variable files
+/backend/.env
+/backend/.env.development.local
+/backend/.env.test.local
+/backend/.env.production.local
+/backend/.env.local
+# Temp directory
+/backend/.temp
+/backend/.tmp
+# Runtime data
+/backend/pids
+/backend/*.pid
+/backend/*.seed
+/backend/*.pid.lock
+# Diagnostic reports (https://nodejs.org/api/report.html)
+/backend/report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
+
+############
+# Frontend #
+############
+/frontend/node_modules
+/frontend/.pnp
+/frontend/.pnp.*
+/frontend/.yarn/*
+!/frontend/.yarn/patches
+!/frontend/.yarn/plugins
+!/frontend/.yarn/releases
+!/frontend/.yarn/versions
+# Testing
+/frontend/coverage
+# Next.js
+/frontend/.next/
+/frontend/out/
+# Production
+/frontend/build
+# Misc
+/frontend/.DS_Store
+/frontend/*.pem
+# Debug
+/frontend/npm-debug.log*
+/frontend/yarn-debug.log*
+/frontend/yarn-error.log*
+/frontend/.pnpm-debug.log*
+# Env files (can opt-in for committing if needed)
+/frontend/.env*
+# Vercel
+/frontend/.vercel
+# TypeScript
+/frontend/*.tsbuildinfo
+/frontend/next-env.d.ts
