@@ -24,11 +24,11 @@ export default function TestPage() {
                 console.log("GET Response: ", response);
                 setMessage(response[0].message)
             } catch (error) {
-                setMessage("Error fetching data")
+                setMessage(`Error fetching data; ${error}`,)
             }
         }
         fetchTestData()
-    }, []);
+    }, [webService.TEST_GET]);
 
     const handlePutRequest = async () => {
         if (!putId || !putMessage) {
@@ -41,7 +41,7 @@ export default function TestPage() {
             console.log("PUT Response: ", response);
             setMessage(`PUT Successful: ${response.updatedEntry.message}`);
         } catch (error) {
-            setMessage("Error sending PUT request");
+            setMessage(`Error sending PUT request; ${error}`);
         }
     };
 
@@ -52,7 +52,7 @@ export default function TestPage() {
             console.log("POST Response: ", response);
             setMessage(`POST Successful: ${response.newEntry.message}`);
         } catch (error) {
-            setMessage("Error sending POST request");
+            setMessage(`Error sending POST request; ${error}`);
         }
     };
 
