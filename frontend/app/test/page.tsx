@@ -1,20 +1,27 @@
 "use client";
 
-import { apiGET } from "@/api/apiMethods";
+import { apiGET, apiPUT, apiPOST } from "@/api/apiMethods";
 import WebService from "@/api/WebService";
 import { useState, useEffect } from "react";
 
+/**
+ * Job: used for a test between the frontend and the backend and the API calls we have; GET, PUT, POST
+ * 
+ * Note: This doesn't use proper styling and the UI should not be modeled from this, use tailwind or material UI components
+ */
 export default function TestPage() {
 
     const webService = new WebService();
     const [message, setMessage] = useState<string | null>(null);
+    const [postMessage, setPostMessage] = useState<string>("");
+    const [putId, setPutId] = useState<string>("");
+    const [putMessage, setPutMessage] = useState<string>("");
 
     useEffect(() => {
         const fetchTestData = async () => {
             try {
-                console.log("Test calling")
                 const response = await apiGET(webService.TEST_GET)
-                console.log(response[0])
+                console.log("GET Response: ", response);
                 setMessage(response[0].message)
             } catch (error) {
                 setMessage("Error fetching data")
@@ -22,6 +29,32 @@ export default function TestPage() {
         }
         fetchTestData()
     }, []);
+
+    const handlePutRequest = async () => {
+        if (!putId || !putMessage) {
+            setMessage("Please enter both ID and message for PUT request.");
+            return;
+        }
+        try {
+            const data = JSON.stringify({ message: putMessage })
+            const response = await apiPUT(`${webService.TEST_PUT}/${putId}`, data);
+            console.log("PUT Response: ", response);
+            setMessage(`PUT Successful: ${response.updatedEntry.message}`);
+        } catch (error) {
+            setMessage("Error sending PUT request");
+        }
+    };
+
+    const handlePostRequest = async () => {
+        try {
+            const data = JSON.stringify({ message: postMessage })
+            const response = await apiPOST(webService.TEST_POST, data);
+            console.log("POST Response: ", response);
+            setMessage(`POST Successful: ${response.newEntry.message}`);
+        } catch (error) {
+            setMessage("Error sending POST request");
+        }
+    };
 
     return (
         <div style={{ padding: "20px", textAlign: "center" }}>
@@ -39,6 +72,64 @@ export default function TestPage() {
             >
                 {message || "Loading..."}
             </pre>
+
+            <div style={{ marginTop: "20px" }}>
+                <h2>PUT Request</h2>
+                <input
+                    type="text"
+                    color="#000000"
+                    placeholder="Enter ID"
+                    value={putId}
+                    onChange={(e) => setPutId(e.target.value)}
+                    style={{
+                        padding: "8px",
+                        marginRight: "10px",
+                        color: "#000000",
+                        backgroundColor: "#ffffff",
+                        border: "1px solid #ccc",
+                        borderRadius: "5px",
+                    }}
+                />
+
+                <input
+                    type="text"
+                    placeholder="Enter new message"
+                    value={putMessage}
+                    onChange={(e) => setPutMessage(e.target.value)}
+                    style={{
+                        padding: "8px",
+                        marginRight: "10px",
+                        color: "#000000",
+                        backgroundColor: "#ffffff",
+                        border: "1px solid #ccc",
+                        borderRadius: "5px",
+                    }}
+                />
+                <button onClick={handlePutRequest} style={{ padding: "8px 12px", cursor: "pointer" }}>
+                    Send PUT
+                </button>
+            </div>
+
+            <div style={{ marginTop: "20px" }}>
+                <h2>POST Request</h2>
+                <input
+                    type="text"
+                    placeholder="Enter message"
+                    value={postMessage}
+                    onChange={(e) => setPostMessage(e.target.value)}
+                    style={{
+                        padding: "8px",
+                        marginRight: "10px",
+                        color: "#000000",
+                        backgroundColor: "#ffffff",
+                        border: "1px solid #ccc",
+                        borderRadius: "5px",
+                    }}
+                />
+                <button onClick={handlePostRequest} style={{ padding: "8px 12px", cursor: "pointer" }}>
+                    Send POST
+                </button>
+            </div>
         </div>
     );
 }

@@ -23,7 +23,7 @@ export const apiGET = async (webService: string) => {
  * @returns Server response as JSON
  */
 export const apiPUT = async (webService: string, data: string) => {
-    const response = await axios.post(webService, data, {
+    const response = await axios.put(webService, data, {
         headers: {
             'Content-Type': 'application/json',
         },
@@ -39,7 +39,7 @@ export const apiPUT = async (webService: string, data: string) => {
  * @returns Server response as JSON
  */
 export const apiPOST = async (webService: string, data: string) => {
-    const response = await axios.put(webService, data, {
+    const response = await axios.post(webService, data, {
         headers: {
             'Content-Type': 'application/json',
         },
