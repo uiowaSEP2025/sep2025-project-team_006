@@ -1,5 +1,5 @@
 import { Controller, Get, Post, Put, Body, Param } from '@nestjs/common';
-import { TestService } from '../api_test/test.service';
+import { TestService } from './test.service';
 
 /**
  * Job: These calls are test for deployment sake and for calls from the front end
