@@ -13,8 +13,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "GAP Welcome Page",
-  description: "GAP Welcome Page",
+  title: "GAP",
+  description: "GAP",
 };
 
 export default function RootLayout({
