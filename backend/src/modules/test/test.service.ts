@@ -11,7 +11,7 @@ export class TestService {
   constructor(
     @InjectRepository(Test)
     private readonly testRepository: Repository<Test>,
-  ) { }
+  ) {}
 
   async getTestData() {
     return this.testRepository.find();
@@ -33,7 +33,9 @@ export class TestService {
 
   async putTestData(id: string, data: { message: string }) {
     try {
-      const testRecord = await this.testRepository.findOne({ where: { id: Number(id) } });
+      const testRecord = await this.testRepository.findOne({
+        where: { id: Number(id) },
+      });
       if (!testRecord) {
         return { success: false, error: 'ID not found' };
       }

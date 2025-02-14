@@ -24,7 +24,10 @@ export class TestController {
   }
 
   @Put(':id') // .*/api/test/:id
-  async putTestData(@Param('id') id: string, @Body() data: { message: string }) {
+  async putTestData(
+    @Param('id') id: string,
+    @Body() data: { message: string },
+  ) {
     return this.testService.putTestData(id, data);
   }
 }

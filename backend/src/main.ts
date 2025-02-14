@@ -1,6 +1,6 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
-import { seedTestTable } from './database/seedTestTable';
+import { seedTestTable } from './seed/seedTestTable';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -15,7 +15,7 @@ async function bootstrap() {
   // seed data ONLY when in development mode
   if (process.env.NODE_ENV === 'development') {
     seedTestTable().catch((error) => {
-      console.error("Error seeding database:", error);
+      console.error('Error seeding database:', error);
       process.exit(1);
     });
   }

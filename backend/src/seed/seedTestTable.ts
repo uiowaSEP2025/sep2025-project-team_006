@@ -18,8 +18,6 @@ const dataSource = new DataSource({
 export async function seedTestTable() {
   await dataSource.initialize();
   const testRepository = dataSource.getRepository(Test);
-
-  // Check if data already exists
   const existingCount = await testRepository.count();
   if (existingCount > 0) {
     console.log('Database already seeded. Skipping...');
@@ -27,7 +25,6 @@ export async function seedTestTable() {
     return;
   }
 
-  // Insert 5 test entries
   const testEntries = [
     { message: 'Hello, this is test 1' },
     { message: 'This is another test message' },
@@ -37,7 +34,6 @@ export async function seedTestTable() {
   ];
 
   await testRepository.save(testEntries);
-
-  console.log("Database seeded successfully with test data.");
+  console.log('Database seeded successfully with test data.');
   await dataSource.destroy();
 }
