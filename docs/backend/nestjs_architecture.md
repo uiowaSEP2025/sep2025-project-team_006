@@ -15,13 +15,13 @@ A well-organized NestJS project follows a modular architecture to maintain separ
 │   ├── main.ts                         # Entry point
 │   ├── app.module.ts                   # Root module
 │   ├── config/                         # Environment & app config
+│   ├── database/                       # Database connection setup
+│   ├── entities/                       # Database schema
 │   ├── modules/
 │   │   ├── example/
+│   │   │   ├── example.controller.ts   # API routes
 │   │   │   ├── example.module.ts       # Feature specific module
 │   │   │   ├── example.service.ts      # Business logic
-│   │   │   ├── example.controller.ts   # API routes
-│   │   │   ├── example.entity.ts       # Database schema
-│   ├── database/                       # Database connection setup
 │   ├── utils/                          # Utility functions
 ├── test/                               # Unit and e2e tests
 ├── .env                                # Environment variables
@@ -103,3 +103,5 @@ A well-organized NestJS project follows a modular architecture to maintain separ
         }
     }
     ```
+
+For any more up-to-date examples please view the code their respective directories and see how items are setup. 
