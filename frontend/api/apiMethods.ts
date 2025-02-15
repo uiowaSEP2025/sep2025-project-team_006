@@ -17,6 +17,24 @@ export const apiGET = async (webService: string) => {
 };
 
 /**
+ * If you perform a `GET` request, the server looks for the data you requested and sends it back to you.
+ * 
+ * @param webService API link from `WebService.ts`
+ * @param id identifier token of the data to be fetched
+ * @returns Requested data as JSON
+ */
+export const apiGETbyId = async (webService: string, id: string) => {
+    const formatted_url = webService.replace(":id", id);
+    const response = await axios.get(formatted_url, {
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        withCredentials: true,
+    });
+    return response.data;
+};
+
+/**
  * If you perform a `PUT` request, the server updates an entry in the database and informs you if the update is successful.
  * 
  * @param webService API link from `WebService.ts`

@@ -8,18 +8,26 @@ import { TestService } from './test.service';
 export class TestController {
   constructor(private readonly testService: TestService) {}
 
-  @Get('get') // .*/api/test/get
-  getTestData() {
+  @Get() // .*/api/test
+  async getTestData() {
     return this.testService.getTestData();
   }
 
-  @Post('post') // .*/api/test/post
-  postTestData(@Body() data: { message: string }) {
+  @Get(':id') // .*/api/test/:id
+  async getTestById(@Param('id') id: string) {
+    return this.testService.getTestDataById(id);
+  }
+
+  @Post() // .*/api/test
+  async postTestData(@Body() data: { message: string }) {
     return this.testService.postTestData(data);
   }
 
   @Put(':id') // .*/api/test/:id
-  putTestData(@Param('id') id: string, @Body() data: { message: string }) {
+  async putTestData(
+    @Param('id') id: string,
+    @Body() data: { message: string },
+  ) {
     return this.testService.putTestData(id, data);
   }
 }
