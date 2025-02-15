@@ -34,6 +34,8 @@ Now you have postgres installed and some default database to use.
 > Going forward, this guide will change as we update and harden our database.
 
 ### Connecting it to the backend
+Before connecting, make sure the database to be defined in your `.env` file is real. To create it, connect to your psql server (on linux, you can do so in the command line via the above snippet) and run `CREATE DATABASE %PGSQL_DATABASE%;`; fill in the placeholder with what you're putting in your .env file.
+
 1. Create a file named `.env` in the `backend` folder.
 2. In that folder, place the following things (replace the placeholders);
     ```sh
@@ -42,7 +44,7 @@ Now you have postgres installed and some default database to use.
     PGSQL_PASSWORD = "%YOUR_PASSWORD%"
     PGSQL_HOST = 127.0.0.1
     PGSQL_PORT = 5432
-    PGSQL_DATABASE = "postgres"
+    PGSQL_DATABASE = "gapdb"
     ```
 
 Now when you run the app, things will work as expected.

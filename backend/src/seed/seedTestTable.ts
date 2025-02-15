@@ -10,7 +10,7 @@ const dataSource = new DataSource({
   port: Number(process.env.PGSQL_PORT) || 5432,
   username: process.env.PGSQL_USER || 'postgres',
   password: process.env.PGSQL_PASSWORD || 'password',
-  database: process.env.PGSQL_DATABASE || 'postgres',
+  database: process.env.PGSQL_DATABASE || 'gapdb',
   entities: [Test],
   synchronize: false, // Ensure migrations are used in production
 });

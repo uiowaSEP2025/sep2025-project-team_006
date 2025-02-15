@@ -10,7 +10,7 @@ import { Test } from 'src/entity/test.entity';
       port: Number(process.env.PGSQL_PORT) || 5432,
       username: process.env.PGSQL_USER || 'postgres',
       password: process.env.PGSQL_PASSWORD || 'password',
-      database: process.env.PGSQL_DATABASE || 'postgres',
+      database: process.env.PGSQL_DATABASE || 'gapdb',
       // Add any entities into this list
       entities: [Test],
       // dev only, use migrations in production
