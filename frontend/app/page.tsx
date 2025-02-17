@@ -12,10 +12,6 @@ export default function Home() {
           height={38}
           priority
         />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li>Get started by editing nothing.</li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
 
         <div className="flex gap-12 items-center flex-col sm:flex-row">
           <a
@@ -33,9 +29,6 @@ export default function Home() {
             rel="noopener noreferrer"
           >
             Students
-          </a>
-          <a>
-
           </a>
         </div>
       </main>
