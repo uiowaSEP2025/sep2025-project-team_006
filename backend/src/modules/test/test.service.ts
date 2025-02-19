@@ -26,8 +26,11 @@ export class TestService {
       const newTest = this.testRepository.create(data);
       const newEntry = await this.testRepository.save(newTest);
       return { success: true, newEntry };
-    } catch (error) {
-      return { success: false, error: error.message };
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        return { success: false, error: error.message };
+      }
+      return { success: false, error: 'An unexpected error occurred' };
     }
   }
 
@@ -43,8 +46,11 @@ export class TestService {
       const updatedEntry = await this.testRepository.save(testRecord);
 
       return { success: true, updatedEntry };
-    } catch (error) {
-      return { success: false, error: error.message };
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        return { success: false, error: error.message };
+      }
+      return { success: false, error: 'An unexpected error occurred' };
     }
   }
 }
