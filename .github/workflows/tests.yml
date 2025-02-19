@@ -1,0 +1,43 @@
+name: Unit Tests
+
+on:
+  push: # will add back branches, but for trial and error will try any branch
+  pull_request:
+    branches:
+      - main
+      - production
+
+jobs:
+  test:
+    name: Run Unit Tests
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+          cache: 'npm'
+
+      - name: Install Dependencies (Backend)
+        run: |
+          cd backend
+          npm install
+
+      - name: Run Tests (Backend)
+        run: |
+          cd backend
+          npm run test
+
+      - name: Install Dependencies (Frontend)
+        run: |
+          cd frontend
+          npm install
+
+      - name: Run Tests (Frontend)
+        run: |
+          cd frontend
+          npm run test
