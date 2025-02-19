@@ -1,4 +1,5 @@
 import { Test } from 'src/entity/test.entity';
+import { User, UserRole } from 'src/entity/user.entity';
 import { DataSource } from 'typeorm';
 
 /**
@@ -11,19 +12,31 @@ const dataSource = new DataSource({
   username: process.env.PGSQL_USER || 'postgres',
   password: process.env.PGSQL_PASSWORD || 'password',
   database: process.env.PGSQL_DATABASE || 'gapdb',
-  entities: [Test],
+  entities: [Test, User],
   synchronize: false, // Ensure migrations are used in production
 });
 
 export async function seedTestTable() {
   await dataSource.initialize();
   const testRepository = dataSource.getRepository(Test);
+  const userRepository = dataSource.getRepository(User);
   const existingCount = await testRepository.count();
   if (existingCount > 0) {
     console.log('Database already seeded. Skipping...');
     await dataSource.destroy();
     return;
   }
+
+  const userEntries = [
+    {
+      displayName: 'Steven',
+      email: 'vanni@uiowa.edu',
+      passwordDigest: 'ThisIsAMeaninglessFieldATM',
+      role: UserRole.REVIEWER,
+      oauth: false,
+    },
+  ];
+  await userRepository.save(userEntries);
 
   const testEntries = [
     { message: 'Hello, this is test 1' },
@@ -32,8 +45,8 @@ export async function seedTestTable() {
     { message: 'Testing API with mock data' },
     { message: 'Fifth test entry for database' },
   ];
-
   await testRepository.save(testEntries);
+
   console.log('Database seeded successfully with test data.');
   await dataSource.destroy();
 }
