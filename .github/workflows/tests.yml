@@ -1,7 +1,9 @@
 name: Unit Tests
 
 on:
-  push: # will add back branches, but for trial and error will try any branch
+  push:
+    - main
+    - production
   pull_request:
     branches:
       - main
