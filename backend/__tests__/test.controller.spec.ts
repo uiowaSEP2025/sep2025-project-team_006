@@ -1,6 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { TestController } from '../test.controller';
-import { TestService } from '../test.service';
+import { TestController } from 'src/modules/test/test.controller';
+import { TestService } from 'src/modules/test/test.service';
 
 describe('TestController', () => {
   let controller: TestController;
@@ -13,10 +13,20 @@ describe('TestController', () => {
         {
           provide: TestService,
           useValue: {
-            getTestData: jest.fn().mockResolvedValue([{ id: 1, message: 'Hello' }]),
-            getTestDataById: jest.fn().mockResolvedValue({ id: 1, message: 'Hello' }),
-            postTestData: jest.fn().mockResolvedValue({ success: true, newEntry: { id: 2, message: 'New' } }),
-            putTestData: jest.fn().mockResolvedValue({ success: true, updatedEntry: { id: 1, message: 'Updated' } }),
+            getTestData: jest
+              .fn()
+              .mockResolvedValue([{ id: 1, message: 'Hello' }]),
+            getTestDataById: jest
+              .fn()
+              .mockResolvedValue({ id: 1, message: 'Hello' }),
+            postTestData: jest.fn().mockResolvedValue({
+              success: true,
+              newEntry: { id: 2, message: 'New' },
+            }),
+            putTestData: jest.fn().mockResolvedValue({
+              success: true,
+              updatedEntry: { id: 1, message: 'Updated' },
+            }),
           },
         },
       ],
@@ -31,11 +41,16 @@ describe('TestController', () => {
   });
 
   it('should return all test data', async () => {
-    expect(await controller.getTestData()).toEqual([{ id: 1, message: 'Hello' }]);
+    expect(await controller.getTestData()).toEqual([
+      { id: 1, message: 'Hello' },
+    ]);
   });
 
   it('should return a single test entry by ID', async () => {
-    expect(await controller.getTestById('1')).toEqual({ id: 1, message: 'Hello' });
+    expect(await controller.getTestById('1')).toEqual({
+      id: 1,
+      message: 'Hello',
+    });
   });
 
   it('should create a new test entry', async () => {
