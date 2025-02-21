@@ -16,13 +16,13 @@ jobs:
       - name: Setup SSH Key
         run: |
           mkdir -p ~/.ssh
-          echo "${{ secrets.AWS_SSH_KEY }}" > ~/.ssh/aws_github_key
-          chmod 400 ~/.ssh/aws_github_key
+          echo "${{ secrets.AWS_SSH_KEY }}" > ~/.ssh/github_deploy_key
+          chmod 400 ~/.ssh/github_deploy_key
           ssh-keyscan -H ${{ secrets.AWS_HOST }} >> ~/.ssh/known_hosts
 
       - name: Deploy to AWS EC2
         run: |
-          ssh -i ~/.ssh/aws_github_key ${{ secrets.AWS_USER }}@${{ secrets.AWS_HOST }} << 'EOF'
+          ssh -i ~/.ssh/github_deploy_key ${{ secrets.AWS_USER }}@${{ secrets.AWS_HOST }} << 'EOF'
             cd ${{ secrets.DEPLOY_PATH }}
             git pull origin production
             npm install
@@ -32,4 +32,4 @@ jobs:
           EOF
 
       - name: Remove SSH Key
-        run: rm -f ~/.ssh/aws_github_key
+        run: rm -f ~/.ssh/github_deploy_key
