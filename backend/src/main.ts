@@ -14,11 +14,17 @@ async function bootstrap() {
 
   // seed data ONLY when in development mode
   if (process.env.NODE_ENV === 'development') {
-    seedTestTable().catch((error) => {
+    try {
+      await seedTestTable();
+      console.log('Database seeding completed.');
+    } catch (error) {
       console.error('Error seeding database:', error);
       process.exit(1);
-    });
+    }
   }
 }
 
-bootstrap();
+bootstrap().catch((error) => {
+  console.error('Fatal error during startup:', error);
+  process.exit(1);
+});
