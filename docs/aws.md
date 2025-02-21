@@ -98,3 +98,4 @@ For now the EC2 instance is running a PostgreSQL database locally, ideally we wi
 
     $ npm run start:prod
     ```
+    
