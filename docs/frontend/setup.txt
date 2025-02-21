@@ -1,0 +1,2 @@
+To run frontend from the root directory, call:
+npm run dev:front

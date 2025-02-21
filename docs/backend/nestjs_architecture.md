@@ -126,11 +126,12 @@ When going about and adding a new feature module here are some examples and tips
     - The `controllers` section registers the controller that defines the API endpoints
     - An example structure would look like:
         ```ts
-        ConfigModule.forRoot();
-
         @Module({
             // Add to the forFeature list if multiple tables are needed
-            imports: [TypeOrmModule.forFeature([Test])],
+            imports: [
+                ConfigModule.forRoot(),
+                TypeOrmModule.forFeature([Test]),
+            ],
             controllers: [TestController],
             providers: [TestService],
         })
