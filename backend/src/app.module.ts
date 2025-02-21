@@ -3,9 +3,11 @@ import { ConfigModule } from '@nestjs/config';
 import { TestModule } from './modules/test/test.module';
 import { DatabaseModule } from './database/database.module';
 
-ConfigModule.forRoot();
-
 @Module({
-  imports: [DatabaseModule, TestModule],
+  imports: [
+    ConfigModule.forRoot({ isGlobal: true }),
+    DatabaseModule,
+    TestModule,
+  ],
 })
 export class AppModule {}

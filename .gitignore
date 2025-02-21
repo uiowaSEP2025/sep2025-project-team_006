@@ -2,6 +2,7 @@
 #  Root   #
 ###########
 /node_modules
+notes.txt
 
 ###########
 # Backend #
@@ -52,6 +53,7 @@
 /backend/*.pid.lock
 # Diagnostic reports (https://nodejs.org/api/report.html)
 /backend/report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
+/backend/*.pem
 
 ############
 # Frontend #
@@ -86,5 +88,3 @@
 # TypeScript
 /frontend/*.tsbuildinfo
 /frontend/next-env.d.ts
-
-notes.txt

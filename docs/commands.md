@@ -85,4 +85,13 @@ $ npm run start
 
 # lint - runs ESLint to check and fix code style issues
 $ npm run lint
+
+# test - runs units tests using Jest
+$ npm run test
+
+# test:watch - runs Jest tests in watch mode, will re-run tests when files change
+$ npm run test:watch
+
+# test:cov - runs tests and generates a coverage report
+$ npm run test:cov
 ```
