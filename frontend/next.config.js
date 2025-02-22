@@ -1,8 +1,9 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
     output: "export",
-    distDir: "out",
+    // distDir: "out",
     basePath: "/sep2025-project-team_006",
+    // assetPrefix: "/sep2025-project-team_006/",
     images: {
         unoptimized: true,
     },

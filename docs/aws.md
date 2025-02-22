@@ -98,3 +98,12 @@ For now the EC2 instance is running a PostgreSQL database locally, ideally we wi
 
     $ npm run start:prod
     ```
+
+16. For automated restarting we can also use the `pm2` package.
+    ```sh
+    # for starting the backend
+    $ pm2 start npm --name "backend" -- run start:prod
+
+    # for restarting it
+    pm2 restart backend
+    ```
