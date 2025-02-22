@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from 'next/link';
 
 export default function Home() {
   return (
@@ -6,21 +7,29 @@ export default function Home() {
       <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
         <Image
           className="light"
-          src="/next.svg"
+          src="./next.svg"
           alt="Next.js logo"
           width={180}
           height={38}
           priority
         />
-
+        <form action="." className="max-w-xs mx auto">
+          <div className="mb-3">
+              <input name="username"autoComplete="off" type ="text" placeholder="Username" className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"></input>
+            </div>
+            <div className="mb-3">
+              <input name="password"autoComplete="off" type ="text" placeholder="password" className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"></input>
+            </div>
+            <button className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5">Enter</button>
+        </form>
         <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
+          <Link
             className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
             href="/facultyLogin"
             rel="noopener noreferrer"
           >
             Login
-          </a>
+          </Link>
         </div>
       </main>
     </div>

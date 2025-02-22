@@ -80,7 +80,11 @@
       "**/*.(t|j)s"
     ],
     "coveragePathIgnorePatterns": [
-      "/node_modules/", "/coverage/", "/dist/", "/src/seed/", "/src/entity/"
+      "/node_modules/",
+      "/coverage/",
+      "/dist/",
+      "/src/seed/",
+      "/src/entity/"
     ],
     "coverageDirectory": "../backend/coverage",
     "testEnvironment": "node"
