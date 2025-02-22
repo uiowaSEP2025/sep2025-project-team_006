@@ -7,7 +7,7 @@ export default function Home() {
       <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
         <Image
           className="light"
-          src="/sep2025-project-team_006/GAPpaint.png"
+          src="./GAPpaint.png"
           alt="GAP logo"
           width={360}
           height={38}
@@ -20,25 +20,11 @@ export default function Home() {
             href="/faculty">
             Faculty
           </Link>
-          {/* <a
+          <Link
             className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="/faculty"
-            //target="_blank"
-            rel="noopener noreferrer"
-          >
-            Faculty
-          </a> */}
-          <Link href="/students">
+            href="/students">
             Students
           </Link>
-          {/* <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="/students"
-            //target="_blank"
-            rel="noopener noreferrer"
-          >
-            Students
-          </a> */}
         </div>
       </main>
       <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
@@ -50,7 +36,7 @@ export default function Home() {
         >
           <Image
             aria-hidden
-            src="/github.png"
+            src="./github.png"
             alt="Github icon"
             width={16}
             height={16}
@@ -65,7 +51,7 @@ export default function Home() {
         >
           <Image
             aria-hidden
-            src="/globe.svg"
+            src="./globe.svg"
             alt="Globe icon"
             width={16}
             height={16}
