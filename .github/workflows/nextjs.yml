@@ -51,21 +51,22 @@ jobs:
         working-directory: ./frontend
       - name: Setup Node
         uses: actions/setup-node@v4
+        working-directory: ./frontend
         with:
           node-version: "20"
           cache: ${{ steps.detect-package-manager.outputs.manager }}
-        working-directory: ./frontend
       - name: Setup Pages
         uses: actions/configure-pages@v5
+        working-directory: ./frontend
         with:
           # Automatically inject basePath in your Next.js configuration file and disable
           # server side image optimization (https://nextjs.org/docs/api-reference/next/image#unoptimized).
           #
           # You may remove this line if you want to manage the configuration yourself.
           static_site_generator: next
-        working-directory: ./frontend
       - name: Restore cache
         uses: actions/cache@v4
+        working-directory: ./frontend
         with:
           path: |
             .next/cache
@@ -74,7 +75,6 @@ jobs:
           # If source files changed but packages didn't, rebuild from a prior cache.
           restore-keys: |
             ${{ runner.os }}-nextjs-${{ hashFiles('**/package-lock.json', '**/yarn.lock') }}-
-        working-directory: ./frontend
       - name: Install dependencies
         run: ${{ steps.detect-package-manager.outputs.manager }} ${{ steps.detect-package-manager.outputs.command }}
         working-directory: ./frontend
