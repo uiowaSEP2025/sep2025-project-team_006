@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Put, Body, Param } from '@nestjs/common';
+import { Controller, Post, Param } from '@nestjs/common';
 import { AuthService } from './auth.service';
 
 /**

@@ -6,10 +6,8 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from 'src/entity/user.entity';
 import { Session } from 'src/entity/session.entity';
 
-ConfigModule.forRoot();
-
 @Module({
-  imports: [TypeOrmModule.forFeature([User, Session])],
+  imports: [ConfigModule.forRoot(), TypeOrmModule.forFeature([User, Session])],
   controllers: [AuthController],
   providers: [AuthService],
 })

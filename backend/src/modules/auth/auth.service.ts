@@ -14,36 +14,38 @@ export class AuthService {
     @InjectRepository(User)
     @InjectRepository(Session)
     private readonly userRepository: Repository<User>,
-    private readonly sessionRepository: Repository<Session>
+    private readonly sessionRepository: Repository<Session>,
   ) {}
 
   async register(email: string, password: string) {
-    if(await this.userRepository.findOne({ where: { email: email } })) {
+    if (await this.userRepository.findOne({ where: { email: email } })) {
       return false; // exists.
-    };
-    let record = this.userRepository.create({
+    }
+    const record = this.userRepository.create({
       email: email,
       passwordDigest: password, // VERY SUPER TEMPORARY. didn't want to figure out password digestion. shouldn't be super hard though...
     });
-    this.userRepository.save(record);
+    await this.userRepository.save(record);
     return true;
   }
 
   async login(email: string, password: string) {
-    let userRecord = await this.userRepository.findOne({ where: { email: email } });
-    if(!userRecord) {
+    const userRecord = await this.userRepository.findOne({
+      where: { email: email },
+    });
+    if (!userRecord) {
       return false; // doesn't exist
-    };
+    }
     if (password !== userRecord.passwordDigest) {
       return false;
     }
 
-    let token = crypto.randomBytes(32).toString("hex");
-    let session = this.sessionRepository.create({
+    const token = crypto.randomBytes(32).toString('hex');
+    const session = this.sessionRepository.create({
       userID: userRecord.id,
       token: token,
-    })
-    this.sessionRepository.save(session);
+    });
+    await this.sessionRepository.save(session);
     return token;
   }
 }
