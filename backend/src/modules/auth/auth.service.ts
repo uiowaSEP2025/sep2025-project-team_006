@@ -12,8 +12,8 @@ import * as crypto from 'node:crypto';
 export class AuthService {
   constructor(
     @InjectRepository(User)
-    @InjectRepository(Session)
     private readonly userRepository: Repository<User>,
+    @InjectRepository(Session)
     private readonly sessionRepository: Repository<Session>,
   ) {}
 
