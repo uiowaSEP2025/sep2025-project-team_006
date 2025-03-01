@@ -7,6 +7,7 @@ import {
   ManyToOne,
   JoinColumn,
   OneToMany,
+  Check,
 } from 'typeorm';
 import { Faculty } from './faculty.entity';
 import { Student } from './student.entity';
@@ -20,6 +21,9 @@ export enum AccountType {
 }
 
 @Entity('users') // table name in PostgreSQL
+@Check(
+  `("student_id" IS NOT NULL AND "faculty_id" IS NULL) OR ("student_id" IS NULL AND "faculty_id" IS NOT NULL)`,
+) // This is needed to ensure only one account type can be added.
 export class User {
   @PrimaryGeneratedColumn()
   user_id: number;

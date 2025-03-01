@@ -5,7 +5,7 @@ import { seedTestTable } from './seed/seedTestTable';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.enableCors({
-    origin: 'http://localhost:3000',
+    origin: ['http://localhost:3000', 'https://uiowasep2025.github.io'],
     methods: ['GET', 'PUT', 'POST'],
     allowedHeaders: ['Content-Type', 'Authorization'],
     credentials: true,
@@ -15,6 +15,7 @@ async function bootstrap() {
   // seed data ONLY when in development mode
   if (process.env.NODE_ENV === 'development') {
     try {
+      // TODO: Seed new tables, slowly start removing test table as more progress is being made
       await seedTestTable();
       console.log('Database seeding completed.');
     } catch (error) {
