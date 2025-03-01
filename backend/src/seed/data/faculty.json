@@ -1,0 +1,42 @@
+[
+    {
+        "first_name": "Alice",
+        "last_name": "Faculty",
+        "email": "faculty1@example.edu",
+        "phone_number": "3191234567",
+        "department": "ECE",
+        "job_title": "Professor"
+    },
+    {
+        "first_name": "Bob",
+        "last_name": "Advisor",
+        "email": "faculty2@example.edu",
+        "phone_number": "3192345678",
+        "department": "ECE",
+        "job_title": "Associate Professor"
+    },
+    {
+        "first_name": "Charlie",
+        "last_name": "Instructor",
+        "email": "faculty3@example.edu",
+        "phone_number": "3193456789",
+        "department": "ME",
+        "job_title": "Lecturer"
+    },
+    {
+        "first_name": "Dana",
+        "last_name": "Researcher",
+        "email": "faculty4@example.edu",
+        "phone_number": "3194567890",
+        "department": "BME",
+        "job_title": "Research Scientist"
+    },
+    {
+        "first_name": "Ethan",
+        "last_name": "Dean",
+        "email": "faculty5@example.edu",
+        "phone_number": "3195678901",
+        "department": "CBE",
+        "job_title": "Dean"
+    }
+]

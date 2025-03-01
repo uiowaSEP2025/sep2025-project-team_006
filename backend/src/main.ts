@@ -1,6 +1,7 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { seedTestTable } from './seed/seedTestTable';
+import { seedUserDatabase } from './seed/seed_users';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -17,6 +18,7 @@ async function bootstrap() {
     try {
       // TODO: Seed new tables, slowly start removing test table as more progress is being made
       await seedTestTable();
+      await seedUserDatabase();
       console.log('Database seeding completed.');
     } catch (error) {
       console.error('Error seeding database:', error);
