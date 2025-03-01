@@ -1,16 +1,30 @@
-import { Entity, Column, CreateDateColumn, UpdateDateColumn } from 'typeorm';
+import {
+  Entity,
+  Column,
+  CreateDateColumn,
+  UpdateDateColumn,
+  PrimaryGeneratedColumn,
+  ManyToOne,
+} from 'typeorm';
+import { User } from './user.entity';
 
-@Entity('sessions')
+@Entity('sessions') // table name in PostgreSQL
 export class Session {
-  @Column()
-  userID: number;
+  @PrimaryGeneratedColumn()
+  session_id: number;
 
   @Column()
-  token: string;
+  session_token: string;
 
   @CreateDateColumn()
-  createdAt: Date;
+  created_at: Date;
 
   @UpdateDateColumn()
-  updatedAt: Date;
+  updated_at: Date;
+
+  @Column()
+  expires_at: Date;
+
+  @ManyToOne(() => User, (user) => user.sessions)
+  user: User;
 }

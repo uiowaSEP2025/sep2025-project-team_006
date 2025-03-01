@@ -1,4 +1,4 @@
-import { User, UserRole } from 'src/entity/user.entity';
+import { User, AccountType } from 'src/entity/user.entity';
 import { DataSource } from 'typeorm';
 
 /**
@@ -30,7 +30,7 @@ export async function seedUsers() {
       displayName: 'Steven',
       email: 'vanni@uiowa.edu',
       passwordDigest: 'ThisIsAMeaninglessFieldATM',
-      role: UserRole.REVIEWER,
+      role: AccountType.FACULTY,
       oauth: false,
     },
   ];
