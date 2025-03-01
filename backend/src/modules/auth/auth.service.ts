@@ -21,11 +21,12 @@ export class AuthService {
     if (await this.userRepository.findOne({ where: { email: email } })) {
       return false; // exists.
     }
-    const record = this.userRepository.create({
-      email: email,
-      passwordDigest: password, // VERY SUPER TEMPORARY. didn't want to figure out password digestion. shouldn't be super hard though...
-    });
-    await this.userRepository.save(record);
+    // TODO: rewrite this after table changes
+    // const record = this.userRepository.create({
+    //   email: email,
+    //   passwordDigest: password, // VERY SUPER TEMPORARY. didn't want to figure out password digestion. shouldn't be super hard though...
+    // });
+    // await this.userRepository.save(record);
     return true;
   }
 
@@ -36,16 +37,17 @@ export class AuthService {
     if (!userRecord) {
       return false; // doesn't exist
     }
-    if (password !== userRecord.passwordDigest) {
-      return false;
-    }
+    // TODO: rewrite this after table changes
+    // if (password !== userRecord.passwordDigest) {
+    //   return false;
+    // }
 
     const token = crypto.randomBytes(32).toString('hex');
-    const session = this.sessionRepository.create({
-      userID: userRecord.id,
-      token: token,
-    });
-    await this.sessionRepository.save(session);
+    // const session = this.sessionRepository.create({
+    //   session_id: userRecord.user_id,
+    //   token: token,
+    // });
+    // await this.sessionRepository.save(session);
     return token;
   }
 }
