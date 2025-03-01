@@ -17,6 +17,7 @@ export class AuthService {
     private readonly sessionRepository: Repository<Session>,
   ) {}
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   async register(email: string, password: string) {
     if (await this.userRepository.findOne({ where: { email: email } })) {
       return false; // exists.
@@ -30,6 +31,7 @@ export class AuthService {
     return true;
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   async login(email: string, password: string) {
     const userRecord = await this.userRepository.findOne({
       where: { email: email },
