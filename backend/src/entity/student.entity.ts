@@ -21,8 +21,6 @@ export class Student {
   @Column()
   address: string;
 
-  // Note: we will add other personal details as needed
-
   @OneToMany(() => Application, (application) => application.student)
   applications: Application[];
 }

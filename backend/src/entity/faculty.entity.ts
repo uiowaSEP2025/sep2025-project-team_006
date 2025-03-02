@@ -25,8 +25,6 @@ export class Faculty {
   @Column()
   job_title: string;
 
-  // Note: we will add other personal details as needed
-
   @OneToMany(() => Review, (review) => review.faculty)
   reviews: Review[];
 
