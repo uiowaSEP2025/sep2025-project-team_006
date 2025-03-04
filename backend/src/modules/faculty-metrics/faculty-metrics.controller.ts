@@ -20,14 +20,12 @@ export class FacultyMetricsController {
     return this.facultyMetricsService.getMetricsByFaculty(id);
   }
 
-  // POST .*/api/faculty/metrics
-  @Post() // curl --header "Content-Type: application/json" --request POST --data "{ \"metric_name\": \"NEW GPA\", \"description\": \"Iowa GPA\", \"default_weight\": 2.0, \"faculty_id\": 1 }" http://localhost:5000/api/faculty/metrics
+  @Post() // .*/api/faculty/metrics
   async createMetric(@Body() createDto: CreateFacultyMetricDto) {
     return this.facultyMetricsService.createMetric(createDto);
   }
 
-  // PUT .*/api/faculty/metrics/:id
-  @Put(':id') // curl --header "Content-Type: application/json" --request PUT --data "{ \"metric_name\": \"Updated GPA\", \"default_weight\": 5.5 }" http://localhost:5000/api/faculty/metrics/1
+  @Put(':id') // .*/api/faculty/metrics/:id
   async updateMetric(
     @Param('id', ParseIntPipe) id: number,
     @Body() updateDto: UpdateFacultyMetricDto,
