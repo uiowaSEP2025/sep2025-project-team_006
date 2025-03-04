@@ -81,17 +81,13 @@ export async function seedUserDatabase() {
   const students = JSON.parse(fs.readFileSync(studentDataPath, 'utf-8'));
   let studentIndex = 1;
   for (const studentData of students) {
-    let student = await studentRepo.findOneBy({ email: studentData.email });
-    if (!student) {
-      student = studentRepo.create({
-        first_name: studentData.first_name,
-        last_name: studentData.last_name,
-        email: studentData.email,
-        phone_number: studentData.phone_number,
-        address: studentData.address,
-      });
-      await studentRepo.save(student);
-    }
+    const student = studentRepo.create({
+      first_name: studentData.first_name,
+      last_name: studentData.last_name,
+      phone_number: studentData.phone_number,
+      address: studentData.address,
+    });
+    await studentRepo.save(student);
 
     const providerId = `google-student-${studentIndex.toString().padStart(3, '0')}`;
     let userStudent = await userRepo.findOne({
