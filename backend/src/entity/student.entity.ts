@@ -12,8 +12,8 @@ export class Student {
   @Column()
   last_name: string;
 
-  @Column({ unique: true })
-  email: string; // TODO: verify if this should be needed since it is already in the User table
+  @Column()
+  email: string;
 
   @Column()
   phone_number: string;

@@ -8,19 +8,29 @@ import { AuthService } from './auth.service';
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
-  @Post('register') // .*/api/auth/register
-  async postTestData(
+  @Post('student/register') // .*/api/auth/register
+  async postStudentRegistration(
     @Param('email') email: string,
     @Param('password') password: string,
   ) {
-    return this.authService.register(email, password);
+    return this.authService.register(email, password, false);
   }
 
-  @Post('login') // .*/api/auth/login
-  async putTestData(
+  @Post('student/login') // .*/api/auth/login
+  async postStudentLogin(
     @Param('email') email: string,
     @Param('password') password: string,
   ) {
     return this.authService.login(email, password);
+  }
+
+  @Post('student/oauth')
+  async postStudentOauthCallback() {
+    return;
+  }
+
+  @Post('faculty/oauth')
+  async postFacultyOauthCallback() {
+    return;
   }
 }

@@ -9,7 +9,7 @@ import { AuthModule } from './modules/auth/auth.module';
     ConfigModule.forRoot({ isGlobal: true }),
     DatabaseModule,
     TestModule,
-    AuthModule
+    AuthModule,
   ],
 })
 export class AppModule {}
