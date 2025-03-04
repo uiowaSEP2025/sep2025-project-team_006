@@ -13,9 +13,9 @@ import { map } from 'rxjs/operators';
 
 @Injectable()
 export class ResponseInterceptor<T> implements NestInterceptor<T, any> {
-  intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
+  intercept(_: ExecutionContext, next: CallHandler): Observable<any> {
     return next.handle().pipe(
-      map((payload) => ({
+      map((payload: T) => ({
         success: true,
         payload,
       })),
