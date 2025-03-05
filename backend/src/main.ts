@@ -10,7 +10,7 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.enableCors({
     origin: ['http://localhost:3000', 'https://uiowasep2025.github.io'],
-    methods: ['GET', 'PUT', 'POST'],
+    methods: ['GET', 'PUT', 'POST', 'DELETE'],
     allowedHeaders: ['Content-Type', 'Authorization'],
     credentials: true,
   });
