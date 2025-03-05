@@ -138,3 +138,22 @@ Example format of the error case, the important thing is to check if the success
         }
     }
     ```
+
+### DELETE
+---
+- **Method:** `DELETE`
+- **Endpoint:** `/api/faculty/metrics/:id`
+- **Description:** Deletes a metric for the faculty member by the `:id` specified.
+- **Example:**
+    ```sh
+    curl --header "Content-Type: application/json" --request DELETE http://localhost:5000/api/faculty/metrics/1
+    ```
+- **Response:**
+    ```json
+    {
+        "success":true,
+        "payload":{
+            "message":"Faculty metric ID: 1 has been deleted."
+        }
+    }
+    ```

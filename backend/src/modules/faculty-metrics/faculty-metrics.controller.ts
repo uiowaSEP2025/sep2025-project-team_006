@@ -6,6 +6,7 @@ import {
   Body,
   Post,
   Put,
+  Delete,
 } from '@nestjs/common';
 import { FacultyMetricsService } from './faculty-metrics.service';
 import { UpdateFacultyMetricDto } from 'src/dto/update-faculty-metric.dto';
@@ -31,5 +32,10 @@ export class FacultyMetricsController {
     @Body() updateDto: UpdateFacultyMetricDto,
   ) {
     return this.facultyMetricsService.updateMetric(id, updateDto);
+  }
+
+  @Delete(':id') // .*/api/faculty/metrics/:id
+  async deleteMetric(@Param('id', ParseIntPipe) id: number) {
+    return this.facultyMetricsService.deleteMetric(id);
   }
 }

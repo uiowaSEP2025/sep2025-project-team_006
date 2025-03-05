@@ -56,4 +56,15 @@ export class FacultyMetricsService {
     Object.assign(metric, updateDto);
     return await this.facultyMetricRepo.save(metric);
   }
+
+  async deleteMetric(metricId: number): Promise<{ message: string }> {
+    const metric = await this.facultyMetricRepo.findOne({
+      where: { faculty_metric_id: metricId },
+    });
+    if (!metric) {
+      throw new NotFoundException(`Metric with id ${metricId} not found`);
+    }
+    await this.facultyMetricRepo.remove(metric);
+    return { message: `Faculty metric ID: ${metricId}, has been deleted.` };
+  }
 }
