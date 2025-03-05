@@ -12,6 +12,7 @@ describe('FacultyMetricsController', () => {
     getMetricsByFaculty: jest.fn(),
     createMetric: jest.fn(),
     updateMetric: jest.fn(),
+    deleteMetric: jest.fn(),
   };
 
   beforeEach(async () => {
@@ -63,6 +64,17 @@ describe('FacultyMetricsController', () => {
 
       expect(await controller.updateMetric(1, dto)).toEqual(updatedMetric);
       expect(mockService.updateMetric).toHaveBeenCalledWith(1, dto);
+    });
+  });
+
+  describe('deleteMetric', () => {
+    it('should delete a metric and return a success object', async () => {
+      const expectedResponse = { success: true };
+      mockService.deleteMetric.mockResolvedValue(expectedResponse);
+      const result = await controller.deleteMetric(1);
+
+      expect(mockService.deleteMetric).toHaveBeenCalledWith(1);
+      expect(result).toEqual(expectedResponse);
     });
   });
 });

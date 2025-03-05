@@ -24,6 +24,7 @@ describe('FacultyMetricsService', () => {
             create: jest.fn(),
             save: jest.fn(),
             findOne: jest.fn(),
+            remove: jest.fn(),
           },
         },
         {
@@ -104,6 +105,32 @@ describe('FacultyMetricsService', () => {
       const result = await service.updateMetric(1, updateDto);
       expect(result).toEqual({ ...existingMetric, ...updateDto });
       expect(facultyMetricRepo.findOne).toHaveBeenCalledWith({ where: { faculty_metric_id: 1 } });
+    });
+  });
+
+  describe('deleteMetric', () => {
+    it('should throw NotFoundException if metric is not found', async () => {
+      (facultyMetricRepo.findOne as jest.Mock).mockResolvedValue(null);
+  
+      await expect(service.deleteMetric(1)).rejects.toThrowError(
+        'Metric with id 1 not found',
+      );
+      expect(facultyMetricRepo.findOne).toHaveBeenCalledWith({
+        where: { faculty_metric_id: 1 },
+      });
+    });
+  
+    it('should delete the metric and return a success object', async () => {
+      const metric = { faculty_metric_id: 1 };
+      (facultyMetricRepo.findOne as jest.Mock).mockResolvedValue(metric);
+      (facultyMetricRepo.remove as jest.Mock).mockResolvedValue(metric);
+  
+      const result = await service.deleteMetric(1);
+      expect(result).toEqual({ message: "Faculty metric ID: 1, has been deleted.", });
+      expect(facultyMetricRepo.findOne).toHaveBeenCalledWith({
+        where: { faculty_metric_id: 1 },
+      });
+      expect(facultyMetricRepo.remove).toHaveBeenCalledWith(metric);
     });
   });
 });
