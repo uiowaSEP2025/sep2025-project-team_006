@@ -49,18 +49,15 @@ export async function seedUserDatabase() {
   const facultyMembers = JSON.parse(fs.readFileSync(facultyDataPath, 'utf-8'));
   let facultyIndex = 1;
   for (const facultyData of facultyMembers) {
-    let faculty = await facultyRepo.findOneBy({ email: facultyData.email });
-    if (!faculty) {
-      faculty = facultyRepo.create({
-        first_name: facultyData.first_name,
-        last_name: facultyData.last_name,
-        email: facultyData.email,
-        phone_number: facultyData.phone_number,
-        department: facultyData.department,
-        job_title: facultyData.job_title,
-      });
-      await facultyRepo.save(faculty);
-    }
+    const faculty = facultyRepo.create({
+      first_name: facultyData.first_name,
+      last_name: facultyData.last_name,
+      phone_number: facultyData.phone_number,
+      department: facultyData.department,
+      job_title: facultyData.job_title,
+      reviews: facultyData.reviews,
+    });
+    await facultyRepo.save(faculty);
 
     const providerId = `microsoft-faculty-${facultyIndex.toString().padStart(3, '0')}`;
     let userFaculty = await userRepo.findOne({
@@ -84,17 +81,13 @@ export async function seedUserDatabase() {
   const students = JSON.parse(fs.readFileSync(studentDataPath, 'utf-8'));
   let studentIndex = 1;
   for (const studentData of students) {
-    let student = await studentRepo.findOneBy({ email: studentData.email });
-    if (!student) {
-      student = studentRepo.create({
-        first_name: studentData.first_name,
-        last_name: studentData.last_name,
-        email: studentData.email,
-        phone_number: studentData.phone_number,
-        address: studentData.address,
-      });
-      await studentRepo.save(student);
-    }
+    const student = studentRepo.create({
+      first_name: studentData.first_name,
+      last_name: studentData.last_name,
+      phone_number: studentData.phone_number,
+      address: studentData.address,
+    });
+    await studentRepo.save(student);
 
     const providerId = `google-student-${studentIndex.toString().padStart(3, '0')}`;
     let userStudent = await userRepo.findOne({

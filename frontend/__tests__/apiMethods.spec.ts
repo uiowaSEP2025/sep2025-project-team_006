@@ -1,6 +1,6 @@
 import axios from "axios";
 import MockAdapter from "axios-mock-adapter";
-import { apiGET, apiGETbyId, apiPOST, apiPUT } from "../api/apiMethods";
+import { apiDELETE, apiGET, apiGETbyId, apiPOST, apiPUT } from "../api/apiMethods";
 import WebService from "../api/WebService";
 
 const mock = new MockAdapter(axios);
@@ -44,6 +44,15 @@ describe("API Methods", () => {
     mock.onPut(webService.TEST_PUT.replace(":id", testId)).reply(200, mockResponse);
 
     const result = await apiPUT(webService.TEST_PUT, testId, JSON.stringify(testData));
+    expect(result).toEqual(mockResponse);
+  });
+
+  it("should send a DELETE request", async () => {
+    const mockResponse = { success: true };
+    const id = '1';
+    const webServiceUrl = 'http://localhost:5000/api/faculty/metrics/:id';
+    mock.onDelete(webServiceUrl.replace(":id", id)).reply(200, mockResponse);
+    const result = await apiDELETE(webServiceUrl, id);
     expect(result).toEqual(mockResponse);
   });
 });

@@ -67,3 +67,21 @@ export const apiPOST = async (webService: string, data: string) => {
     });
     return response.data;
 };
+
+/**
+ * If you perform a `DELETE` request, the server creates a deletes the entry from the database and informs you if the deletion is successful. 
+ * 
+ * @param webService API link from `WebService.ts`
+ * @param id identifier token of the data to be modified
+ * @returns Server response as JSON
+ */
+export const apiDELETE = async (webService: string, id: string = "") => {
+    const formatted_url = webService.replace(":id", id);
+    const response = await axios.delete(formatted_url, {
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        withCredentials: true,
+    });
+    return response.data;
+};

@@ -13,9 +13,6 @@ export class Faculty {
   @Column()
   last_name: string;
 
-  @Column({ unique: true })
-  email: string; // TODO: verify if this should be needed since it is already in the User table
-
   @Column()
   phone_number: string;
 
@@ -24,8 +21,6 @@ export class Faculty {
 
   @Column()
   job_title: string;
-
-  // Note: we will add other personal details as needed
 
   @OneToMany(() => Review, (review) => review.faculty)
   reviews: Review[];
