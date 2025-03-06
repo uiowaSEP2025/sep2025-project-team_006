@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image";
 import ProfileList from "@/components/ProfileList";
 
 // Define the Profile type
@@ -31,9 +32,16 @@ export default function Home() {
       <ProfileList profiles={profiles} onProfileClick={handleProfileClick} />
 
       {selectedProfile && (
-        <div className="mt-4 p-4 border rounded bg-white shadow-lg">
+        <div className="mt-4 p-4 border rounded bg-white shadow-lg flex flex-col items-center">
           <h2 className="text-xl font-semibold">{selectedProfile.name}</h2>
-          <img src={selectedProfile.image} alt={selectedProfile.name} className="w-20 h-20 rounded-full mt-2" />
+          <div className="relative w-20 h-20 mt-2">
+            <Image
+              src={selectedProfile.image}
+              alt={selectedProfile.name}
+              fill
+              className="rounded-full object-cover"
+            />
+          </div>
         </div>
       )}
     </div>
