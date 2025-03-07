@@ -11,10 +11,16 @@ import {
 import { FacultyMetricsService } from './faculty-metrics.service';
 import { UpdateFacultyMetricDto } from 'src/dto/update-faculty-metric.dto';
 import { CreateFacultyMetricDto } from 'src/dto/create-faculty-metric.dto';
+import { defaultMetrics } from './faculty-metrics-default';
 
 @Controller('api/faculty/metrics') // .*/api/faculty/metrics/.*
 export class FacultyMetricsController {
   constructor(private readonly facultyMetricsService: FacultyMetricsService) {}
+
+  @Get('default') // .*/api/faculty/metrics/default
+  getDefaultMetrics() {
+    return defaultMetrics;
+  }
 
   @Get(':id') // .*/api/faculty/metrics/:id
   async getMetrics(@Param('id', ParseIntPipe) id: number) {

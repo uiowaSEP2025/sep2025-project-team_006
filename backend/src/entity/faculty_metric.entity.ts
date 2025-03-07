@@ -13,7 +13,7 @@ export class FacultyMetric {
   description: string; // e.g., "M.I.T"
 
   @Column('float')
-  default_weight: number; // e.g., 3.2
+  default_weight: number; // e.g., 0.25 -> 25%
 
   @ManyToOne(() => Faculty, (faculty) => faculty.faculty_metrics)
   faculty: Faculty;
