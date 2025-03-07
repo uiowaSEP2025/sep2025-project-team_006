@@ -3,7 +3,7 @@
  */
 export const defaultMetrics = [
   {
-    metric_name: 'Recommendation Score',
+    metric_name: 'Recommendation',
     description: 'Quality of recommendation letters',
     default_weight: 0.2,
   },
@@ -13,7 +13,7 @@ export const defaultMetrics = [
     default_weight: 0.25,
   },
   {
-    metric_name: 'Relevant Work/Research Experience',
+    metric_name: 'Work/Research Relevancy',
     description: 'Work or research background in relevant field',
     default_weight: 0.15,
   },
@@ -23,22 +23,22 @@ export const defaultMetrics = [
     default_weight: 0.1,
   },
   {
-    metric_name: 'Publication Value',
+    metric_name: 'Publications',
     description: 'Number and quality of publications',
     default_weight: 0.1,
   },
   {
-    metric_name: 'Extra-Curricular Activity Value',
+    metric_name: 'Extra-Curricular Activities',
     description: 'Clubs, volunteer work, leadership roles',
     default_weight: 0.05,
   },
   {
-    metric_name: 'Personal Statement Score',
+    metric_name: 'Personal Statement',
     description: 'Quality and clarity of personal statement',
     default_weight: 0.1,
   },
   {
-    metric_name: 'Education Relevancy Score',
+    metric_name: 'Education Relevancy',
     description: 'Match between previous coursework and intended program',
     default_weight: 0.05,
   },
