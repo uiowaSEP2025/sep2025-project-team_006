@@ -188,3 +188,73 @@ Example format of the error case, the important thing is to check if the success
         }
     }
     ```
+
+## Students Module
+
+### GET
+---
+- **Method:** `GET`
+- **Endpoint:** `/api/students/applicants`
+- **Description:** Fetches a list of all students that have an application with a "submitted" status, as well as the degree and department.
+- **Example:**
+    ```sh
+    $ curl http://localhost:5000/api/students/applicants
+    ```
+- **Response:**
+    ```json
+    {
+        "success":true,
+        "payload": [
+            {
+                "student_id": 2,
+                "full_name": "Alice Scholar",
+                "status": "submitted",
+                "department": "ECE",
+                "degree_program": "M.S."
+            },
+            {
+                "student_id": 10,
+                "full_name": "Julia Bookworm",
+                "status": "submitted",
+                "department": "ECE",
+                "degree_program": "M.S."
+            },
+            ...
+        ] 
+    }
+    ```
+
+### GET
+---
+- **Method:** `GET`
+- **Endpoint:** `/api/students/:id`
+- **Description:** Fetches all the information about the student given an `:id` parameter.
+- **Example:**
+    ```sh
+    $ curl http://localhost:5000/api/students/2
+    ```
+- **Response:**
+    ```json
+    {
+        "success": true,
+        "payload": {
+            "student_id": 2,
+            "first_name": "Alice",
+            "last_name": "Scholar",
+            "phone_number": "3192345678",
+            "address": "456 College Ave, Iowa City, IA 52242",
+            "applications": [
+                {
+                    "application_id": 8,
+                    "status": "submitted",
+                    "submission_date": "2025-03-08T10:00:00.000Z",
+                    "department": "ECE",
+                    "degree_program": "M.S.",
+                    "documents": [],
+                    "reviews": []
+                }
+            ]
+        }
+    }
+    ```
+---
