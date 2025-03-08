@@ -5,6 +5,7 @@ import { seedUserDatabase } from './seed/seed_users';
 import { seedFacultyMetrics } from './seed/seed_faculty_metrics';
 import { ResponseInterceptor } from './config/response.interceptor';
 import { HttpExceptionFilter } from './config/http_exception.filter';
+import { seedApplications } from './seed/seed_applications';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -28,6 +29,7 @@ async function bootstrap() {
       await seedTestTable();
       await seedUserDatabase();
       await seedFacultyMetrics();
+      await seedApplications();
       console.log('Database seeding completed.');
     } catch (error) {
       console.error('Error seeding database:', error);

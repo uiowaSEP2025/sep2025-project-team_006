@@ -1,6 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { CreateFacultyMetricDto } from 'src/dto/create-faculty-metric.dto';
 import { UpdateFacultyMetricDto } from 'src/dto/update-faculty-metric.dto';
+import { defaultMetrics } from 'src/modules/faculty-metrics/faculty-metrics-default';
 import { FacultyMetricsController } from 'src/modules/faculty-metrics/faculty-metrics.controller';
 import { FacultyMetricsService } from 'src/modules/faculty-metrics/faculty-metrics.service';
 
@@ -28,6 +29,13 @@ describe('FacultyMetricsController', () => {
 
     controller = module.get<FacultyMetricsController>(FacultyMetricsController);
     service = module.get<FacultyMetricsService>(FacultyMetricsService);
+  });
+
+  describe('getDefaultMetrics', () => {
+    it('should return an array of our predefine metrics', async () => {
+      const result = controller.getDefaultMetrics();
+      expect(result).toEqual(defaultMetrics)
+    });
   });
 
   describe('getMetrics', () => {
