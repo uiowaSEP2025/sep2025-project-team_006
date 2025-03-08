@@ -11,4 +11,8 @@ export default class WebService {
     TEST_PUT = `${this.serverUrl}/api/test/:id`;
     TEST_POST = `${this.serverUrl}/api/test`;
     // API calls
+    FACULTY_METRIC_ID = `${this.serverUrl}/api/faculty/metrics/:id`; // Handles PUT, POST, DELETE
+    FACULTY_METRIC_GET = `${this.serverUrl}/api/faculty/metrics`;
+    STUDENTS_APPLICANT_LIST = `${this.serverUrl}/api/students/applicants`;
+    STUDENTS_APPLICANT_INFO = `${this.serverUrl}/api/students/:id`;
 }
