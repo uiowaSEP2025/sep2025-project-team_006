@@ -20,6 +20,12 @@ export enum AccountType {
   STUDENT = 'student',
 }
 
+export enum OAuthProviderType {
+  NONE = 'none',
+  GOOGLE = 'Google',
+  MICROSOFT = 'Microsoft',
+}
+
 @Entity('users') // table name in PostgreSQL
 @Check(
   `("student_id" IS NOT NULL AND "faculty_id" IS NULL) OR ("student_id" IS NULL AND "faculty_id" IS NOT NULL)`,
@@ -45,7 +51,11 @@ export class User {
   @JoinColumn({ name: 'faculty_id' })
   faculty: Faculty;
 
-  @Column()
+  @Column({
+    type: 'enum',
+    enum: OAuthProviderType,
+    default: OAuthProviderType.NONE,
+  })
   provider: string; // 'Google' or 'Microsoft'
 
   @Column()
@@ -53,6 +63,9 @@ export class User {
 
   @Column({ unique: true })
   email: string;
+
+  @Column()
+  password_digest: string;
 
   @CreateDateColumn()
   registered_at: Date;

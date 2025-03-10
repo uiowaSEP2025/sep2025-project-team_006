@@ -1,9 +1,12 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { User } from 'src/entity/user.entity';
+import { JwtService } from '@nestjs/jwt';
+import { Faculty } from 'src/entity/faculty.entity';
+import { Student } from 'src/entity/student.entity';
 import { Session } from 'src/entity/session.entity';
+import { User } from 'src/entity/user.entity';
 import { Repository } from 'typeorm';
-import * as crypto from 'node:crypto';
+import * as bcrypt from 'bcrypt';
 
 /**
  * Job: Handles authentication; session management, logins, etc.
@@ -15,41 +18,58 @@ export class AuthService {
     private readonly userRepository: Repository<User>,
     @InjectRepository(Session)
     private readonly sessionRepository: Repository<Session>,
+    @InjectRepository(Student)
+    private readonly studentRepository: Repository<Student>,
+    @InjectRepository(Faculty)
+    private readonly facultyRepository: Repository<Faculty>,
+    private jwtService: JwtService,
   ) {}
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  async register(email: string, password: string) {
+  async register(email: string, password: string, isFaculty: boolean) {
     if (await this.userRepository.findOne({ where: { email: email } })) {
-      return false; // exists.
+      throw new Error('User already exists'); // exists.
     }
-    // TODO: rewrite this after table changes
-    // const record = this.userRepository.create({
-    //   email: email,
-    //   passwordDigest: password, // VERY SUPER TEMPORARY. didn't want to figure out password digestion. shouldn't be super hard though...
-    // });
-    // await this.userRepository.save(record);
-    return true;
+    const digest = bcrypt.hashSync(
+      password,
+      bcrypt.genSaltSync(process.env.BCRYPT_SALT_ROUNDS),
+    );
+    const userRecord = this.userRepository.create({
+      email: email,
+      password_digest: digest,
+    });
+
+    if (isFaculty) {
+      const facultyRecord = this.facultyRepository.create();
+      await this.facultyRepository.save(facultyRecord);
+      userRecord.faculty = facultyRecord;
+    } else {
+      const studentRecord = this.studentRepository.create();
+      await this.studentRepository.save(studentRecord);
+      userRecord.student = studentRecord;
+    }
+    await this.userRepository.save(userRecord);
+
+    const payload = { id: userRecord.user_id, email: userRecord.email };
+    return {
+      token: await this.jwtService.signAsync(payload),
+    };
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   async login(email: string, password: string) {
     const userRecord = await this.userRepository.findOne({
       where: { email: email },
     });
     if (!userRecord) {
-      return false; // doesn't exist
+      throw new UnauthorizedException(); // doesn't exist
     }
-    // TODO: rewrite this after table changes
-    // if (password !== userRecord.passwordDigest) {
-    //   return false;
-    // }
 
-    const token = crypto.randomBytes(32).toString('hex');
-    // const session = this.sessionRepository.create({
-    //   session_id: userRecord.user_id,
-    //   token: token,
-    // });
-    // await this.sessionRepository.save(session);
-    return token;
+    if (await bcrypt.compare(password, userRecord.password_digest)) {
+      const payload = { id: userRecord.user_id, email: userRecord.email };
+      return {
+        token: await this.jwtService.signAsync(payload),
+      };
+    } else {
+      throw new UnauthorizedException();
+    }
   }
 }
