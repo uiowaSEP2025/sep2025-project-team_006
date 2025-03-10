@@ -4,6 +4,9 @@ import Image from "next/image";
 interface Profile {
   id: number;
   name: string;
+  status: string;
+  department: string;
+  degree_program: string;
   image: string;
 }
 
@@ -15,9 +18,9 @@ interface ProfileListProps {
 const ProfileList: React.FC<ProfileListProps> = ({ profiles, onProfileClick }) => {
   return (
     <div className="max-w-md mx-auto bg-white shadow-md rounded-lg overflow-hidden">
-      {profiles.map((profile) => (
+      {profiles.map((profile, index) => (
         <button
-          key={profile.id}
+          key={index}
           onClick={() => onProfileClick(profile)}
           className="flex items-center p-4 hover:bg-gray-100 w-full text-left"
         >
@@ -31,7 +34,12 @@ const ProfileList: React.FC<ProfileListProps> = ({ profiles, onProfileClick }) =
               className="rounded-full"
             />
           </div>
-          <span className="text-lg font-medium">{profile.name}</span>
+          <div>
+            <div className="text-lg font-medium">{profile.name}</div>
+            <div className="text-sm text-gray-600">
+              {profile.status} – {profile.department} – {profile.degree_program}
+            </div>
+          </div>
         </button>
       ))}
     </div>

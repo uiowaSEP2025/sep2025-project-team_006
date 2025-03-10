@@ -1,49 +1,61 @@
 "use client";
 
-import { useState } from "react";
-import Image from "next/image";
+import { useEffect, useState } from "react";
 import ProfileList from "@/components/ProfileList";
+import WebService from "@/api/WebService";
+import { apiGET } from "@/api/apiMethods";
+import { useRouter } from "next/navigation";
 
-// Define the Profile type
 interface Profile {
-  id: number;
-  name: string;
+  id: number; // corresponds to student_id
+  name: string; // corresponds to full_name
+  status: string;
+  department: string;
+  degree_program: string;
   image: string;
 }
 
-const profiles: Profile[] = [
-  { id: 1, name: "Alice Johnson", image: "/defaultpfp.jpeg" },
-  { id: 2, name: "Bob Smith", image: "/defaultpfp.jpeg" },
-  { id: 3, name: "Charlie Brown", image: "/defaultpfp.jpeg" },
-];
-
 export default function Home() {
-  // Define selectedProfile with the correct type
-  const [selectedProfile, setSelectedProfile] = useState<Profile | null>(null);
+
+  const router = useRouter();
+  const webService = new WebService();
+  const [profiles, setProfiles] = useState<Profile[]>([]);
+
+  useEffect(() => {
+    const fetchApplicants = async () => {
+      try {
+        const response = await apiGET(webService.STUDENTS_APPLICANT_LIST)
+        if (response.success) {
+          const fetchedProfiles: Profile[] = response.payload.map(
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            (applicant: any) => ({
+              id: applicant.student_id,
+              name: applicant.full_name,
+              status: applicant.status,
+              department: applicant.department,
+              degree_program: applicant.degree_program,
+              image: "/defaultpfp.jpeg", // default profile picture
+            })
+          );
+          setProfiles(fetchedProfiles);
+        } else {
+          console.log("GET error: ", response.error);
+        }
+      } catch (error) {
+        console.log("An unexpected error occured: ", error)
+      }
+    }
+    fetchApplicants()
+  }, [webService.STUDENTS_APPLICANT_LIST]);
 
   const handleProfileClick = (profile: Profile) => {
-    setSelectedProfile(profile);
-    //alert(`Clicked on ${profile.name}`); // Replace with modal or route navigation
+    router.push(`/studentList/application?id=${profile.id}`);
   };
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100 p-6">
       <h1 className="text-2xl font-bold mb-4">Select a Profile</h1>
       <ProfileList profiles={profiles} onProfileClick={handleProfileClick} />
-
-      {selectedProfile && (
-        <div className="mt-4 p-4 border rounded bg-white shadow-lg flex flex-col items-center">
-          <h2 className="text-xl font-semibold">{selectedProfile.name}</h2>
-          <div className="relative w-20 h-20 mt-2">
-            <Image
-              src={selectedProfile.image}
-              alt={selectedProfile.name}
-              fill
-              className="rounded-full object-cover"
-            />
-          </div>
-        </div>
-      )}
     </div>
   );
 }
