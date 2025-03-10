@@ -47,6 +47,37 @@ Example format of the error case, the important thing is to check if the success
 ### GET
 ---
 - **Method:** `GET`
+- **Endpoint:** `/api/faculty/metrics/default`
+- **Description:** Fetches all of our predefined, static, default review metrics
+- **Example:**
+    ```sh
+    $ curl http://localhost:5000/api/faculty/metrics/default
+    ```
+- **Response:**
+    ```json
+    {
+        "success":true,
+        "payload": [
+            {
+                "metric_name": "Recommendation Score",
+                "description": "Quality of recommendation letters",
+                "default_weight": 0.2
+            },
+            {
+                "metric_name": "GPA (University Modifier)",
+                "description": "GPA with consideration of institution prestige",
+                "default_weight": 0.25
+            },
+            ...
+        ] 
+    }
+    ```
+    To see or modify all the default metrics please view the `faculty-metrics-default.ts` file. 
+---
+
+### GET
+---
+- **Method:** `GET`
 - **Endpoint:** `/api/faculty/metrics/:id`
 - **Description:** Fetches all of the faculty metrics, by an `:id`, which is for the faculty member viewing their settings page.
 - **Example:**
@@ -157,3 +188,73 @@ Example format of the error case, the important thing is to check if the success
         }
     }
     ```
+
+## Students Module
+
+### GET
+---
+- **Method:** `GET`
+- **Endpoint:** `/api/students/applicants`
+- **Description:** Fetches a list of all students that have an application with a "submitted" status, as well as the degree and department.
+- **Example:**
+    ```sh
+    $ curl http://localhost:5000/api/students/applicants
+    ```
+- **Response:**
+    ```json
+    {
+        "success":true,
+        "payload": [
+            {
+                "student_id": 2,
+                "full_name": "Alice Scholar",
+                "status": "submitted",
+                "department": "ECE",
+                "degree_program": "M.S."
+            },
+            {
+                "student_id": 10,
+                "full_name": "Julia Bookworm",
+                "status": "submitted",
+                "department": "ECE",
+                "degree_program": "M.S."
+            },
+            ...
+        ] 
+    }
+    ```
+
+### GET
+---
+- **Method:** `GET`
+- **Endpoint:** `/api/students/:id`
+- **Description:** Fetches all the information about the student given an `:id` parameter.
+- **Example:**
+    ```sh
+    $ curl http://localhost:5000/api/students/2
+    ```
+- **Response:**
+    ```json
+    {
+        "success": true,
+        "payload": {
+            "student_id": 2,
+            "first_name": "Alice",
+            "last_name": "Scholar",
+            "phone_number": "3192345678",
+            "address": "456 College Ave, Iowa City, IA 52242",
+            "applications": [
+                {
+                    "application_id": 8,
+                    "status": "submitted",
+                    "submission_date": "2025-03-08T10:00:00.000Z",
+                    "department": "ECE",
+                    "degree_program": "M.S.",
+                    "documents": [],
+                    "reviews": []
+                }
+            ]
+        }
+    }
+    ```
+---
