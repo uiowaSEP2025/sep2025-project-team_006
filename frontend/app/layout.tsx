@@ -25,10 +25,19 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
+        
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
+        <header className="bg-black text-[#F1BE48] h-20 text-4xl px-6 sm:px-12 py-4 flex justify-between items-center">
+          Graduate Admission Portal 
+          </header>
+        
         {children}
+
+        <footer className="bg-black text-[#F1BE48] h-20 text-4xl px-6 sm:px-12 py-4 flex justify-between items-center"> 
+          Bottom of Page</footer>
       </body>
+      
     </html>
   );
 }
