@@ -7,20 +7,18 @@ describe('AuthController', () => {
   let controller: AuthController;
   let service: AuthService;
 
+  const mockService = {
+    register: jest.fn(),
+    login: jest.fn(),
+  };
+
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       controllers: [AuthController],
       providers: [
         {
           provide: AuthService,
-          useValue: {
-            register: jest
-              .fn()
-              .mockResolvedValue(true),
-            login: jest
-              .fn()
-              .mockResolvedValue(crypto.randomBytes(32).toString('hex')),
-          },
+          useValue: mockService
         },
       ],
     }).compile();
@@ -29,7 +27,9 @@ describe('AuthController', () => {
     service = module.get<AuthService>(AuthService);
   });
 
-  it('should be defined', () => {
-    expect(controller).toBeDefined();
-  });
+  describe("traditionalLogin", () => {
+    it("should return a session token", async () => {
+      expect(await controller.postStudentLogin("minecraftguy66@gmail.com", "12345")).toMatch(/0-9a-f{32}/);
+    })
+  })
 });

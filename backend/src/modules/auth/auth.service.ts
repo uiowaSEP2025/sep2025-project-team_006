@@ -1,9 +1,10 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { JwtService } from '@nestjs/jwt';
 import { User } from 'src/entity/user.entity';
 import { Session } from 'src/entity/session.entity';
 import { Repository } from 'typeorm';
-import * as crypto from 'node:crypto';
+//import * as crypto from 'node:crypto';
 import * as bcrypt from 'bcrypt';
 import { Faculty } from 'src/entity/faculty.entity';
 import { Student } from 'src/entity/student.entity';
@@ -22,13 +23,15 @@ export class AuthService {
     private readonly studentRepository: Repository<Student>,
     @InjectRepository(Faculty)
     private readonly facultyRepository: Repository<Faculty>,
+    private jwtService: JwtService,
   ) {}
 
   async register(email: string, password: string, isFaculty: boolean) {
     if (await this.userRepository.findOne({ where: { email: email } })) {
-      return false; // exists.
+      //throw new Exception("yeah"); // exists.
+      return;
     }
-    const digest = bcrypt.hashSync(password, process.env.AUTH_SALT);
+    const digest = bcrypt.hashSync(password, process.env.AUTH_SALT as string);
     const userRecord = this.userRepository.create({
       email: email,
       password_digest: digest,
@@ -53,24 +56,16 @@ export class AuthService {
       where: { email: email },
     });
     if (!userRecord) {
-      return false; // doesn't exist
+      throw new UnauthorizedException(); // doesn't exist
     }
 
     if (await bcrypt.compare(password, userRecord.password_digest)) {
-      const token = await this.generateSessionToken(userRecord);
-      return token;
+      const payload = { id: userRecord.user_id, email: userRecord.email };
+      return {
+        token: await this.jwtService.signAsync(payload),
+      };
     } else {
-      return false;
+      throw new UnauthorizedException();
     }
-  }
-
-  private async generateSessionToken(user: User) {
-    const token = crypto.randomBytes(32).toString('hex');
-    const session = this.sessionRepository.create({
-      user: user,
-      session_id: token,
-    });
-    await this.sessionRepository.save(session);
-    return token;
   }
 }
