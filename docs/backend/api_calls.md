@@ -104,7 +104,7 @@ Example format of the error case, the important thing is to check if the success
 ### PUT
 ---
 - **Method:** `PUT`
-- **Endpoint:** `/api/test/:id`
+- **Endpoint:** `/api/faculty/metrics/:id`
 - **Description:** Updates an existing faculty metric entry. `:id` is for the `faculty_metric_id`
 - **Request Body:**
     ```json

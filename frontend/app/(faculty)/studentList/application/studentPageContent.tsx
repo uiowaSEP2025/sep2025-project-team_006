@@ -2,7 +2,7 @@
 
 import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
-import { apiGETbyId } from "@/api/apiMethods";
+import { apiGET } from "@/api/apiMethods";
 import WebService from "@/api/WebService";
 
 interface StudentData {
@@ -24,7 +24,7 @@ export default function StudentPageContent() {
     if (!studentId) return;
     const fetchStudentInfo = async () => {
       try {
-        const response = await apiGETbyId(webService.STUDENTS_APPLICANT_INFO, studentId);
+        const response = await apiGET(webService.STUDENTS_APPLICANT_INFO, studentId);
         if (response.success) {
           // this will be expanded upon later.
           setStudentData(response.payload);
