@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, CreateDateColumn } from 'typeorm';
 import { Application } from './application.entity';
 
 @Entity('documents')
@@ -12,7 +12,7 @@ export class Document {
   @Column()
   file_path: string; // Not sure on this yet, will research how to store uploaded files
 
-  @Column()
+  @CreateDateColumn()
   uploaded_at: Date;
 
   @ManyToOne(() => Application, (application) => application.documents)
