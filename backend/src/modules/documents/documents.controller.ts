@@ -23,13 +23,13 @@ export class DocumentsController {
     }))
     async uploadDocument(
         @UploadedFile() file: Express.Multer.File,
-        @Body() body: { document_type: string; applicationId: number },
+        @Body() body: { document_type: string; application_id: number },
     ) {
         // The file has been saved on disk, file.path contains the saved file's path.
         const newDocument = await this.documentsService.createDocument({
             document_type: body.document_type,
-            file_path: file.path, // store the file path
-            applicationId: Number(body.applicationId),
+            file_path: file.path,
+            application_id: Number(body.application_id),
         });
         return { success: true, newEntry: newDocument };
     }

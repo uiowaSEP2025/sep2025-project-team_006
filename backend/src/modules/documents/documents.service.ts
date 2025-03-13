@@ -13,8 +13,9 @@ export class DocumentsService {
     private applicationRepo: Repository<Application>,
   ) { }
 
-  async createDocument(createDto: { document_type: string; file_path: string; applicationId: number }): Promise<Document> {
-    const application = await this.applicationRepo.findOneBy({ application_id: createDto.applicationId });
+  // TODO - extract DTOs
+  async createDocument(createDto: { document_type: string; file_path: string; application_id: number }): Promise<Document> {
+    const application = await this.applicationRepo.findOneBy({ application_id: createDto.application_id });
     if (!application) {
       throw new NotFoundException('Application not found');
     }
