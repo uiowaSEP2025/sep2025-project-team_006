@@ -8,7 +8,12 @@ import { HttpExceptionFilter } from './config/http_exception.filter';
 import { seedApplications } from './seed/seed_applications';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create(AppModule, {
+    logger:
+      process.env.NODE_ENV === 'development'
+        ? ['log', 'fatal', 'error', 'warn', 'debug', 'verbose']
+        : ['log', 'fatal', 'error'],
+  });
   app.enableCors({
     origin: ['http://localhost:3000', 'https://uiowasep2025.github.io'],
     methods: ['GET', 'PUT', 'POST', 'DELETE'],
