@@ -12,7 +12,7 @@ async function bootstrap() {
     logger:
       process.env.NODE_ENV === 'development'
         ? ['log', 'fatal', 'error', 'warn', 'debug', 'verbose']
-        : ['log', 'fatal', 'error'],
+        : ['log', 'fatal', 'error']
   });
   app.enableCors({
     origin: ['http://localhost:3000', 'https://uiowasep2025.github.io'],

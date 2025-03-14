@@ -17,7 +17,10 @@ export class HttpExceptionFilter implements ExceptionFilter {
   private readonly logger = new Logger(HttpExceptionFilter.name);
 
   catch(exception: unknown, host: ArgumentsHost) {
-    this.logger.error('HTTP Exception caught!', exception);
+    if (process.env.NODE_ENV !== "test") {
+      // Required to avoid logging in a test environment. The logger settings in the main function do not control this.
+      this.logger.error('HTTP Exception caught!', exception);
+    }
 
     const ctx = host.switchToHttp();
     const response = ctx.getResponse<Response>();
