@@ -1,25 +1,24 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import axios from "axios";
+import { apiGETDocument } from "@/api/documentsApiMethods";
+import WebService from "@/api/WebService";
 
 interface PdfViewerProps {
-    documentId: string; // The document id you want to fetch
+    document_id: string;
 }
 
-export default function PdfViewer({ documentId }: PdfViewerProps) {
+/**
+ * NOTE: If the file type is a .xlsx file then it will just download the file and not show anything
+ */
+export default function PdfViewer({ document_id }: PdfViewerProps) {
+    const webService = new WebService();
     const [pdfUrl, setPdfUrl] = useState<string | null>(null);
 
     useEffect(() => {
         const fetchPdf = async () => {
             try {
-                // TODO _ extract this and clean this file up
-                const response = await axios.get(`http://localhost:5000/api/documents/${documentId}`, {
-                    responseType: "blob", // expect binary data
-                    withCredentials: true,
-                });
-                // Create an object URL for the Blob and open it in a new tab/window
-                const fileURL = URL.createObjectURL(response.data);
+                const fileURL = await apiGETDocument(webService.APPLICATION_DOCUMENT_GET, document_id)
                 setPdfUrl(fileURL);
             } catch (error) {
                 console.error("Error fetching PDF:", error);
@@ -27,7 +26,7 @@ export default function PdfViewer({ documentId }: PdfViewerProps) {
         };
 
         fetchPdf();
-    }, [documentId]);
+    }, [document_id]);
 
     return (
         <div className="h-full w-full">

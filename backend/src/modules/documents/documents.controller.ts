@@ -16,6 +16,7 @@ import { diskStorage } from 'multer';
 import { extname } from 'path';
 import { Response } from 'express';
 import { CreateDocumentDto } from 'src/dto/create-document.dto';
+import { DocumentType } from './document-type.enum';
 
 @Controller('/api/documents') // .*/api/documents/.*
 export class DocumentsController {
@@ -61,10 +62,14 @@ export class DocumentsController {
       throw new NotFoundException('Document not found');
     }
 
-    // TODO: Check if we need to have different Content-Type for .xlsx
+    let contentType = 'application/pdf';
+    if (document.document_type === DocumentType.XLSX) {
+      contentType =
+        'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
+    }
     res.set({
-      'Content-Type': 'application/pdf',
-      'Content-Disposition': `inline; filename=document_${id}.pdf`,
+      'Content-Type': contentType,
+      'Content-Disposition': `inline; filename=document_${id}.${document.document_type}`,
     });
     const fs = await import('fs');
     const stream = fs.createReadStream(document.file_path);

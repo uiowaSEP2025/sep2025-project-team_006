@@ -4,7 +4,6 @@ import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { apiGET } from "@/api/apiMethods";
 import WebService from "@/api/WebService";
-import { fetchDocument } from "@/api/documentsApiMethods";
 import PdfViewer from "@/components/PdfViewer";
 
 interface StudentData {
@@ -37,46 +36,6 @@ export default function StudentPageContent() {
   const studentId = searchParams.get('id'); // will be a string or null
   const webService = new WebService();
   const [studentData, setStudentData] = useState<any>(null);
-
-  // TODO - clean up this file
-
-  const fetchPdfDocument = async (payload: any) => {
-    try {
-      // if (!studentData) return
-      const document_id = payload.applications[0].documents[0].document_id
-      const response = await fetchDocument(document_id as unknown as string);
-      // if (response.success) {
-      //   // this will be expanded upon later.
-      //   setStudentData(response.payload);
-      // } else {
-      //   console.error("GET error:", response.error);
-      // }
-    } catch (error) {
-      console.error("An unexpected error occurred:", error);
-    }
-  }
-
-  useEffect(() => {
-    if (!studentId) return;
-    const fetchStudentInfo = async () => {
-      try {
-        const response = await apiGET(webService.STUDENTS_APPLICANT_INFO, studentId);
-        if (response.success) {
-          // this will be expanded upon later.
-          setStudentData(response.payload);
-          // await fetchPdfDocument(response.payload);
-        } else {
-          console.error("GET error:", response.error);
-        }
-      } catch (error) {
-        console.error("An unexpected error occurred:", error);
-      }
-    };
-    fetchStudentInfo();
-  }, [studentId, webService.STUDENTS_APPLICANT_INFO]);
-
-  // UI will be developed more in sprint 3.
-
   const documentId =
     studentData &&
       studentData.applications &&
@@ -86,13 +45,30 @@ export default function StudentPageContent() {
       ? String(studentData.applications[0].documents[0].document_id)
       : null;
 
+  const fetchStudentInfo = async (student_id: string) => {
+    try {
+      const response = await apiGET(webService.STUDENTS_APPLICANT_INFO, student_id);
+      if (response.success) {
+        setStudentData(response.payload);
+      } else {
+        console.error("GET error:", response.error);
+      }
+    } catch (error) {
+      console.error("An unexpected error occurred:", error);
+    }
+  };
+
+  useEffect(() => {
+    if (!studentId) return;
+    fetchStudentInfo(studentId);
+  }, [studentId, webService.STUDENTS_APPLICANT_INFO]);
+
   return (
     <div className="flex w-full h-screen">
       {/* Left half: PDF Viewer */}
       <div className="w-1/2 h-full border-r border-gray-300 p-6">
         {documentId ? (
-          // If your PdfViewer component accepts a className prop, you can pass h-full and w-full.
-          <PdfViewer documentId={documentId} />
+          <PdfViewer document_id={documentId} />
         ) : (
           <p className="h-full flex items-center justify-center text-center text-gray-600">
             No document available.
@@ -100,7 +76,7 @@ export default function StudentPageContent() {
         )}
       </div>
 
-      {/* Right half: Other Content */}
+      {/* Right half: Other Content - This is where the review UI should be */}
       <div className="w-1/2 h-full p-6 overflow-auto">
         <div className="p-6">
           <h1 className="text-2xl font-bold mb-4">
