@@ -6,6 +6,7 @@ import { apiGET } from "@/api/apiMethods";
 import WebService from "@/api/WebService";
 import PdfViewer from "@/components/PdfViewer";
 import { StudentData } from "@/types/StudentData";
+import ExcelViewer from "@/components/ExcelViewer";
 
 export default function StudentPageContent() {
   const searchParams = useSearchParams();
@@ -20,6 +21,14 @@ export default function StudentPageContent() {
       studentData.applications[0].documents.length > 0
       ? String(studentData.applications[0].documents[0].document_id)
       : null;
+
+  const documentType = studentData &&
+    studentData.applications &&
+    studentData.applications.length > 0 &&
+    studentData.applications[0].documents &&
+    studentData.applications[0].documents.length > 0
+    ? String(studentData.applications[0].documents[0].document_type)
+    : null;
 
   useEffect(() => {
     if (!studentId) return;
@@ -41,10 +50,12 @@ export default function StudentPageContent() {
 
   return (
     <div className="flex w-full h-screen">
-      {/* Left half: PDF Viewer */}
+      {/* Left half: File Viewer */}
       <div className="w-1/2 h-full border-r border-gray-300 p-6">
-        {documentId ? (
+        {documentId && documentType === 'pdf' ? (
           <PdfViewer document_id={documentId} />
+        ) : documentId && documentType === 'xlsx' ? (
+          <ExcelViewer document_id={documentId} />
         ) : (
           <p className="h-full flex items-center justify-center text-center text-gray-600">
             No document available.
