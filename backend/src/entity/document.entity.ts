@@ -1,18 +1,28 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm';
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  ManyToOne,
+  CreateDateColumn,
+} from 'typeorm';
 import { Application } from './application.entity';
+import { DocumentType } from 'src/modules/documents/document-type.enum';
 
 @Entity('documents')
 export class Document {
   @PrimaryGeneratedColumn()
   document_id: number;
 
-  @Column()
-  document_type: string; // Transcript, SOP, etc.
+  @Column({
+    type: 'enum',
+    enum: DocumentType,
+  })
+  document_type: DocumentType; // Only "pdf" or "xlsx" will be allowed
 
   @Column()
-  file_path: string; // Not sure on this yet, will research how to store uploaded files
+  file_path: string;
 
-  @Column()
+  @CreateDateColumn()
   uploaded_at: Date;
 
   @ManyToOne(() => Application, (application) => application.documents)

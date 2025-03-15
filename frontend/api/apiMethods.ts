@@ -4,26 +4,10 @@ import axios from "axios";
  * If you perform a `GET` request, the server looks for the data you requested and sends it back to you.
  * 
  * @param webService API link from `WebService.ts`
+ * @param id Optional identifier token of the data to be fetched
  * @returns Requested data as JSON
  */
-export const apiGET = async (webService: string) => {
-    const response = await axios.get(webService, {
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        withCredentials: true,
-    });
-    return response.data;
-};
-
-/**
- * If you perform a `GET` request, the server looks for the data you requested and sends it back to you.
- * 
- * @param webService API link from `WebService.ts`
- * @param id identifier token of the data to be fetched
- * @returns Requested data as JSON
- */
-export const apiGETbyId = async (webService: string, id: string) => {
+export const apiGET = async (webService: string, id: string = "") => {
     const formatted_url = webService.replace(":id", id);
     const response = await axios.get(formatted_url, {
         headers: {
@@ -72,7 +56,7 @@ export const apiPOST = async (webService: string, data: string) => {
  * If you perform a `DELETE` request, the server creates a deletes the entry from the database and informs you if the deletion is successful. 
  * 
  * @param webService API link from `WebService.ts`
- * @param id identifier token of the data to be modified
+ * @param id Optional identifier token of the data to be deleted
  * @returns Server response as JSON
  */
 export const apiDELETE = async (webService: string, id: string = "") => {

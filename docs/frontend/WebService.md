@@ -8,22 +8,11 @@ These functions use Axios to perform HTTP requests and return JSON data.
 ### `apiGET`
 
 Performs a `GET` request to fetch data from the server.
+The URL includes an optional `:id` placeholder for endpoints that require it.
 
 Usage Example:
 ```ts
 const response = await apiGET(webService.TEST_GET);
-```
-
----
-
-### `apiGETbyId`
-
-Performs a `GET` request for a resource with a dynamic id. 
-The URL includes a `:id` placeholder which is replaced with the provided id.
-
-Usage Example:
-```ts
-const response = await apiGETbyId(webService.STUDENTS_APPLICANT_INFO, "123");
 ```
 
 ---
@@ -108,10 +97,3 @@ try {
 ```
 
 This documentation outlines the usage and purpose of each API method and the WebService class, providing a clear reference on how to perform HTTP operations within the framework. 
-
-
-
-
-
-
-
