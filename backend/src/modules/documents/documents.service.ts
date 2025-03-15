@@ -12,10 +12,12 @@ export class DocumentsService {
     private documentRepo: Repository<Document>,
     @InjectRepository(Application)
     private applicationRepo: Repository<Application>,
-  ) { }
+  ) {}
 
   async createDocument(createDto: CreateDocumentDto): Promise<Document> {
-    const application = await this.applicationRepo.findOneBy({ application_id: createDto.application_id });
+    const application = await this.applicationRepo.findOneBy({
+      application_id: createDto.application_id,
+    });
     if (!application) {
       throw new NotFoundException('Application not found');
     }
