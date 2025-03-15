@@ -3,6 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Document } from 'src/entity/document.entity';
 import { Application } from 'src/entity/application.entity';
+import { CreateDocumentDto } from 'src/dto/create-document.dto';
 
 @Injectable()
 export class DocumentsService {
@@ -13,8 +14,7 @@ export class DocumentsService {
     private applicationRepo: Repository<Application>,
   ) { }
 
-  // TODO - extract DTOs
-  async createDocument(createDto: { document_type: string; file_path: string; application_id: number }): Promise<Document> {
+  async createDocument(createDto: CreateDocumentDto): Promise<Document> {
     const application = await this.applicationRepo.findOneBy({ application_id: createDto.application_id });
     if (!application) {
       throw new NotFoundException('Application not found');

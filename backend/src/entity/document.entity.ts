@@ -7,10 +7,10 @@ export class Document {
   document_id: number;
 
   @Column()
-  document_type: string; // Transcript, SOP, etc.
+  document_type: string;
 
   @Column()
-  file_path: string; // Not sure on this yet, will research how to store uploaded files
+  file_path: string;
 
   @CreateDateColumn()
   uploaded_at: Date;
