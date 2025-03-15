@@ -1,5 +1,7 @@
 import axios from "axios";
-import WebService from "./WebService";
+
+// Note: This can be used to open file in new window, if needed.
+// window.open(fileURL, "_blank"); 
 
 /**
  * Special API GET method with the purpose of fetching documents that are ready to download/view.
@@ -23,5 +25,36 @@ export async function apiGETDocument(webService: string, document_id: string) {
   }
 }
 
-// Can be used to open file in new window, if needed.
-// window.open(fileURL, "_blank"); 
+/**
+ * Special API POST method for uploading a document (e.g., PDF or Excel file).
+ * 
+ * @param webService API link from `WebService.ts`
+ * @param file The File object to upload.
+ * @param documentType The type of document ("pdf" or "xlsx").
+ * @param applicationId The ID of the application to which this document belongs.
+ * @returns The server response as JSON.
+ */
+export async function apiPOSTDocument(
+  webService: string,
+  file: File,
+  documentType: string,
+  applicationId: number
+) {
+  const formData = new FormData();
+  formData.append("file", file); // the file upload field
+  formData.append("document_type", documentType);
+  formData.append("application_id", String(applicationId));
+
+  try {
+    const response = await axios.post(webService, formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+      withCredentials: true,
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Error uploading document:", error);
+    throw error;
+  }
+}

@@ -26,7 +26,7 @@ export default function PdfViewer({ document_id }: PdfViewerProps) {
         };
 
         fetchPdf();
-    }, [document_id]);
+    }, [document_id, webService.APPLICATION_DOCUMENT_GET]);
 
     return (
         <div className="h-full w-full">
