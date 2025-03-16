@@ -13,6 +13,12 @@ export default function StudentPageContent() {
   const studentId = searchParams.get('id'); // will be a string or null
   const webService = new WebService();
   const [studentData, setStudentData] = useState<StudentData | null>(null);
+
+  /**
+   * Note: These are lengthy and annoying but because of table structure we must check all the way through.
+   * 
+   * Though this will have to become dynamic for whoever implements the ability to toggle which document to look at.
+   */
   const documentId =
     studentData &&
       studentData.applications &&
