@@ -17,6 +17,7 @@ import { extname } from 'path';
 import { Response } from 'express';
 import { CreateDocumentDto } from 'src/dto/create-document.dto';
 import { DocumentType } from './document-type.enum';
+import * as fs from 'fs';
 
 @Controller('/api/documents') // .*/api/documents/.*
 export class DocumentsController {
@@ -71,7 +72,6 @@ export class DocumentsController {
       'Content-Type': contentType,
       'Content-Disposition': `inline; filename=document_${id}.${document.document_type}`,
     });
-    const fs = await import('fs');
     const stream = fs.createReadStream(document.file_path);
     stream.pipe(res);
   }
