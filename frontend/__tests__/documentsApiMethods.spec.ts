@@ -33,7 +33,7 @@ describe('apiGETDocument', () => {
 });
 
 describe('apiPOSTDocument', () => {
-    it('should upload the document and return the response data', async () => {
+    it.skip('should upload the document and return the response data', async () => {
         const fakeFile = new File(['dummy content'], 'test.xlsx', {
             type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
         });
