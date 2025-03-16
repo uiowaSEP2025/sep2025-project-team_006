@@ -1,15 +1,17 @@
-import React from "react";
+import React, {useState} from "react";
 
 interface Metric {
     id: number;
-    label: string;
+    name: string;
     description: string;
     weight: number;
   }
 
 
-interface MetricInputProps {
+interface MetricFormProps {
     metric: Metric;
     onSave: (updatedMetric: Metric) => void;
 }
-
+const MetricForm: React.FC = () => {
+    
+}
