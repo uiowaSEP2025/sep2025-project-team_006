@@ -104,7 +104,7 @@ Example format of the error case, the important thing is to check if the success
 ### PUT
 ---
 - **Method:** `PUT`
-- **Endpoint:** `/api/test/:id`
+- **Endpoint:** `/api/faculty/metrics/:id`
 - **Description:** Updates an existing faculty metric entry. `:id` is for the `faculty_metric_id`
 - **Request Body:**
     ```json
@@ -256,5 +256,66 @@ Example format of the error case, the important thing is to check if the success
             ]
         }
     }
+    ```
+---
+
+## Documents Module
+
+### POST
+---
+- **Method:** `POST`
+- **Endpoint:** `/api/documents`
+- **Description:** Uploads a new document file (`pdf` or `xlsx`) for a specific application. The request must be sent as `multipart/form-data` and include:
+- **Request Body:**
+    ```json
+    {
+        "file": "<file location>",
+        "document_type": "xlsx", // either "xlsx" or "pdf"
+        "application_id": 6
+    }
+    ```
+- **Example:**
+    ```sh
+    curl -X POST "http://localhost:5000/api/documents" \
+     -F "file=@test_excel.xlsx" \
+     -F "document_type=xlsx" \
+     -F "application_id=6"
+    ```
+- **Response:**
+    ```json
+    {
+        "success": true,
+        "payload": {
+            "document_type": "xlsx",
+            "file_path": "uploads\\file-1742065435575-328615993.xlsx",
+            "application": {
+                "application_id": 6,
+                "status": "submitted",
+                "submission_date": "2025-03-06T10:00:00.000Z",
+                "department": "ECE",
+                "degree_program": "M.S."
+            },
+            "document_id": 3,
+            "uploaded_at": "2025-03-15T19:03:55.598Z"
+        }
+    }
+    ```
+
+### GET
+---
+- **Method:** `GET`
+- **Endpoint:** `/api/documents/:id`
+- **Description:** Retrieves a document by its ID, streams the binary file (`pdf` or `xlsx`) to the client, and sets the appropriate `Content-Type` header.
+- **Example:**
+    ```sh
+    # Note: the --output tag is used in cURL so we can open the file locally.
+    $ curl http://localhost:5000/api/documents/1 --output test.pdf
+    ```
+- **Response:**
+    ```sh
+    # With cURL the output will just be showing saving the data.
+    # With the API function the output will look like:
+    blob:http://localhost:3000/32e89ba6-65f0-40ec-a29b-3814e49026e9
+    # This is essentially the "URL" to open or download the file
     ```
 ---
