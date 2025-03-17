@@ -26,6 +26,19 @@ const MetricForm: React.FC<MetricFormProps> = ({metrics, onChangeMetric, onSaveM
                     value={metric.name}
                     onChange={(e) => onChangeMetric(metric.id, "name", e.target.value)}
                     />
+                    <input
+                    type="text"
+                    placeholder="Metric Description"
+                    value={metric.description}
+                    onChange={(e) => onChangeMetric(metric.id,"description",e.target.value)}
+                    />
+                    <input
+                    type="number"
+                    placeholder="weight"
+                    value={metric.weight}
+                    onChange={(e)=> onChangeMetric(metric.id, "weight",parseFloat(e.target.value))}
+                    step="0.02"
+                    />
                 </div>
                 ))}
         
