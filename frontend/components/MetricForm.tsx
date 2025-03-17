@@ -10,13 +10,27 @@ interface Metric {
 
 interface MetricFormProps {
     metrics: Metric[];
-    onChange: (id: number, field: keyof Metric, value: string | number) => void;
-    onSave: (updatedMetric: Metric) => void;
-    onDelete: (id: number) => void;
-    onAdd: ()=> void;
+    onChangeMetric: (id: number, field: keyof Metric, value: string | number) => void;
+    onSaveMetric: (updatedMetric: Metric) => void;
+    onDeleteMetric: (id: number) => void;
+    onAddMetric: ()=> void;
 }
-const MetricForm: React.FC = (MetricFormProps) = ({metrics, onChange, onSave,onDelete,onAdd}) => {
-
+const MetricForm: React.FC<MetricFormProps> = ({metrics, onChangeMetric, onSaveMetric,onDeleteMetric,onAddMetric}) => {
+    return(
+        <div>
+            {metrics.map((metric)=> (
+                <div key={metric.id}>
+                    <input
+                    type="text"
+                    placeholder="Metric Name"
+                    value={metric.name}
+                    onChange={(e) => onChangeMetric(metric.id, "name", e.target.value)}
+                    />
+                </div>
+                ))}
+        
+        </div>
+    );
 };
 
 
