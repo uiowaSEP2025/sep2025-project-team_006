@@ -37,11 +37,30 @@ const MetricForm: React.FC<MetricFormProps> = ({metrics, onChangeMetric, onSaveM
                     placeholder="weight"
                     value={metric.weight}
                     onChange={(e)=> onChangeMetric(metric.id, "weight",parseFloat(e.target.value))}
-                    step="0.02"
+                    step="0.01"
                     />
+
+                    <div>
+                        <button
+                        onClick={() => onSaveMetric(metric)}
+                        >
+                            Save
+                        </button>
+
+                        <button
+                        onClick={() => onDeleteMetric(metric.id)}
+                        >
+                            Delete
+                        </button>
+                    </div>
                 </div>
                 ))}
-        
+
+                <button
+                onClick={onAddMetric}
+                >
+                    +
+                </button>
         </div>
     );
 };
