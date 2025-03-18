@@ -12,7 +12,7 @@ export default class WebService {
     TEST_POST = `${this.serverUrl}/api/test`;
     // API calls
     FACULTY_METRIC_ID = `${this.serverUrl}/api/faculty/metrics/:id`; // PUT, POST, DELETE
-    FACULTY_METRIC_GET = `${this.serverUrl}/api/faculty/metrics`; // GET
+    FACULTY_METRIC_GET = `${this.serverUrl}/api/faculty/metrics/default`; // GET
     STUDENTS_APPLICANT_LIST = `${this.serverUrl}/api/students/applicants`; // GET
     STUDENTS_APPLICANT_INFO = `${this.serverUrl}/api/students/:id`; // GET
 }
