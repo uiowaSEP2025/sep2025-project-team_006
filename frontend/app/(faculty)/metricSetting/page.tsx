@@ -45,17 +45,27 @@ export default function Home() {
     fetchMetrics()
  }, [webService.FACULTY_METRIC_DEFAULTS]);
 
+const handleOnAddMetric = () => {
+    const newMetric: Metric = {
+        id: Date.now(),
+        name: "",
+        description: "",
+        weight: 0,
+        isNew: true,
+    };
+    setMetrics((prevMetrics)=>[...prevMetrics, newMetric]);
+}
+
 return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100 p-6">
       <h1 className="text-2xl font-bold mb-4">Metric Settings</h1>
-      <MetricForm metrics={metrics} 
+      <MetricForm metrics={metrics}
+            onAddMetric={handleOnAddMetric}
             onChangeMetric={function (id: number, field: keyof Metric, value: string | number): void {
             throw new Error("Function not implemented.");
         } } onSaveMetric={function (updatedMetric: Metric): void {
             throw new Error("Function not implemented.");
         } } onDeleteMetric={function (id: number): void {
-            throw new Error("Function not implemented.");
-        } } onAddMetric={function (): void {
             throw new Error("Function not implemented.");
         } } />
       </div>
