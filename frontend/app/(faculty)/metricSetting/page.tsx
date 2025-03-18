@@ -23,7 +23,7 @@ export default function Home() {
  useEffect(()=> {
     const fetchMetrics = async () => {
         try{
-            const response = await apiGET(webService.FACULTY_METRIC_GET)
+            const response = await apiGET(webService.FACULTY_METRIC_DEFAULTS)
             if (response.success) {
                 const fetchedMetrics: Metric[] = response.payload.map(
                     (metric: any) => ({
@@ -43,7 +43,7 @@ export default function Home() {
         }
     }
     fetchMetrics()
- }, [webService.FACULTY_METRIC_GET]);
+ }, [webService.FACULTY_METRIC_DEFAULTS]);
 
 return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100 p-6">
