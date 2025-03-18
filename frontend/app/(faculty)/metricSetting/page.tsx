@@ -26,10 +26,10 @@ export default function Home() {
             if (response.success) {
                 const fetchedMetrics: Metric[] = response.payload.map(
                     (metric: any) => ({
-                        id: metric.id,
-                        name: metric.name,
-                        description: metric.description,
-                        weight: metric.weight,
+                        id: metric.metric_id,
+                        name: metric.metric_name,
+                        description: metric.metric_description,
+                        weight: metric.metric_weight,
                     })
                 );
                 setMetrics(fetchedMetrics);
@@ -46,7 +46,8 @@ export default function Home() {
 return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100 p-6">
       <h1 className="text-2xl font-bold mb-4">Metric Settings</h1>
-      <MetricForm metrics={metrics} onChangeMetric={function (id: number, field: keyof Metric, value: string | number): void {
+      <MetricForm metrics={metrics} 
+            onChangeMetric={function (id: number, field: keyof Metric, value: string | number): void {
             throw new Error("Function not implemented.");
         } } onSaveMetric={function (updatedMetric: Metric): void {
             throw new Error("Function not implemented.");
