@@ -28,8 +28,8 @@ export default function Home() {
                     (metric: any) => ({
                         id: metric.metric_id,
                         name: metric.metric_name,
-                        description: metric.metric_description,
-                        weight: metric.metric_weight,
+                        description: metric.description,
+                        weight: metric.default_weight,
                     })
                 );
                 setMetrics(fetchedMetrics);
