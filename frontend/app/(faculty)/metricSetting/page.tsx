@@ -12,6 +12,7 @@ interface Metric {
     name: string;
     description: string;
     weight: number;
+    isNew: boolean;
 }
 
 export default function Home() {
@@ -30,6 +31,7 @@ export default function Home() {
                         name: metric.metric_name,
                         description: metric.description,
                         weight: metric.default_weight,
+                        isNew: false,
                     })
                 );
                 setMetrics(fetchedMetrics);
