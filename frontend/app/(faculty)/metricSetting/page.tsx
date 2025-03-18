@@ -5,6 +5,7 @@ import ProfileList from "@/components/ProfileList";
 import WebService from "@/api/WebService";
 import { apiGET } from "@/api/apiMethods";
 import { useRouter } from "next/navigation";
+import MetricForm from "@/components/MetricForm";
 
 interface Metric {
     id: number;
@@ -41,4 +42,20 @@ export default function Home() {
     }
     fetchMetrics()
  }, [webService.FACULTY_METRIC_GET]);
+
+return (
+    <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100 p-6">
+      <h1 className="text-2xl font-bold mb-4">Metric Settings</h1>
+      <MetricForm metrics={metrics} onChangeMetric={function (id: number, field: keyof Metric, value: string | number): void {
+            throw new Error("Function not implemented.");
+        } } onSaveMetric={function (updatedMetric: Metric): void {
+            throw new Error("Function not implemented.");
+        } } onDeleteMetric={function (id: number): void {
+            throw new Error("Function not implemented.");
+        } } onAddMetric={function (): void {
+            throw new Error("Function not implemented.");
+        } } />
+      </div>
+);
+
 }
