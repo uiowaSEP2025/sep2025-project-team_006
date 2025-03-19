@@ -47,10 +47,10 @@
     ],
     "rootDir": "./",
     "modulePaths": [
-      "<rootDir>/src"
+      "<rootDir>/"
     ],
     "moduleNameMapper": {
-      "^@/(.*)$": "<rootDir>/src/$1"
+      "^@/(.*)$": "<rootDir>/$1"
     },
     "testRegex": ".*\\.spec\\.tsx?$",
     "transform": {
