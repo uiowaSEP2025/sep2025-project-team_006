@@ -3,8 +3,7 @@
 import { useEffect, useState } from "react";
 import ProfileList from "@/components/ProfileList";
 import WebService from "@/api/WebService";
-import { apiGET } from "@/api/apiMethods";
-import { apiPOST } from "@/api/apiMethods";
+import { apiGET, apiGETbyId, apiPOST } from "@/api/apiMethods";
 import { useRouter } from "next/navigation";
 import MetricForm from "@/components/MetricForm";
 
@@ -24,27 +23,49 @@ export default function Home() {
  useEffect(()=> {
     const fetchMetrics = async () => {
         try{
-            const response = await apiGET(webService.FACULTY_METRIC_DEFAULTS)
-            if (response.success) {
-                const fetchedMetrics: Metric[] = response.payload.map(
-                    (metric: any) => ({
-                        //id: metric.metric_id,
+            const [defaults, response] = await Promise.all([
+                apiGET(webService.FACULTY_METRIC_DEFAULTS),
+                apiGETbyId(webService.FACULTY_METRIC_ID, "1")
+
+            ]);
+
+            let metrics: Metric[] = [];
+
+            if(defaults.success) {
+                metrics = [
+                    ...metrics,
+                    ...defaults.payload.map((metric: any) => ({
                         name: metric.metric_name,
                         description: metric.description,
                         weight: metric.default_weight,
                         isNew: false,
-                    })
-                );
-                setMetrics(fetchedMetrics);
-            } else{
-                console.log("GET error: ", response.error);
+                    }))
+                ];
+            } else {
+                console.log("GET error for defaults: ", defaults.error);
             }
+
+            if (response.success) {
+                metrics = [
+                    ...metrics,
+                    ...response.payload.map((metric: any) => ({
+                        //id: metric.metric_id
+                        name: metric.metric_name,
+                        description: metric.description,
+                        weight: metric.default_weight,
+                        isNew: false,
+                    }))
+                ];
+            } else {
+                console.log("Get error for FacultyID Metrics: ", response.error);
+            }
+                setMetrics(metrics);
         } catch (error){
             console.log("An unexpected error occured: ", error)
         }
     }
     fetchMetrics()
- }, [webService.FACULTY_METRIC_DEFAULTS]);
+ }, [webService.FACULTY_METRIC_DEFAULTS, webService.FACULTY_METRIC_ID]);
 
 const handleOnAddMetric = () => {
     const newMetric: Metric = {
