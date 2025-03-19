@@ -44,13 +44,14 @@ const MetricForm: React.FC<MetricFormProps> = ({metrics, onChangeMetric, onSaveM
                     type="number"
                     placeholder="weight"
                     value={metric.weight}
+                    disabled={!metric.isNew}
                     onChange={(e)=> onChangeMetric(metric.id, "weight",parseFloat(e.target.value))}
                     step="0.01"
                      className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500"
                     />
                     </div>
 
-                   
+                    {metric.isNew && (
                     <div>
                         <button
                         onClick={() => onSaveMetric(metric)}
@@ -58,16 +59,16 @@ const MetricForm: React.FC<MetricFormProps> = ({metrics, onChangeMetric, onSaveM
                         >
                             Save
                         </button>
-                    {metric.isNew && (
+                    
                         <button
                         onClick={() => onDeleteMetric(metric.id)}
                         className="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition"
                         >
                             Delete
                         </button>
-                        )}
+                        
                     </div>
-                    
+                    )}
                 </div>
                 ))}
 
