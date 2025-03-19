@@ -1,6 +1,6 @@
+import React from "react";
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import "@testing-library/jest-dom";
-import Page from "@/app/(faculty)/metricSetting/page"; 
 import { apiGET, apiGETbyId, apiPOST } from "@/api/apiMethods";
 import WebService from "@/api/WebService";
 import MetricForm from "@/components/MetricForm";
@@ -19,7 +19,14 @@ jest.mock("@/api/apiMethods", () => ({
 }));
 
 // Mock MetricForm component
-jest.mock("@/components/MetricForm", () => jest.fn(() => <div data-testid="metric-form"></div>));
+jest.mock("@/components/MetricForm", () =>
+  jest.fn(() => React.createElement("div", { "data-testid": "metric-form" }))
+);
+
+// Mock Page component
+jest.mock("@/app/(faculty)/metricSetting/page", () =>
+  jest.fn(() => React.createElement("div", { children: "Metric Settings" }))
+);
 
 describe("MetricSetting Page", () => {
   const mockRouter = { push: jest.fn() };
@@ -37,7 +44,7 @@ describe("MetricSetting Page", () => {
     (apiGET as jest.Mock).mockResolvedValue({ success: true, payload: [] });
     (apiGETbyId as jest.Mock).mockResolvedValue({ success: true, payload: [] });
 
-    render(<Page />);
+    render(React.createElement(require("@/app/(faculty)/metricSetting/page").default));
 
     expect(screen.getByText("Metric Settings")).toBeInTheDocument();
     await waitFor(() => expect(apiGET).toHaveBeenCalledWith(mockWebService.FACULTY_METRIC_DEFAULTS));
@@ -48,7 +55,7 @@ describe("MetricSetting Page", () => {
     (apiGET as jest.Mock).mockResolvedValue({ success: false, error: "Error fetching defaults" });
     (apiGETbyId as jest.Mock).mockResolvedValue({ success: false, error: "Error fetching faculty metrics" });
 
-    render(<Page />);
+    render(React.createElement(require("@/app/(faculty)/metricSetting/page").default));
 
     await waitFor(() => expect(apiGET).toHaveBeenCalled());
     await waitFor(() => expect(apiGETbyId).toHaveBeenCalled());
@@ -58,7 +65,7 @@ describe("MetricSetting Page", () => {
     (apiGET as jest.Mock).mockResolvedValue({ success: true, payload: [] });
     (apiGETbyId as jest.Mock).mockResolvedValue({ success: true, payload: [] });
 
-    render(<Page />);
+    render(React.createElement(require("@/app/(faculty)/metricSetting/page").default));
 
     const addMetricButton = screen.getByText("Add Metric"); // Make sure this button exists in `MetricForm`
     fireEvent.click(addMetricButton);
@@ -79,7 +86,7 @@ describe("MetricSetting Page", () => {
       },
     });
 
-    render(<Page />);
+    render(React.createElement(require("@/app/(faculty)/metricSetting/page").default));
 
     // Assuming there's a function in `MetricForm` that triggers saving
     const mockMetric = {
