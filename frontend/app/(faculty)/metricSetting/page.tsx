@@ -35,6 +35,7 @@ export default function Home() {
                 metrics = [
                     ...metrics,
                     ...defaults.payload.map((metric: any) => ({
+                        //id: metric.faculty_metric_id,
                         name: metric.metric_name,
                         description: metric.description,
                         weight: metric.default_weight,
@@ -49,7 +50,7 @@ export default function Home() {
                 metrics = [
                     ...metrics,
                     ...response.payload.map((metric: any) => ({
-                        //id: metric.metric_id
+                        id: metric.faculty_metric_id,
                         name: metric.metric_name,
                         description: metric.description,
                         weight: metric.default_weight,
