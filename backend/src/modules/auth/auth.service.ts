@@ -32,7 +32,7 @@ export class AuthService {
     }
     const digest = bcrypt.hashSync(
       password,
-      bcrypt.genSaltSync(process.env.BCRYPT_SALT_ROUNDS),
+      bcrypt.genSaltSync(+process.env.BCRYPT_SALT_ROUNDS as number), // slight hack
     );
     const userRecord = this.userRepository.create({
       email: email,
@@ -40,13 +40,13 @@ export class AuthService {
     });
 
     // Attaching the user record to an empty student/faculty record.
-    // These will assumedly get filled out later.
+    // These will, assumedly, get filled out later.
     if (isFaculty) {
-      const facultyRecord = this.facultyRepository.create();
+      const facultyRecord = this.facultyRepository.create({});
       await this.facultyRepository.save(facultyRecord);
       userRecord.faculty = facultyRecord;
     } else {
-      const studentRecord = this.studentRepository.create();
+      const studentRecord = this.studentRepository.create({});
       await this.studentRepository.save(studentRecord);
       userRecord.student = studentRecord;
     }

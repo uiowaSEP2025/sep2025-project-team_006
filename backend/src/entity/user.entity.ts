@@ -58,7 +58,7 @@ export class User {
   })
   provider: string; // 'Google' or 'Microsoft'
 
-  @Column()
+  @Column({ nullable: true })
   provider_id: string;
 
   @Column({ unique: true })
