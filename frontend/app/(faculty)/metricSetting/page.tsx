@@ -107,7 +107,11 @@ const handleOnSaveMetric = async (updatedMetric: Metric) => {
         setMetrics((prevMetrics) => 
             prevMetrics.map((metric) =>
                 metric.id === updatedMetric.id
-                    ? { ...savedMetric, isNew: false }
+                    ? { id: savedMetric.faculty_metric_id,
+                        name: savedMetric.metric_name,
+                        description: savedMetric.description,
+                        weight: savedMetric.default_weight,
+                        isNew: false }
                     : metric
         )
     );
