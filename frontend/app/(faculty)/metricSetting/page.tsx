@@ -60,6 +60,11 @@ const handleOnDeleteMetric = (id: number)=> {
     setMetrics ((prevMetrics) => prevMetrics.filter((metric)=> metric.id != id));
 }
 
+const handleOnChangeMetric = (id: number, field: keyof Metric, value: string | number) => {
+    setMetrics((prevMetrics) => prevMetrics.map((metric)=>
+        metric.id == id ? { ...metric, [field]: value } : metric)
+    );
+}
 
 return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100 p-6">
@@ -67,11 +72,10 @@ return (
       <MetricForm metrics={metrics}
             onAddMetric={handleOnAddMetric}
             onDeleteMetric={handleOnDeleteMetric}
-            onChangeMetric={function (id: number, field: keyof Metric, value: string | number): void {
+            onChangeMetric={handleOnChangeMetric}
+            onSaveMetric={function (updatedMetric: Metric): void {
             throw new Error("Function not implemented.");
-        } } onSaveMetric={function (updatedMetric: Metric): void {
-            throw new Error("Function not implemented.");
-        } } />
+        } }/>
       </div>
 );
 
