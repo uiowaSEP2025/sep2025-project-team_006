@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import ProfileList from "@/components/ProfileList";
 import WebService from "@/api/WebService";
-import { apiGET, apiGETbyId, apiPOST } from "@/api/apiMethods";
+import { apiGET, apiPOST } from "@/api/apiMethods";
 import { useRouter } from "next/navigation";
 import MetricForm from "@/components/MetricForm";
 
@@ -25,7 +25,7 @@ export default function Home() {
         try{
             const [defaults, response] = await Promise.all([
                 apiGET(webService.FACULTY_METRIC_DEFAULTS),
-                apiGETbyId(webService.FACULTY_METRIC_ID, "1")
+                apiGET(webService.FACULTY_METRIC_ID, "1")
 
             ]);
 
