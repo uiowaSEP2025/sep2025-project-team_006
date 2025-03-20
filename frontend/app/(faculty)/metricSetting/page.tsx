@@ -12,7 +12,7 @@ interface Metric {
     name: string;
     description: string;
     weight: number;
-    isNew: boolean;
+    isDefault: boolean;
 }
 
 export default function Home() {
@@ -39,7 +39,7 @@ export default function Home() {
                         name: metric.metric_name,
                         description: metric.description,
                         weight: metric.default_weight,
-                        isNew: false,
+                        isDefault: true,
                     }))
                 ];
             } else {
@@ -54,7 +54,7 @@ export default function Home() {
                         name: metric.metric_name,
                         description: metric.description,
                         weight: metric.default_weight,
-                        isNew: false,
+                        isDefault: false,
                     }))
                 ];
             } else {
@@ -74,7 +74,7 @@ const handleOnAddMetric = () => {
         name: "",
         description: "",
         weight: 0,
-        isNew: true,
+        isDefault: false,
     };
     setMetrics((prevMetrics)=>[...prevMetrics, newMetric]);
 }
@@ -112,7 +112,7 @@ const handleOnSaveMetric = async (updatedMetric: Metric) => {
                         name: savedMetric.metric_name,
                         description: savedMetric.description,
                         weight: savedMetric.default_weight,
-                        isNew: false }
+                        isDefault: false }
                     : metric
         )
     );

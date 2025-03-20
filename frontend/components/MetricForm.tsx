@@ -5,7 +5,7 @@ interface Metric {
     name: string;
     description: string;
     weight: number;
-    isNew: boolean;
+    isDefault: boolean;
   }
 
 
@@ -28,7 +28,7 @@ const MetricForm: React.FC<MetricFormProps> = ({metrics, onChangeMetric, onSaveM
                     type="text"
                     placeholder="Metric Name"
                     value={metric.name}
-                    disabled={!metric.isNew}
+                    disabled={metric.isDefault}
                     onChange={(e) => onChangeMetric(metric.id, "name", e.target.value)}
                     className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500"
                     />
@@ -36,7 +36,7 @@ const MetricForm: React.FC<MetricFormProps> = ({metrics, onChangeMetric, onSaveM
                     type="text"
                     placeholder="Metric Description"
                     value={metric.description}
-                    disabled={!metric.isNew}
+                    disabled={metric.isDefault}
                     onChange={(e) => onChangeMetric(metric.id,"description",e.target.value)}
                     className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500"
                     />
@@ -44,14 +44,14 @@ const MetricForm: React.FC<MetricFormProps> = ({metrics, onChangeMetric, onSaveM
                     type="number"
                     placeholder="weight"
                     value={metric.weight}
-                    disabled={!metric.isNew}
+                    disabled={metric.isDefault}
                     onChange={(e)=> onChangeMetric(metric.id, "weight",parseFloat(e.target.value))}
                     step="0.01"
                      className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500"
                     />
                     </div>
 
-                    {metric.isNew && (
+                    {!metric.isDefault && (
                     <div>
                         <button
                         onClick={() => onSaveMetric(metric)}
