@@ -14,7 +14,7 @@ interface MetricFormProps {
     metrics: Metric[];
     onChangeMetric: (id: number, field: keyof Metric, value: string | number) => void;
     onSaveMetric: (updatedMetric: Metric) => void;
-    onDeleteMetric: (id: number) => void;
+    onDeleteMetric: (id: number, isNew: boolean) => void;
     onAddMetric: ()=> void;
 }
 const MetricForm: React.FC<MetricFormProps> = ({metrics, onChangeMetric, onSaveMetric,onDeleteMetric,onAddMetric}) => {
@@ -62,7 +62,7 @@ const MetricForm: React.FC<MetricFormProps> = ({metrics, onChangeMetric, onSaveM
                         </button>
                     
                         <button
-                        onClick={() => onDeleteMetric(metric.id)}
+                        onClick={() => onDeleteMetric(metric.id, metric.isNew)}
                         className="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition"
                         >
                             Delete

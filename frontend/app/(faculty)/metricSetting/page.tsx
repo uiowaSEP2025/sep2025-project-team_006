@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import ProfileList from "@/components/ProfileList";
 import WebService from "@/api/WebService";
-import { apiGET, apiPOST } from "@/api/apiMethods";
+import { apiGET, apiPOST, apiDELETE } from "@/api/apiMethods";
 import { useRouter } from "next/navigation";
 import MetricForm from "@/components/MetricForm";
 
@@ -13,6 +13,7 @@ interface Metric {
     description: string;
     weight: number;
     isDefault: boolean;
+    isNew: boolean;
 }
 
 export default function Home() {
@@ -75,12 +76,29 @@ const handleOnAddMetric = () => {
         description: "",
         weight: 0,
         isDefault: false,
+        isNew: true
     };
     setMetrics((prevMetrics)=>[...prevMetrics, newMetric]);
 }
 
-const handleOnDeleteMetric = (id: number)=> {
+const handleOnDeleteMetric = async (id: number, isNew: boolean)=> {
+    if (isNew){
     setMetrics ((prevMetrics) => prevMetrics.filter((metric)=> metric.id != id));
+    return;
+    }
+
+    try{
+        const response = await apiDELETE(webService.FACULTY_METRIC_ID,id.toString());
+
+        if (!response.success){
+            throw new Error('Failed to delete metric');
+        }
+        setMetrics((prevMetrics) => prevMetrics.filter((metric) => metric.id !== id));
+
+        console.log('Metric deleted successfully');
+    } catch(error) {
+        console.error("Error deleting metric:", error);
+    }
 }
 
 const handleOnChangeMetric = (id: number, field: keyof Metric, value: string | number) => {
@@ -112,7 +130,8 @@ const handleOnSaveMetric = async (updatedMetric: Metric) => {
                         name: savedMetric.metric_name,
                         description: savedMetric.description,
                         weight: savedMetric.default_weight,
-                        isDefault: false }
+                        isDefault: false,
+                        isNew: false }
                     : metric
         )
     );
