@@ -59,6 +59,7 @@ export class AuthService {
     };
   }
 
+  // Logging in returns the same
   async login(email: string, password: string) {
     const userRecord = await this.userRepository.findOne({
       where: { email: email },
@@ -100,13 +101,14 @@ export class AuthService {
     return session;
   }
 
-  async refreshJWT(req, sessionToken: string) {
+  async refreshJWT(sessionToken: string) {
     const sessionRecord: Session | null = await this.sessionRepository.findOne({
       where: { session_token: sessionToken },
+      relations: ['user'],
     });
 
     // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-    if (sessionRecord && req.user.email === sessionRecord.user.email) {
+    if (sessionRecord) {
       return {
         token: await this.createJWT(sessionRecord.user),
       };
