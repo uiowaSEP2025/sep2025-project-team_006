@@ -16,3 +16,6 @@ import { ReviewsService } from './reviews.service';
     providers: [ReviewsService],
 })
 export class ReviewsModule { }
+
+
+// curl -X POST http://localhost:3000/reviews -H "Content-Type: application/json" -d "{ \"faculty_id\": 1, \"application_id\": 2 }"
