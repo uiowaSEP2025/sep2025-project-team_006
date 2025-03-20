@@ -17,15 +17,11 @@ export class ReviewMetric {
   @Column({ nullable: true })
   description: string;
 
-  // Weight selected during review (can differ from facultyMetric.defaultWeight)
   @Column('float')
   selected_weight: number;
 
   @Column('float')
   value: number;
-
-  @Column('float') // TBD how we will do this score
-  calculated_score: number;
 
   @ManyToOne(() => Review, (review) => review.review_metrics)
   review: Review;
