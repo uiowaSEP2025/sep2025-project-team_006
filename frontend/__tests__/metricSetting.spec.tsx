@@ -1,7 +1,7 @@
 import React from "react";
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import "@testing-library/jest-dom";
-import { apiGET, apiGETbyId, apiPOST } from "@/api/apiMethods";
+import { apiGET, apiPOST } from "@/api/apiMethods";
 import WebService from "@/api/WebService";
 import MetricForm from "@/components/MetricForm";
 import { useRouter } from "next/navigation";
@@ -42,28 +42,28 @@ describe("MetricSetting Page", () => {
 
   test("renders without crashing", async () => {
     (apiGET as jest.Mock).mockResolvedValue({ success: true, payload: [] });
-    (apiGETbyId as jest.Mock).mockResolvedValue({ success: true, payload: [] });
+    (apiGET as jest.Mock).mockResolvedValue({ success: true, payload: [] });
 
     render(React.createElement(require("@/app/(faculty)/metricSetting/page").default));
 
     expect(screen.getByText("Metric Settings")).toBeInTheDocument();
     await waitFor(() => expect(apiGET).toHaveBeenCalledWith(mockWebService.FACULTY_METRIC_DEFAULTS));
-    await waitFor(() => expect(apiGETbyId).toHaveBeenCalledWith(mockWebService.FACULTY_METRIC_ID, "1"));
+    await waitFor(() => expect(apiGET).toHaveBeenCalledWith(mockWebService.FACULTY_METRIC_ID, "1"));
   });
 
   test("handles API errors gracefully", async () => {
     (apiGET as jest.Mock).mockResolvedValue({ success: false, error: "Error fetching defaults" });
-    (apiGETbyId as jest.Mock).mockResolvedValue({ success: false, error: "Error fetching faculty metrics" });
+    (apiGET as jest.Mock).mockResolvedValue({ success: false, error: "Error fetching faculty metrics" });
 
     render(React.createElement(require("@/app/(faculty)/metricSetting/page").default));
 
     await waitFor(() => expect(apiGET).toHaveBeenCalled());
-    await waitFor(() => expect(apiGETbyId).toHaveBeenCalled());
+    await waitFor(() => expect(apiGET).toHaveBeenCalled());
   });
 
   test("calls onAddMetric when clicking add button", async () => {
     (apiGET as jest.Mock).mockResolvedValue({ success: true, payload: [] });
-    (apiGETbyId as jest.Mock).mockResolvedValue({ success: true, payload: [] });
+    (apiGET as jest.Mock).mockResolvedValue({ success: true, payload: [] });
 
     render(React.createElement(require("@/app/(faculty)/metricSetting/page").default));
 
