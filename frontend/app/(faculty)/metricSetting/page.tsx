@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import ProfileList from "@/components/ProfileList";
 import WebService from "@/api/WebService";
 import { apiGET, apiPOST, apiDELETE, apiPUT } from "@/api/apiMethods";
 import { useRouter } from "next/navigation";
@@ -16,8 +15,14 @@ interface Metric {
     isNew: boolean;
 }
 
+interface MetricResponse {
+    faculty_metric_id: number;
+    metric_name: string;
+    description: string;
+    default_weight: number;
+}
+
 export default function Home() {
- const router = useRouter();
  const webService = new WebService();
  const [metrics, setMetrics] = useState<Metric[]>([]);
 
@@ -35,7 +40,7 @@ export default function Home() {
             if(defaults.success) {
                 metrics = [
                     ...metrics,
-                    ...defaults.payload.map((metric: any) => ({
+                    ...defaults.payload.map((metric: MetricResponse) => ({
                         //id: metric.faculty_metric_id,
                         name: metric.metric_name,
                         description: metric.description,
@@ -50,7 +55,7 @@ export default function Home() {
             if (response.success) {
                 metrics = [
                     ...metrics,
-                    ...response.payload.map((metric: any) => ({
+                    ...response.payload.map((metric: MetricResponse) => ({
                         id: metric.faculty_metric_id,
                         name: metric.metric_name,
                         description: metric.description,
