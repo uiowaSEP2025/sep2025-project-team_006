@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import ProfileList from "@/components/ProfileList";
 import WebService from "@/api/WebService";
-import { apiGET, apiPOST, apiDELETE } from "@/api/apiMethods";
+import { apiGET, apiPOST, apiDELETE, apiPUT } from "@/api/apiMethods";
 import { useRouter } from "next/navigation";
 import MetricForm from "@/components/MetricForm";
 
@@ -114,34 +114,61 @@ const handleOnSaveMetric = async (updatedMetric: Metric) => {
         default_weight: updatedMetric.weight,
         faculty_id: 1,
     })
-    
-    try{
-        const response = await apiPOST(webService.FACULTY_METRIC_POST, data);
+    if(updatedMetric.isNew){
+        try{
+            const response = await apiPOST(webService.FACULTY_METRIC_POST, data);
 
-        if (!response.success) {
-            throw new Error("Failed to save metric");
+            if (!response.success) {
+                throw new Error("Failed to save metric");
+            }
+            const savedMetric = response.payload;
+
+            setMetrics((prevMetrics) => 
+                prevMetrics.map((metric) =>
+                    metric.id === updatedMetric.id
+                        ? { id: savedMetric.faculty_metric_id,
+                            name: savedMetric.metric_name,
+                            description: savedMetric.description,
+                            weight: savedMetric.default_weight,
+                            isDefault: false,
+                            isNew: false }
+                        : metric
+            )
+        );
+            console.log("Metric saved successfully:", savedMetric);
+        } catch(error){
+            console.error("Error saving metric:", error);
         }
-        const savedMetric = response.payload;
 
-        setMetrics((prevMetrics) => 
-            prevMetrics.map((metric) =>
-                metric.id === updatedMetric.id
-                    ? { id: savedMetric.faculty_metric_id,
-                        name: savedMetric.metric_name,
-                        description: savedMetric.description,
-                        weight: savedMetric.default_weight,
-                        isDefault: false,
-                        isNew: false }
-                    : metric
-        )
-    );
-        console.log("Metric saved successfully:", savedMetric);
-    } catch(error){
-        console.error("Error saving metric:", error);
-    }
+    }else{
+        try{
+            const response = await apiPUT(webService.FACULTY_METRIC_ID, updatedMetric.id.toString(), data);
 
-    
-};
+            if(!response.success){
+                throw new Error("Failed to update metric");
+            }
+            const newUpdateMetric = response.payload;
+
+            setMetrics((prevMetrics) => 
+                prevMetrics.map((metric) =>
+                    metric.id === updatedMetric.id
+                        ? { id: newUpdateMetric.faculty_metric_id,
+                            name: newUpdateMetric.metric_name,
+                            description: newUpdateMetric.description,
+                            weight: newUpdateMetric.default_weight,
+                            isDefault: false,
+                            isNew: false }
+                        : metric
+            )
+        );
+            console.log("Metric updated successfully:", newUpdateMetric);
+        } catch(error){
+            console.error("Error saving metric:", error);
+        }
+
+        }
+    };
+
 
 return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100 p-6">
