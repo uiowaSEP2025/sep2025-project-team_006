@@ -6,10 +6,10 @@ export class Student {
   @PrimaryGeneratedColumn()
   student_id: number;
 
-  @Column({ default: 'First' })
+  @Column({ nullable: true })
   first_name: string;
 
-  @Column({ default: 'Name' })
+  @Column({ nullable: true })
   last_name: string;
 
   @Column({ nullable: true })

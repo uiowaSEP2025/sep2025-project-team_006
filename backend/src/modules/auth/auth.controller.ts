@@ -23,21 +23,10 @@ export class AuthController {
     return this.authService.login(createUserDto.email, createUserDto.password);
   }
 
+  // For future reference:
   // The idea here is that each role has their own route for oauth logins.
   // This way, people can't just create faculty accounts. However, given their email exists in the database, they should have no problem logging in.
-
-  /* eslint-disable @typescript-eslint/require-await */
-  // These are stubs before oauth gets figured out.
-  @Post('student/oauth') // .*/api/auth/student/oauth
-  async postStudentOauthCallback() {
-    return;
-  }
-
-  @Post('faculty/oauth') // .*/api/auth/faculty/oauth
-  async postFacultyOauthCallback() {
-    return;
-  }
-  /* eslint-enable @typescript-eslint/require-await */
+  // There were stubs here, but they were removed. This will likely work a bit differently than previously intended.
 
   @Post('refresh') // .*/api/auth/refresh
   async postRefresh(@Body() refreshTokenDto: RefreshTokenDto) {
