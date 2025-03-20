@@ -107,7 +107,6 @@ export class AuthService {
       relations: ['user'],
     });
 
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
     if (sessionRecord) {
       return {
         token: await this.createJWT(sessionRecord.user),

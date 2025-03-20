@@ -1,7 +1,6 @@
-import { Body, Controller, Post, Request, UseGuards, Headers } from '@nestjs/common';
+import { Body, Controller, Post } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { CreateUserDto, RefreshTokenDto } from 'src/dto/auth.dto';
-import { AuthGuard } from './auth.guard';
 
 /**
  * Job: These routes are for user authentication.
