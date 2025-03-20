@@ -1,6 +1,6 @@
 import axios from "axios";
 import MockAdapter from "axios-mock-adapter";
-import { apiDELETE, apiGET, apiGETbyId, apiPOST, apiPUT } from "../api/apiMethods";
+import { apiDELETE, apiGET, apiPOST, apiPUT } from "../api/apiMethods";
 import WebService from "../api/WebService";
 
 const mock = new MockAdapter(axios);
@@ -24,7 +24,7 @@ describe("API Methods", () => {
     const testId = "1";
     mock.onGet(webService.TEST_GET_ONE.replace(":id", testId)).reply(200, mockData);
 
-    const result = await apiGETbyId(webService.TEST_GET_ONE, testId);
+    const result = await apiGET(webService.TEST_GET_ONE, testId);
     expect(result).toEqual(mockData);
   });
 
