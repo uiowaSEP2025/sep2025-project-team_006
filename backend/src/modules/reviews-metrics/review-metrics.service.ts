@@ -21,22 +21,22 @@ export class ReviewMetricsService {
     private reviewMetricRepo: Repository<ReviewMetric>,
   ) { }
 
-  // async getReviewForApplicationAndFaculty(
-  //   applicationId: number,
-  //   facultyId: number,
-  // ): Promise<Review> {
-  //   const review = await this.reviewRepo.findOne({
-  //     where: {
-  //       application: { application_id: applicationId },
-  //       faculty: { faculty_id: facultyId },
-  //     },
-  //     relations: ['review_metrics'],
-  //   });
-  //   if (!review) {
-  //     throw new NotFoundException(`Review for application ${applicationId} by faculty ${facultyId} not found`);
-  //   }
-  //   return review;
-  // }
+  async getReviewForApplicationAndFaculty(
+    application_id: number,
+    faculty_id: number,
+  ): Promise<Review> {
+    const review = await this.reviewRepo.findOne({
+      where: {
+        application: { application_id },
+        faculty: { faculty_id },
+      },
+      relations: ['review_metrics'],
+    });
+    if (!review) {
+      throw new NotFoundException(`Review for application ${application_id} by faculty ${faculty_id} not found`);
+    }
+    return review;
+  }
 
   async createReviewMetric(
     createDto: CreateReviewMetricDto,
