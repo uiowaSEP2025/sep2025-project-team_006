@@ -21,8 +21,8 @@ const MetricForm: React.FC<MetricFormProps> = ({metrics, onChangeMetric, onSaveM
         <div className="max-w-3xl mx-auto bg-white shadow-lg rounded-2xl p-6 border border-gray-200">
             <h2 className="text-2x1 font-bold text-black mb-4">Metrics</h2>
 
-            {metrics.map((metric)=> (
-                <div key={metric.id} className="bg-gray-100 p-4 rounded-lg shadow-md mb-4">
+            {metrics.map((metric, index)=> (
+                <div key={index} className="bg-gray-100 p-4 rounded-lg shadow-md mb-4">
                     <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                     <input
                     type="text"
