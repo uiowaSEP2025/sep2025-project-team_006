@@ -3,7 +3,6 @@
 import { useEffect, useState } from "react";
 import WebService from "@/api/WebService";
 import { apiGET, apiPOST, apiDELETE, apiPUT } from "@/api/apiMethods";
-import { useRouter } from "next/navigation";
 import MetricForm from "@/components/MetricForm";
 
 interface Metric {
