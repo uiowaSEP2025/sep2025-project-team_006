@@ -11,7 +11,7 @@ import { User } from './user.entity';
 @Entity('sessions') // table name in PostgreSQL
 export class Session {
   @PrimaryGeneratedColumn()
-  session_id: number;
+  id: number;
 
   @Column()
   session_token: string;
@@ -21,9 +21,6 @@ export class Session {
 
   @UpdateDateColumn()
   updated_at: Date;
-
-  @Column()
-  expires_at: Date;
 
   @ManyToOne(() => User, (user) => user.sessions)
   user: User;
