@@ -3,19 +3,13 @@ import {
   PrimaryGeneratedColumn,
   Column,
   ManyToOne,
-  JoinColumn,
 } from 'typeorm';
 import { Review } from './review.entity';
-import { FacultyMetric } from './faculty_metric.entity';
 
 @Entity('review_metrics')
 export class ReviewMetric {
   @PrimaryGeneratedColumn()
   review_metric_id: number;
-
-  @ManyToOne(() => FacultyMetric, { nullable: true })
-  @JoinColumn({ name: 'faculty_metric_id' })
-  faculty_metric: FacultyMetric;
 
   @Column({ nullable: true })
   name: string;
