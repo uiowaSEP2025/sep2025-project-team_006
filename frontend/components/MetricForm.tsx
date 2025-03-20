@@ -6,6 +6,7 @@ interface Metric {
     description: string;
     weight: number;
     isDefault: boolean;
+    isNew: boolean;
   }
 
 
