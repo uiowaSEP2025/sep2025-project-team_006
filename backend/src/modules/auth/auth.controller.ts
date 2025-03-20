@@ -1,6 +1,7 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, Post, Request, UseGuards } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { CreateUserDto } from 'src/dto/create-user.dto';
+import { CreateUserDto, RefreshTokenDto } from 'src/dto/auth.dto';
+import { AuthGuard } from './auth.guard';
 
 /**
  * Job: These routes are for user authentication.
@@ -37,4 +38,10 @@ export class AuthController {
     return;
   }
   /* eslint-enable @typescript-eslint/require-await */
+
+  @UseGuards(AuthGuard)
+  @Post('refresh')
+  async postRefresh(@Request() req, @Body() refreshTokenDto: RefreshTokenDto) {
+    return this.authService.refreshJWT(req, refreshTokenDto.session);
+  }
 }

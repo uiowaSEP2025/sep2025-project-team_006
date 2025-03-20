@@ -26,13 +26,14 @@ export class AuthService {
     private jwtService: JwtService,
   ) {}
 
+  // Registration logic is handled between students and faculty.
   async register(email: string, password: string, isFaculty: boolean) {
     if (await this.userRepository.findOne({ where: { email: email } })) {
       throw new Error('User already exists'); // exists.
     }
     const digest = bcrypt.hashSync(
       password,
-      bcrypt.genSaltSync(+process.env.BCRYPT_SALT_ROUNDS as number), // slight hack
+      bcrypt.genSaltSync(+process.env.BCRYPT_SALT_ROUNDS), // slight hack
     );
     const userRecord = this.userRepository.create({
       email: email,
@@ -50,9 +51,12 @@ export class AuthService {
       await this.studentRepository.save(studentRecord);
       userRecord.student = studentRecord;
     }
-
     await this.userRepository.save(userRecord);
-    return this.onSuccessfulLogin(userRecord);
+
+    return {
+      token: await this.createJWT(userRecord),
+      session: await this.createSessionToken(userRecord),
+    };
   }
 
   async login(email: string, password: string) {
@@ -60,29 +64,54 @@ export class AuthService {
       where: { email: email },
     });
     if (!userRecord) {
-      // no user record > user doesn't exist, throw an exception
+      // No user record > user doesn't exist, so throw an exception.
       throw new UnauthorizedException();
     }
 
     if (await bcrypt.compare(password, userRecord.password_digest)) {
-      return this.onSuccessfulLogin(userRecord);
+      // The passed in password matches the other, good to go.
+      return {
+        token: await this.createJWT(userRecord),
+        session: await this.createSessionToken(userRecord),
+      };
     } else {
       throw new UnauthorizedException();
     }
   }
 
-  // Helper function to create a session token and return a JWT. 
-  private async onSuccessfulLogin(userRecord: User) {
-    const session = crypto.randomBytes(32).toString("hex");
+  async createJWT(userRecord: User) {
+    const payload = { id: userRecord.user_id, email: userRecord.email };
+    return await this.jwtService.signAsync(payload);
+  }
+
+  async createSessionToken(userRecord: User) {
+    const session = crypto.randomBytes(32).toString('hex');
     const sessionRecord = this.sessionRepository.create({
       session_token: session,
+      user: userRecord,
     });
     await this.sessionRepository.save(sessionRecord);
 
-    const payload = { id: userRecord.user_id, email: userRecord.email };
-    return {
-      token: await this.jwtService.signAsync(payload),
-      session,
-    };
+    // Add session to user.
+    userRecord.sessions ??= [];
+    userRecord.sessions.push(sessionRecord);
+    await this.userRepository.save(userRecord);
+
+    return session;
+  }
+
+  async refreshJWT(req, sessionToken: string) {
+    const sessionRecord: Session | null = await this.sessionRepository.findOne({
+      where: { session_token: sessionToken },
+    });
+
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+    if (sessionRecord && req.user.email === sessionRecord.user.email) {
+      return {
+        token: await this.createJWT(sessionRecord.user),
+      };
+    } else {
+      throw new UnauthorizedException();
+    }
   }
 }
