@@ -16,4 +16,6 @@ export default class WebService {
     FACULTY_METRIC_DEFAULTS = `${this.serverUrl}/api/faculty/metrics/default` // GET
     STUDENTS_APPLICANT_LIST = `${this.serverUrl}/api/students/applicants`; // GET
     STUDENTS_APPLICANT_INFO = `${this.serverUrl}/api/students/:id`; // GET
+    APPLICATION_DOCUMENT_GET = `${this.serverUrl}/api/documents/:id` // GET
+    APPLICATION_DOCUMENT_POST = `${this.serverUrl}/api/documents` // POST
 }

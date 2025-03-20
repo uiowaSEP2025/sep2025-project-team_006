@@ -16,7 +16,8 @@
     "next": "15.1.6",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
-    "sep2025-project-team_006": "file:.."
+    "sep2025-project-team_006": "file:..",
+    "xlsx": "^0.18.5"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",

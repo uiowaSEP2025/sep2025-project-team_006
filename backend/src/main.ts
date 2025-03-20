@@ -6,6 +6,7 @@ import { seedFacultyMetrics } from './seed/seed_faculty_metrics';
 import { ResponseInterceptor } from './config/response.interceptor';
 import { HttpExceptionFilter } from './config/http_exception.filter';
 import { seedApplications } from './seed/seed_applications';
+import { seedDocuments } from './seed/seed_documents';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -25,11 +26,11 @@ async function bootstrap() {
   // seed data ONLY when in development mode
   if (process.env.NODE_ENV === 'development') {
     try {
-      // TODO: Seed new tables, slowly start removing test table as more progress is being made
       await seedTestTable();
       await seedUserDatabase();
       await seedFacultyMetrics();
       await seedApplications();
+      await seedDocuments();
       console.log('Database seeding completed.');
     } catch (error) {
       console.error('Error seeding database:', error);

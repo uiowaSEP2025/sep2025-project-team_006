@@ -35,7 +35,7 @@ export default function RootLayout({
         {children}
 
         <footer className="bg-black text-[#F1BE48] h-20 text-4xl px-6 sm:px-12 py-4 flex justify-between items-center"> 
-          Bottom of Page</footer>
+          University of Iowa</footer>
       </body>
       
     </html>
