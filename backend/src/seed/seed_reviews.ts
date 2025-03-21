@@ -46,10 +46,16 @@ export async function seedReviews() {
   const reviewsData = JSON.parse(fs.readFileSync(reviewsDataPath, 'utf-8'));
 
   for (const reviewData of reviewsData) {
-    const faculty = await facultyRepo.findOneBy({ faculty_id: reviewData.faculty_id });
-    const application = await applicationRepo.findOneBy({ application_id: reviewData.application_id });
+    const faculty = await facultyRepo.findOneBy({
+      faculty_id: reviewData.faculty_id,
+    });
+    const application = await applicationRepo.findOneBy({
+      application_id: reviewData.application_id,
+    });
     if (!faculty || !application) {
-      console.warn(`Skipping review: Faculty ${reviewData.faculty_id} or Application ${reviewData.application_id} not found`);
+      console.warn(
+        `Skipping review: Faculty ${reviewData.faculty_id} or Application ${reviewData.application_id} not found`,
+      );
       continue;
     }
 
@@ -58,7 +64,7 @@ export async function seedReviews() {
       application,
       overall_score: reviewData.overall_score || null,
       comments: reviewData.comments || null,
-      review_metrics: []
+      review_metrics: [],
     });
     await reviewRepo.save(newReview);
   }

@@ -39,16 +39,28 @@ export async function seedReviewMetrics() {
   const dirname = __dirname.replace('dist', 'src');
 
   // Remove previously stored data
-  await dataSource.query(`TRUNCATE TABLE "review_metrics" RESTART IDENTITY CASCADE`);
+  await dataSource.query(
+    `TRUNCATE TABLE "review_metrics" RESTART IDENTITY CASCADE`,
+  );
 
-  const reviewMetricsDataPath = path.join(dirname, 'data', 'review_metrics.json');
-  const reviewMetricsData = JSON.parse(fs.readFileSync(reviewMetricsDataPath, 'utf-8'));
+  const reviewMetricsDataPath = path.join(
+    dirname,
+    'data',
+    'review_metrics.json',
+  );
+  const reviewMetricsData = JSON.parse(
+    fs.readFileSync(reviewMetricsDataPath, 'utf-8'),
+  );
 
   for (const metricData of reviewMetricsData) {
     // Ensure that the associated review exists
-    const review = await reviewRepo.findOneBy({ review_id: metricData.review_id });
+    const review = await reviewRepo.findOneBy({
+      review_id: metricData.review_id,
+    });
     if (!review) {
-      console.warn(`Skipping metric for Review ${metricData.review_id}: Review not found`);
+      console.warn(
+        `Skipping metric for Review ${metricData.review_id}: Review not found`,
+      );
       continue;
     }
 
