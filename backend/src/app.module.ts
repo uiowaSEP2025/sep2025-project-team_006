@@ -6,6 +6,8 @@ import { AuthModule } from './modules/auth/auth.module';
 import { FacultyMetricsModule } from './modules/faculty-metrics/faculty-metrics.module';
 import { StudentsModule } from './modules/students/students.module';
 import { DocumentsModule } from './modules/documents/documents.module';
+import { ReviewMetricsModule } from './modules/reviews-metrics/review-metrics.module';
+import { ReviewsModule } from './modules/reviews/reviews.module';
 
 @Module({
   imports: [
@@ -13,6 +15,8 @@ import { DocumentsModule } from './modules/documents/documents.module';
     DatabaseModule,
     DocumentsModule,
     FacultyMetricsModule,
+    ReviewMetricsModule,
+    ReviewsModule,
     StudentsModule,
     TestModule,
     AuthModule,
