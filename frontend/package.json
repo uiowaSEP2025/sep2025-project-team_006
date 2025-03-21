@@ -48,17 +48,17 @@
     ],
     "rootDir": "./",
     "modulePaths": [
-      "<rootDir>/src"
+      "<rootDir>/"
     ],
     "moduleNameMapper": {
-      "^@/(.*)$": "<rootDir>/src/$1"
+      "^@/(.*)$": "<rootDir>/$1"
     },
-    "testRegex": ".*\\.spec\\.ts$",
+    "testRegex": ".*\\.spec\\.tsx?$",
     "transform": {
-      "^.+\\.(t|j)s$": "ts-jest"
+      "^.+\\.(t|j)sx?$": "ts-jest"
     },
     "collectCoverageFrom": [
-      "**/*.(t|j)s"
+      "**/*.(t|j)sx?"
     ],
     "coveragePathIgnorePatterns": [
       "frontend/node_modules/",
@@ -66,6 +66,6 @@
       "/frontend/.next"
     ],
     "coverageDirectory": "../frontend/coverage",
-    "testEnvironment": "node"
+    "testEnvironment": "jsdom"
   }
 }
