@@ -17,23 +17,18 @@ export default function Home() {
           Your one-stop solution for graduate student management.
         </p>
         <div className="flex gap-6">
+          <Button asChild>
           <Link
-            href="/faculty"
-            className="w-40 h-12 flex items-center justify-center rounded-full bg-white text-black font-semibold hover:bg-gray-300 transition"
-          >
+            href="/faculty">
             Faculty
           </Link>
-
-          <Button>
-            ShadCN/UI Button
           </Button>
-          
+          <Button asChild>
           <Link
-            href="/students"
-            className="w-40 h-12 flex items-center justify-center rounded-full bg-white text-black font-semibold hover:bg-gray-300 transition"
-          >
+            href="/students">
             Students
           </Link>
+          </Button>
         </div>
       </div>
     </div>
