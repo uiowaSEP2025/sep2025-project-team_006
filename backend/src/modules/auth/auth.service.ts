@@ -1,8 +1,12 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { User } from 'src/entity/user.entity';
+import { JwtService } from '@nestjs/jwt';
+import { Faculty } from 'src/entity/faculty.entity';
+import { Student } from 'src/entity/student.entity';
 import { Session } from 'src/entity/session.entity';
+import { User } from 'src/entity/user.entity';
 import { Repository } from 'typeorm';
+import * as bcrypt from 'bcrypt';
 import * as crypto from 'node:crypto';
 
 /**
@@ -15,41 +19,100 @@ export class AuthService {
     private readonly userRepository: Repository<User>,
     @InjectRepository(Session)
     private readonly sessionRepository: Repository<Session>,
+    @InjectRepository(Student)
+    private readonly studentRepository: Repository<Student>,
+    @InjectRepository(Faculty)
+    private readonly facultyRepository: Repository<Faculty>,
+    private jwtService: JwtService,
   ) {}
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  async register(email: string, password: string) {
+  // Registration logic is handled between students and faculty.
+  async register(email: string, password: string, isFaculty: boolean) {
     if (await this.userRepository.findOne({ where: { email: email } })) {
-      return false; // exists.
+      throw new Error('User already exists'); // exists.
     }
-    // TODO: rewrite this after table changes
-    // const record = this.userRepository.create({
-    //   email: email,
-    //   passwordDigest: password, // VERY SUPER TEMPORARY. didn't want to figure out password digestion. shouldn't be super hard though...
-    // });
-    // await this.userRepository.save(record);
-    return true;
+    const digest = bcrypt.hashSync(
+      password,
+      bcrypt.genSaltSync(+process.env.BCRYPT_SALT_ROUNDS), // slight hack
+    );
+    const userRecord = this.userRepository.create({
+      email: email,
+      password_digest: digest,
+    });
+
+    // Attaching the user record to an empty student/faculty record.
+    // These will, assumedly, get filled out later.
+    if (isFaculty) {
+      const facultyRecord = this.facultyRepository.create({});
+      await this.facultyRepository.save(facultyRecord);
+      userRecord.faculty = facultyRecord;
+    } else {
+      const studentRecord = this.studentRepository.create({});
+      await this.studentRepository.save(studentRecord);
+      userRecord.student = studentRecord;
+    }
+    await this.userRepository.save(userRecord);
+
+    return {
+      token: await this.createJWT(userRecord),
+      session: await this.createSessionToken(userRecord),
+    };
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  // Logging in returns the same
   async login(email: string, password: string) {
     const userRecord = await this.userRepository.findOne({
       where: { email: email },
     });
     if (!userRecord) {
-      return false; // doesn't exist
+      // No user record > user doesn't exist, so throw an exception.
+      throw new UnauthorizedException();
     }
-    // TODO: rewrite this after table changes
-    // if (password !== userRecord.passwordDigest) {
-    //   return false;
-    // }
 
-    const token = crypto.randomBytes(32).toString('hex');
-    // const session = this.sessionRepository.create({
-    //   session_id: userRecord.user_id,
-    //   token: token,
-    // });
-    // await this.sessionRepository.save(session);
-    return token;
+    if (await bcrypt.compare(password, userRecord.password_digest)) {
+      // The passed in password matches the other, good to go.
+      return {
+        token: await this.createJWT(userRecord),
+        session: await this.createSessionToken(userRecord),
+      };
+    } else {
+      throw new UnauthorizedException();
+    }
+  }
+
+  async createJWT(userRecord: User) {
+    const payload = { id: userRecord.user_id, email: userRecord.email };
+    return await this.jwtService.signAsync(payload);
+  }
+
+  async createSessionToken(userRecord: User) {
+    const session = crypto.randomBytes(32).toString('hex');
+    const sessionRecord = this.sessionRepository.create({
+      session_token: session,
+      user: userRecord,
+    });
+    await this.sessionRepository.save(sessionRecord);
+
+    // Add session to user.
+    userRecord.sessions ??= [];
+    userRecord.sessions.push(sessionRecord);
+    await this.userRepository.save(userRecord);
+
+    return session;
+  }
+
+  async refreshJWT(sessionToken: string) {
+    const sessionRecord: Session | null = await this.sessionRepository.findOne({
+      where: { session_token: sessionToken },
+      relations: ['user'],
+    });
+
+    if (sessionRecord) {
+      return {
+        token: await this.createJWT(sessionRecord.user),
+      };
+    } else {
+      throw new UnauthorizedException();
+    }
   }
 }
