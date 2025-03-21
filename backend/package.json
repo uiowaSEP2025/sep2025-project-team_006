@@ -91,7 +91,9 @@
       "/coverage/",
       "/dist/",
       "/src/seed/",
-      "/src/entity/"
+      "/src/entity/",
+      ".*\\.module\\.ts$",
+      "/src/main.ts"
     ],
     "coverageDirectory": "../backend/coverage",
     "testEnvironment": "node"
