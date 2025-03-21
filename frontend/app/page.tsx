@@ -1,5 +1,7 @@
 import Link from 'next/link';
 import "./globals.css";
+import { Button } from "@/components/ui/button"
+
 
 export default function Home() {
   return (
@@ -21,6 +23,11 @@ export default function Home() {
           >
             Faculty
           </Link>
+
+          <Button>
+            ShadCN/UI Button
+          </Button>
+          
           <Link
             href="/students"
             className="w-40 h-12 flex items-center justify-center rounded-full bg-white text-black font-semibold hover:bg-gray-300 transition"
