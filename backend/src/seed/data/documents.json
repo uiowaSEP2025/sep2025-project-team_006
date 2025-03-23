@@ -1,0 +1,27 @@
+[
+    {
+        "document_type": "pdf",
+        "file_name": "test_pdf1.pdf",
+        "application_id": 8
+    },
+    {
+        "document_type": "pdf",
+        "file_name": "test_pdf2.pdf",
+        "application_id": 6
+    },
+    {
+        "document_type": "pdf",
+        "file_name": "test_pdf3.pdf",
+        "application_id": 10
+    },
+    {
+        "document_type": "xlsx",
+        "file_name": "test_excel1.xlsx",
+        "application_id": 6
+    },
+    {
+        "document_type": "xlsx",
+        "file_name": "test_excel1.xlsx",
+        "application_id": 3
+    }
+]

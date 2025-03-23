@@ -16,7 +16,8 @@
     "next": "15.1.6",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
-    "sep2025-project-team_006": "file:.."
+    "sep2025-project-team_006": "file:..",
+    "xlsx": "^0.18.5"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
@@ -47,17 +48,17 @@
     ],
     "rootDir": "./",
     "modulePaths": [
-      "<rootDir>/src"
+      "<rootDir>/"
     ],
     "moduleNameMapper": {
-      "^@/(.*)$": "<rootDir>/src/$1"
+      "^@/(.*)$": "<rootDir>/$1"
     },
-    "testRegex": ".*\\.spec\\.ts$",
+    "testRegex": ".*\\.spec\\.tsx?$",
     "transform": {
-      "^.+\\.(t|j)s$": "ts-jest"
+      "^.+\\.(t|j)sx?$": "ts-jest"
     },
     "collectCoverageFrom": [
-      "**/*.(t|j)s"
+      "**/*.(t|j)sx?"
     ],
     "coveragePathIgnorePatterns": [
       "frontend/node_modules/",
@@ -65,6 +66,6 @@
       "/frontend/.next"
     ],
     "coverageDirectory": "../frontend/coverage",
-    "testEnvironment": "node"
+    "testEnvironment": "jsdom"
   }
 }
