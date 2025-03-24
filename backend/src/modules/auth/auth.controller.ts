@@ -1,6 +1,7 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, Get, Post, UseGuards, Request } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { CreateUserDto, RefreshTokenDto } from 'src/dto/auth.dto';
+import { AuthGuard } from './auth.guard';
 
 /**
  * Job: These routes are for user authentication.
@@ -27,6 +28,12 @@ export class AuthController {
   // The idea here is that each role has their own route for oauth logins.
   // This way, people can't just create faculty accounts. However, given their email exists in the database, they should have no problem logging in.
   // There were stubs here, but they were removed. This will likely work a bit differently than previously intended.
+
+  @UseGuards(AuthGuard)
+  @Get('')
+  async getAuthInfo(@Request() req: Request) {
+    return this.authService.getAuthInfo(req);
+  }
 
   @Post('refresh') // .*/api/auth/refresh
   async postRefresh(@Body() refreshTokenDto: RefreshTokenDto) {
