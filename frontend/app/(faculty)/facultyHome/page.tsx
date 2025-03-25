@@ -6,8 +6,8 @@ import { Button } from "@/components/ui/button";
 export default function Home() {
 
   const Develompent = [
-    {label: "Student List", href: "/studentList", image: "/JPGOFIcon.png"},
-    {label: "Metric Settings", href: "/metricSetting", image: "/JPGOFIcon.png"},
+    {label: "Student List", href: "/studentList", image: "/studentList.png"},
+    {label: "Metric Settings", href: "/metricSetting", image: "/metricSetting.png"},
   ];
 
   const AdmissionsInformation = [
