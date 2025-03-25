@@ -1,4 +1,4 @@
-require('dotenv').config();
+import * as dotenv from 'dotenv';
 
 import { Application } from 'src/entity/application.entity';
 import { Document } from 'src/entity/document.entity';
@@ -15,26 +15,28 @@ import { DataSource } from 'typeorm';
 /**
  * Job: Is needed in order to create and generate migrations
  */
+dotenv.config();
+
 export const AppDataSource = new DataSource({
-    type: 'postgres',
-    host: process.env.PGSQL_HOST || 'localhost',
-    port: Number(process.env.PGSQL_PORT) || 5432,
-    username: process.env.PGSQL_USER || 'postgres',
-    password: process.env.PGSQL_PASSWORD || 'password',
-    database: process.env.PGSQL_DATABASE || 'gapdb',
-    entities: [
-        Test,
-        Application,
-        Document,
-        FacultyMetric,
-        Faculty,
-        ReviewMetric,
-        Review,
-        Session,
-        Student,
-        User,
-    ],
-    migrations: [__dirname + '/migrations/*{.ts,.js}'],
-    synchronize: false,
-    logging: process.env.NODE_ENV === 'development',
+  type: 'postgres',
+  host: process.env.PGSQL_HOST || 'localhost',
+  port: Number(process.env.PGSQL_PORT) || 5432,
+  username: process.env.PGSQL_USER || 'postgres',
+  password: process.env.PGSQL_PASSWORD || 'password',
+  database: process.env.PGSQL_DATABASE || 'gapdb',
+  entities: [
+    Test,
+    Application,
+    Document,
+    FacultyMetric,
+    Faculty,
+    ReviewMetric,
+    Review,
+    Session,
+    Student,
+    User,
+  ],
+  migrations: [__dirname + '/migrations/*{.ts,.js}'],
+  synchronize: false,
+  logging: process.env.NODE_ENV === 'development',
 });
