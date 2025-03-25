@@ -1,8 +1,7 @@
 # Database Migrations
 
-Managing your database schema is a critical part of developing your backend. 
 Every time you make changes to your entities or table definitions, you'll need to update your database via migration files. 
-These migration files should be committed to your repository so that every team member and environment remains in sync.
+These migration files should be committed to the repository so that all of us can remain in sync.
 
 ## When to Run Migration Commands
 
