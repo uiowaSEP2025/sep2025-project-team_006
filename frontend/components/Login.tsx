@@ -9,11 +9,19 @@ import {
 } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import Link from "next/link"
+
+type LoginFormProps = React.ComponentPropsWithoutRef<"div"> & {
+    //signUpHref?: string
+    showSignUpLink?: boolean
+}
 
 export function LoginForm({
   className,
+  //signUpHref = "/createAccount",
+  showSignUpLink = true,
   ...props
-}: React.ComponentPropsWithoutRef<"div">) {
+}: LoginFormProps) {
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>
       <Card>
@@ -51,15 +59,18 @@ export function LoginForm({
                 Login
               </Button>
               <Button variant="outline" className="w-full">
-                Login with Google
+                Login with Outlook
               </Button>
             </div>
+            {showSignUpLink && (
             <div className="mt-4 text-center text-sm">
               Don&apos;t have an account?{" "}
-              <a href="#" className="underline underline-offset-4">
+              <a href="/createAccount" className="underline underline-offset-4">
                 Sign up
               </a>
             </div>
+            )}
+
           </form>
         </CardContent>
       </Card>
