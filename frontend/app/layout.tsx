@@ -44,14 +44,14 @@ export default function RootLayout({
 
         <footer className="bg-black text-[#F1BE48] h-20 text-4xl px-6 sm:px-12 py-4 flex justify-between items-center"> 
         <img
-              src="./Tigerhawk.png"
-              alt="TigerHawk Logo"
+              src="./IOWABLACKLogo.png"
+              alt="Iowa Logo"
               className="h-12 w-auto"
             />
         <div className="flex items-center space-x-4">
         <img
-              src="./IOWABlackLogo.png"
-              alt="Iowa Logo"
+              src="./Tigerhawk.png"
+              alt="Tiger Hawk"
               className="h-12 w-auto"
             />
           </div>
