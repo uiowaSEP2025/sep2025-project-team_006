@@ -50,7 +50,7 @@ export default function RootLayout({
             />
         <div className="flex items-center space-x-4">
         <img
-              src="./IOWALogo.png"
+              src="./IOWABlackLogo.png"
               alt="Iowa Logo"
               className="h-12 w-auto"
             />
