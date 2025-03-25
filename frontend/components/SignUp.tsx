@@ -57,10 +57,7 @@ export function SignUpForm({
                 <Input id="password" type="password" required />
               </div>
               <Button type="submit" className="w-full">
-                Login
-              </Button>
-              <Button variant="outline" className="w-full">
-                Login with Outlook
+                Sign-Up
               </Button>
             </div>
             
