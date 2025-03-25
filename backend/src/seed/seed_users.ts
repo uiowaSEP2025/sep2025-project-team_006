@@ -70,7 +70,7 @@ export async function seedUserDatabase() {
         faculty: faculty, // link to faculty entity
         provider: 'Microsoft',
         provider_id: providerId,
-        password_digest: bcrypt.hashSync("meaningless", bcrypt.genSaltSync(10)),
+        password_digest: bcrypt.hashSync('meaningless', bcrypt.genSaltSync(10)),
         email: facultyData.email,
       });
       await userRepo.save(userFaculty);
@@ -101,7 +101,7 @@ export async function seedUserDatabase() {
         student: student, // link to student entity
         provider: 'Google',
         provider_id: providerId,
-        password_digest: bcrypt.hashSync("meaningless", bcrypt.genSaltSync(10)),
+        password_digest: bcrypt.hashSync('meaningless', bcrypt.genSaltSync(10)),
         email: studentData.email,
       });
       await userRepo.save(userStudent);
