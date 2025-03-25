@@ -28,7 +28,7 @@ export default function Home() {
 
           <Button asChild>
           <Link
-            href="/studentLogin"
+            href="/studentHome"
           >
             Move to Next Page
           </Link>
