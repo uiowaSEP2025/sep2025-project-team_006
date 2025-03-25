@@ -29,13 +29,33 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <header className="bg-black text-[#F1BE48] h-20 text-4xl px-6 sm:px-12 py-4 flex justify-between items-center">
-          Graduate Admission Portal 
+        <img
+              src="./GAPOfficial.png"
+              alt="GAP Official logo"
+              className="h-12 w-auto"
+            />
+
+          <div className="flex items-center space-x-4">
+            Graduate Admission Portal 
+          </div>
           </header>
         
         {children}
 
         <footer className="bg-black text-[#F1BE48] h-20 text-4xl px-6 sm:px-12 py-4 flex justify-between items-center"> 
-          University of Iowa</footer>
+        <img
+              src="./Tigerhawk.png"
+              alt="TigerHawk Logo"
+              className="h-12 w-auto"
+            />
+        <div className="flex items-center space-x-4">
+        <img
+              src="./IOWALogo.png"
+              alt="Iowa Logo"
+              className="h-12 w-auto"
+            />
+          </div>
+        </footer>
       </body>
       
     </html>
