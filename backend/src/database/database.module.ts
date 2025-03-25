@@ -34,7 +34,9 @@ import { User } from 'src/entity/user.entity';
         User,
       ],
       // dev only, use migrations in production
-      synchronize: true,
+      synchronize: false,
+      migrations: [__dirname + '/migrations/*{.ts,.js}'],
+      migrationsTableName: "sep_migration_table",
     }),
   ],
   exports: [TypeOrmModule], // Exporting allows other modules to use TypeORM
