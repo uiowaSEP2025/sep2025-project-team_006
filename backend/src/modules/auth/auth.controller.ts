@@ -35,7 +35,8 @@ export class AuthController {
     return this.authService.getAuthInfo(req);
   }
 
-  @Post('refresh') // .*/api/auth/refresh
+  // This route refreshes the JWT.
+  @Post('') // .*/api/auth
   async postRefresh(@Body() refreshTokenDto: RefreshTokenDto) {
     return this.authService.refreshJWT(refreshTokenDto.session);
   }
