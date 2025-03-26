@@ -4,6 +4,8 @@ import { useEffect, useState } from "react";
 import WebService from "@/api/WebService";
 import { apiGET, apiPOST, apiDELETE, apiPUT } from "@/api/apiMethods";
 import MetricForm from "@/components/MetricForm";
+import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
 interface Metric {
     id: number;
@@ -183,6 +185,14 @@ return (
             onChangeMetric={handleOnChangeMetric}
             onSaveMetric={handleOnSaveMetric}
         />
+
+        <Button asChild>
+          <Link
+            href="/facultyHome"
+          >
+            Return to Home
+          </Link>
+          </Button>
       </div>
 );
 
