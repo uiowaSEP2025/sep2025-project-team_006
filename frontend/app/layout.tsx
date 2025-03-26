@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import Image from "next/image";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -29,13 +30,39 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <header className="bg-black text-[#F1BE48] h-20 text-4xl px-6 sm:px-12 py-4 flex justify-between items-center">
-          Graduate Admission Portal 
+        <Image
+              src="./GAPOfficial.png"
+              alt="GAP Official logo"
+              width={48} 
+              height={48}
+              className="h-12 w-auto"
+            />
+
+          <div className="flex items-center space-x-4">
+            Graduate Admission Portal 
+          </div>
           </header>
         
         {children}
 
         <footer className="bg-black text-[#F1BE48] h-20 text-4xl px-6 sm:px-12 py-4 flex justify-between items-center"> 
-          University of Iowa</footer>
+        <Image
+              src="./IOWABLACKLogo.png"
+              alt="Iowa Logo"
+              width={48} 
+              height={48}
+              className="h-12 w-auto"
+            />
+        <div className="flex items-center space-x-4">
+        <Image
+              src="./Tigerhawk.png"
+              alt="Tiger Hawk"
+              width={48} 
+              height={48}
+              className="h-12 w-auto"
+            />
+          </div>
+        </footer>
       </body>
       
     </html>
