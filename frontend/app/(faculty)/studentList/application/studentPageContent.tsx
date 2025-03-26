@@ -9,6 +9,7 @@ import { StudentData } from "@/types/StudentData";
 import ExcelViewer from "@/components/ExcelViewer";
 import ReviewForm from "@/components/ReviewForm";
 import { Button } from "@/components/ui/button";
+import { Textarea } from "@/components/ui/textarea";
 import Link from "next/link";
 
 interface Metric {
@@ -175,6 +176,7 @@ export default function StudentPageContent() {
             <p className="text-gray-600">Loading student data...</p>
           )}
             */}
+          <Textarea placeholder="Comments"/>
 
           <Button asChild>
             <Link
