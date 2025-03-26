@@ -8,6 +8,8 @@ import PdfViewer from "@/components/PdfViewer";
 import { StudentData } from "@/types/StudentData";
 import ExcelViewer from "@/components/ExcelViewer";
 import ReviewForm from "@/components/ReviewForm";
+import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
 interface Metric {
   id: number;
@@ -169,6 +171,14 @@ export default function StudentPageContent() {
             <p className="text-gray-600">Loading student data...</p>
           )}
             */}
+
+          <Button asChild>
+            <Link
+              href="/studentList"
+          >
+              Return to Student List
+          </Link>
+          </Button>
         </div>
       </div>
     </div>
