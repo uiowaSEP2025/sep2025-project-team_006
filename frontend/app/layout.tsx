@@ -33,6 +33,8 @@ export default function RootLayout({
         <Image
               src="./GAPOfficial.png"
               alt="GAP Official logo"
+              width={48} 
+              height={48}
               className="h-12 w-auto"
             />
 
@@ -47,12 +49,16 @@ export default function RootLayout({
         <Image
               src="./IOWABLACKLogo.png"
               alt="Iowa Logo"
+              width={48} 
+              height={48}
               className="h-12 w-auto"
             />
         <div className="flex items-center space-x-4">
         <Image
               src="./Tigerhawk.png"
               alt="Tiger Hawk"
+              width={48} 
+              height={48}
               className="h-12 w-auto"
             />
           </div>
