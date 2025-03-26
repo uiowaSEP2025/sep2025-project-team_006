@@ -5,6 +5,7 @@ interface Metric {
     name: string;
     description: string;
     weight: number;
+    score: number;
   }
 
 
@@ -38,6 +39,15 @@ const ReviewForm: React.FC<ReviewFormProps> = ({metrics, onChangeMetric,onDelete
                     step="0.01"
                      className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500"
                     />
+                    <input
+                    type="number"
+                    placeholder="Score"
+                    value={metric.score}
+                    disabled={false}
+                    onChange={(e)=> onChangeMetric(metric.id, "score",parseInt(e.target.value))}
+                     className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500"
+                    />
+
                     </div>
                     <div>
                         <button

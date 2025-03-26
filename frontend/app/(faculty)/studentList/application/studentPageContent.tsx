@@ -16,6 +16,7 @@ interface Metric {
   name: string;
   description: string;
   weight: number;
+  score: number;
 }
 
 interface MetricResponse {
@@ -23,6 +24,7 @@ interface MetricResponse {
   metric_name: string;
   description: string;
   default_weight: number;
+  score: number;
 }
 
 export default function StudentPageContent() {
@@ -94,6 +96,7 @@ export default function StudentPageContent() {
                           name: metric.metric_name,
                           description: metric.description,
                           weight: metric.default_weight,
+                          score: 0,
                           isDefault: true,
                       }))
                   ];
@@ -109,6 +112,7 @@ export default function StudentPageContent() {
                           name: metric.metric_name,
                           description: metric.description,
                           weight: metric.default_weight,
+                          score: 0,
                           isDefault: false,
                       }))
                   ];
