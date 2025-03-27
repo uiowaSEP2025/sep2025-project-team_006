@@ -10,6 +10,7 @@ import { ReviewMetric } from 'src/entity/review_metric.entity';
 import { Session } from 'src/entity/session.entity';
 import { Student } from 'src/entity/student.entity';
 import { User } from 'src/entity/user.entity';
+import { LoggerService } from 'src/common/logger/logger.service';
 
 const dataSource = new DataSource({
   type: 'postgres',
@@ -32,7 +33,7 @@ const dataSource = new DataSource({
   synchronize: false,
 });
 
-export async function seedFacultyMetrics() {
+export async function seedFacultyMetrics(logger: LoggerService) {
   await dataSource.initialize();
   const facultyMetricRepo = dataSource.getRepository(FacultyMetric);
   const facultyRepo = dataSource.getRepository(Faculty);
@@ -70,6 +71,6 @@ export async function seedFacultyMetrics() {
     }
   }
 
-  console.log('Faculty metrics seeded successfully.');
+  logger.debug('Faculty metrics seeded successfully.');
   await dataSource.destroy();
 }

@@ -106,6 +106,5 @@ export async function seedUserDatabase() {
     studentIndex++;
   }
 
-  console.log('OAuth Users and Sessions seeded successfully.');
   await dataSource.destroy();
 }

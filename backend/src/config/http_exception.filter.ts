@@ -4,9 +4,9 @@ import {
   ArgumentsHost,
   HttpException,
   HttpStatus,
-  Logger,
 } from '@nestjs/common';
 import { Request, Response } from 'express';
+import { LoggerService } from 'src/common/logger/logger.service';
 
 /**
  * Job: Catches any HTTP errors and formats the response in a consistent format.
@@ -14,7 +14,7 @@ import { Request, Response } from 'express';
 
 @Catch()
 export class HttpExceptionFilter implements ExceptionFilter {
-  private readonly logger = new Logger(HttpExceptionFilter.name);
+  constructor(private readonly logger: LoggerService) {}
 
   catch(exception: unknown, host: ArgumentsHost) {
     if (process.env.NODE_ENV !== "test") {

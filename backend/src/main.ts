@@ -6,13 +6,12 @@ import { seedFacultyMetrics } from './seed/seed_faculty_metrics';
 import { ResponseInterceptor } from './config/response.interceptor';
 import { HttpExceptionFilter } from './config/http_exception.filter';
 import { seedApplications } from './seed/seed_applications';
+import { LoggerService } from './common/logger/logger.service';
 
 async function bootstrap() {
+  const logger = new LoggerService();
   const app = await NestFactory.create(AppModule, {
-    logger:
-      process.env.NODE_ENV === 'development'
-        ? ['log', 'fatal', 'error', 'warn', 'debug', 'verbose']
-        : ['log', 'fatal', 'error']
+    logger,
   });
   app.enableCors({
     origin: ['http://localhost:3000', 'https://uiowasep2025.github.io'],
@@ -23,7 +22,7 @@ async function bootstrap() {
 
   // To help standardize our API responses
   app.useGlobalInterceptors(new ResponseInterceptor());
-  app.useGlobalFilters(new HttpExceptionFilter());
+  app.useGlobalFilters(new HttpExceptionFilter(logger));
 
   await app.listen(process.env.PORT ?? 5000);
 
@@ -31,13 +30,13 @@ async function bootstrap() {
   if (process.env.NODE_ENV === 'development') {
     try {
       // TODO: Seed new tables, slowly start removing test table as more progress is being made
-      await seedTestTable();
-      await seedUserDatabase();
-      await seedFacultyMetrics();
-      await seedApplications();
-      console.log('Database seeding completed.');
+      await seedTestTable(logger);
+      await seedUserDatabase(logger);
+      await seedFacultyMetrics(logger);
+      await seedApplications(logger);
+      logger.debug('Database seeding completed.');
     } catch (error) {
-      console.error('Error seeding database:', error);
+      logger.error('Error seeding database:', error);
       process.exit(1);
     }
   }

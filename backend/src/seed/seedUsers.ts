@@ -1,4 +1,5 @@
 import { User, AccountType } from 'src/entity/user.entity';
+import { LoggerService } from 'src/common/logger/logger.service';
 import { DataSource } from 'typeorm';
 
 /**
@@ -15,12 +16,12 @@ const dataSource = new DataSource({
   synchronize: false, // Ensure migrations are used in production
 });
 
-export async function seedUsers() {
+export async function seedUsers(logger: LoggerService) {
   await dataSource.initialize();
   const userRepository = dataSource.getRepository(User);
   const existingCount = await userRepository.count();
   if (existingCount > 0) {
-    console.log('Users already seeded. Skipping...');
+    logger.warn('Users already seeded. Skipping...');
     await dataSource.destroy();
     return;
   }
@@ -36,6 +37,6 @@ export async function seedUsers() {
   ];
   await userRepository.save(userEntries);
 
-  console.log('Database seeded successfully with user data.');
+  logger.debug('Database seeded successfully with user data.');
   await dataSource.destroy();
 }
