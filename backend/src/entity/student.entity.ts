@@ -6,16 +6,16 @@ export class Student {
   @PrimaryGeneratedColumn()
   student_id: number;
 
-  @Column()
+  @Column({ nullable: true })
   first_name: string;
 
-  @Column()
+  @Column({ nullable: true })
   last_name: string;
 
-  @Column()
+  @Column({ nullable: true })
   phone_number: string;
 
-  @Column()
+  @Column({ nullable: true })
   address: string;
 
   @OneToMany(() => Application, (application) => application.student)

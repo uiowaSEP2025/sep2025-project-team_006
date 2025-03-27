@@ -8,6 +8,7 @@ import { Document } from 'src/entity/document.entity';
 import { FacultyMetric } from 'src/entity/faculty_metric.entity';
 import { ReviewMetric } from 'src/entity/review_metric.entity';
 import { Review } from 'src/entity/review.entity';
+import * as bcrypt from 'bcrypt';
 import * as fs from 'fs';
 import * as path from 'path';
 
@@ -69,6 +70,7 @@ export async function seedUserDatabase() {
         faculty: faculty, // link to faculty entity
         provider: 'Microsoft',
         provider_id: providerId,
+        password_digest: bcrypt.hashSync('meaningless', bcrypt.genSaltSync(10)),
         email: facultyData.email,
       });
       await userRepo.save(userFaculty);
@@ -99,6 +101,7 @@ export async function seedUserDatabase() {
         student: student, // link to student entity
         provider: 'Google',
         provider_id: providerId,
+        password_digest: bcrypt.hashSync('meaningless', bcrypt.genSaltSync(10)),
         email: studentData.email,
       });
       await userRepo.save(userStudent);

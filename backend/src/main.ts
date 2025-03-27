@@ -7,6 +7,9 @@ import { ResponseInterceptor } from './config/response.interceptor';
 import { HttpExceptionFilter } from './config/http_exception.filter';
 import { seedApplications } from './seed/seed_applications';
 import { LoggerService } from './common/logger/logger.service';
+import { seedDocuments } from './seed/seed_documents';
+import { seedReviews } from './seed/seed_reviews';
+import { seedReviewMetrics } from './seed/seed_review_metrics';
 
 async function bootstrap() {
   const logger = new LoggerService();
@@ -29,12 +32,14 @@ async function bootstrap() {
   // seed data ONLY when in development mode
   if (process.env.NODE_ENV === 'development') {
     try {
-      // TODO: Seed new tables, slowly start removing test table as more progress is being made
-      await seedTestTable(logger);
-      await seedUserDatabase(logger);
-      await seedFacultyMetrics(logger);
-      await seedApplications(logger);
-      logger.debug('Database seeding completed.');
+      await seedTestTable();
+      await seedUserDatabase();
+      await seedFacultyMetrics();
+      await seedApplications();
+      await seedDocuments();
+      await seedReviews();
+      await seedReviewMetrics();
+      console.log('Database seeding completed.');
     } catch (error) {
       logger.error('Error seeding database:', error);
       process.exit(1);

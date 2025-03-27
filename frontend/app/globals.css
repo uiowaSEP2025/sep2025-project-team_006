@@ -2,20 +2,101 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
 
-@media (prefers-color-scheme: dark) {
+
+@layer base {
   :root {
-    --background: #ffffff; 
-    --foreground: #000000c9;
+    /* Base colors */
+    --background: 0 0% 100%;
+    --foreground: 0 0% 0%;
+    --card: 0 0% 100%;
+    --card-foreground: 0 0% 0%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 0 0% 0%;
+
+    /* Primary (Gold) */
+    --primary: 48 100% 50%;
+    --primary-foreground: 0 0% 0%;
+
+    /* Secondary (Black) */
+    --secondary: 0 0% 0%;
+    --secondary-foreground: 48 100% 50%;
+
+    /* Additional colors */
+    --muted: 0 0% 90%;
+    --muted-foreground: 0 0% 10%;
+    --accent: 48 100% 50%;
+    --accent-foreground: 0 0% 0%;
+    --destructive: 0 100% 50%;
+    --destructive-foreground: 0 0% 100%;
+
+    /* Border and input */
+    --border: 0 0% 80%;
+    --input: 0 0% 80%;
+
+    /* Ring color */
+    --ring: 48 100% 50%;
+
+    /* Radius */
+    --radius: 0.5rem;
+
+    /* Chart colors */
+    --chart-1: 48 100% 50%;
+    --chart-2: 0 0% 0%;
+    --chart-3: 0 0% 20%;
+    --chart-4: 0 0% 40%;
+    --chart-5: 0 0% 60%;
+  }
+
+  .dark {
+    /* Dark mode adjustments */
+    --background: 0 0% 0%;
+    --foreground: 0 0% 100%;
+    --card: 0 0% 0%;
+    --card-foreground: 0 0% 100%;
+    --popover: 0 0% 0%;
+    --popover-foreground: 0 0% 100%;
+
+    /* Primary (Gold) */
+    --primary: 48 100% 50%;
+    --primary-foreground: 0 0% 0%;
+
+    /* Secondary (Black) */
+    --secondary: 0 0% 100%;
+    --secondary-foreground: 0 0% 0%;
+
+    /* Additional colors */
+    --muted: 0 0% 20%;
+    --muted-foreground: 0 0% 80%;
+    --accent: 48 100% 50%;
+    --accent-foreground: 0 0% 0%;
+    --destructive: 0 100% 50%;
+    --destructive-foreground: 0 0% 100%;
+
+    /* Border and input */
+    --border: 0 0% 40%;
+    --input: 0 0% 40%;
+
+    /* Ring color */
+    --ring: 48 100% 50%;
+
+    /* Chart colors */
+    --chart-1: 48 100% 50%;
+    --chart-2: 0 0% 100%;
+    --chart-3: 0 0% 80%;
+    --chart-4: 0 0% 60%;
+    --chart-5: 0 0% 40%;
   }
 }
 
-body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+
+
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
 }

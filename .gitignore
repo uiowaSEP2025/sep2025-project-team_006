@@ -54,6 +54,8 @@ notes.txt
 # Diagnostic reports (https://nodejs.org/api/report.html)
 /backend/report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
 /backend/*.pem
+# Excluding these to lower file size on repo
+/backend/uploads
 
 ############
 # Frontend #

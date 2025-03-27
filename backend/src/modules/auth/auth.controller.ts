@@ -1,5 +1,6 @@
-import { Controller, Post, Param } from '@nestjs/common';
+import { Body, Controller, Post } from '@nestjs/common';
 import { AuthService } from './auth.service';
+import { CreateUserDto, RefreshTokenDto } from 'src/dto/auth.dto';
 
 /**
  * Job: These routes are for user authentication.
@@ -8,19 +9,27 @@ import { AuthService } from './auth.service';
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
-  @Post('register') // .*/api/auth/register
-  async postTestData(
-    @Param('email') email: string,
-    @Param('password') password: string,
-  ) {
-    return this.authService.register(email, password);
+  @Post('student/register') // .*/api/auth/student/register
+  async postStudentRegistration(@Body() createUserDto: CreateUserDto) {
+    return this.authService.register(
+      createUserDto.email,
+      createUserDto.password,
+      false,
+    );
   }
 
-  @Post('login') // .*/api/auth/login
-  async putTestData(
-    @Param('email') email: string,
-    @Param('password') password: string,
-  ) {
-    return this.authService.login(email, password);
+  @Post('student/login') // .*/api/auth/student/login
+  async postStudentLogin(@Body() createUserDto: CreateUserDto) {
+    return this.authService.login(createUserDto.email, createUserDto.password);
+  }
+
+  // For future reference:
+  // The idea here is that each role has their own route for oauth logins.
+  // This way, people can't just create faculty accounts. However, given their email exists in the database, they should have no problem logging in.
+  // There were stubs here, but they were removed. This will likely work a bit differently than previously intended.
+
+  @Post('refresh') // .*/api/auth/refresh
+  async postRefresh(@Body() refreshTokenDto: RefreshTokenDto) {
+    return this.authService.refreshJWT(refreshTokenDto.session);
   }
 }

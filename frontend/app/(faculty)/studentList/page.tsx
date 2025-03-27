@@ -5,6 +5,8 @@ import ProfileList from "@/components/ProfileList";
 import WebService from "@/api/WebService";
 import { apiGET } from "@/api/apiMethods";
 import { useRouter } from "next/navigation";
+import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
 interface Profile {
   id: number; // corresponds to student_id
@@ -56,6 +58,13 @@ export default function Home() {
     <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100 p-6">
       <h1 className="text-2xl font-bold mb-4">Select a Profile</h1>
       <ProfileList profiles={profiles} onProfileClick={handleProfileClick} />
+      <Button asChild>
+          <Link
+            href="/facultyHome"
+          >
+            Return to Home
+          </Link>
+          </Button>
     </div>
   );
 }
