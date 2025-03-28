@@ -389,7 +389,7 @@ Example format of the error case, the important thing is to check if the success
         "success": true,
         "payload": {
             "review_id": 1,
-            "overall_score": 98,
+            "overall_score": 95,
             "review_date": "2025-03-28T19:52:28.669Z",
             "comments": "Updated comments"
         }
