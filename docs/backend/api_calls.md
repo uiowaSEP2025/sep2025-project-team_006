@@ -367,6 +367,35 @@ Example format of the error case, the important thing is to check if the success
     }
     ```
 
+### PUT
+---
+- **Method:** `PUT`
+- **Endpoint:** `/api/reviews/:id`
+- **Description:**  Updates the comments (and optionally overall_score) for an existing review. The `:id` in the endpoint corresponds to the `review_id` of the review to update.
+- **Request Body:**
+    ```json
+    {
+        "comments": "Updated comment text", // optional, new comment value
+        "overall_score": 95                 // optional, new overall score
+    }
+    ```
+- **Example:**
+    ```sh
+    $ curl -X PUT "http://localhost:5000/api/reviews/1" -H "Content-Type: application/json" -d "{ \"comments\": \"Updated comments\", \"overall_score\": 95 }"
+    ```
+- **Response:**
+    ```json
+    {
+        "success": true,
+        "payload": {
+            "review_id": 1,
+            "overall_score": 98,
+            "review_date": "2025-03-28T19:52:28.669Z",
+            "comments": "Updated comments"
+        }
+    }
+    ```
+
 ---
 
 ## Review Metrics Module
