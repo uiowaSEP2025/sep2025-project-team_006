@@ -11,6 +11,7 @@ import { Review } from 'src/entity/review.entity';
 import * as bcrypt from 'bcrypt';
 import * as fs from 'fs';
 import * as path from 'path';
+import { LoggerService } from 'src/common/logger/logger.service';
 
 const dataSource = new DataSource({
   type: 'postgres',
@@ -33,7 +34,7 @@ const dataSource = new DataSource({
   synchronize: false,
 });
 
-export async function seedUserDatabase() {
+export async function seedUserDatabase(logger: LoggerService) {
   await dataSource.initialize();
   const userRepo = dataSource.getRepository(User);
   const facultyRepo = dataSource.getRepository(Faculty);

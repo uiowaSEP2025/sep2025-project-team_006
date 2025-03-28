@@ -10,6 +10,7 @@ import { ReviewMetric } from 'src/entity/review_metric.entity';
 import { Review } from 'src/entity/review.entity';
 import * as fs from 'fs';
 import * as path from 'path';
+import { LoggerService } from 'src/common/logger/logger.service';
 
 const dataSource = new DataSource({
   type: 'postgres',
@@ -74,6 +75,6 @@ export async function seedReviewMetrics(logger: LoggerService) {
     await reviewMetricRepo.save(newMetric);
   }
 
-  console.log('Review metrics seeded successfully.');
+  logger.debug('Review metrics seeded successfully.');
   await dataSource.destroy();
 }

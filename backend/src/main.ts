@@ -32,16 +32,17 @@ async function bootstrap() {
   // seed data ONLY when in development mode
   if (process.env.NODE_ENV === 'development') {
     try {
-      await seedTestTable();
-      await seedUserDatabase();
-      await seedFacultyMetrics();
-      await seedApplications();
-      await seedDocuments();
-      await seedReviews();
-      await seedReviewMetrics();
-      console.log('Database seeding completed.');
+      await seedTestTable(logger);
+      await seedUserDatabase(logger);
+      await seedFacultyMetrics(logger);
+      await seedApplications(logger);
+      await seedDocuments(logger);
+      await seedReviews(logger);
+      await seedReviewMetrics(logger);
+      logger.debug('Database seeding completed.');
     } catch (error) {
-      logger.error('Error seeding database:', error);
+      logger.error('Error seeding database!');
+      logger.error(error);
       process.exit(1);
     }
   }
