@@ -40,6 +40,8 @@ export default function StudentPageContent() {
   const [studentData, setStudentData] = useState<StudentData | null>(null);
   const [currentDocIndex, setCurrentDocIndex] = useState<number>(0);
   const [documentList, setDocumentList] = useState<DocumentInfo[]>([]);
+  const [availableMetrics, setAvailableMetrics] = useState<Metric[]>([]);
+  const [selectedMetricId, setSelectedMetricId] = useState<number | "">("");
 
   useEffect(() => {
     if (!studentId) return;
@@ -92,11 +94,11 @@ export default function StudentPageContent() {
           apiGET(webServiceTwo.FACULTY_METRIC_ID, "1"),
         ]);
 
-        let metrics: Metric[] = [];
+        let allMetrics: Metric[] = [];
 
         if (defaults.success) {
-          metrics = [
-            ...metrics,
+          allMetrics = [
+            ...allMetrics,
             ...defaults.payload.map((metric: MetricResponse, index: number) => ({
               id: 1000 + index,
               name: metric.metric_name,
@@ -111,8 +113,8 @@ export default function StudentPageContent() {
         }
 
         if (response.success) {
-          metrics = [
-            ...metrics,
+          allMetrics = [
+            ...allMetrics,
             ...response.payload.map((metric: MetricResponse) => ({
               id: metric.faculty_metric_id,
               name: metric.metric_name,
@@ -125,7 +127,8 @@ export default function StudentPageContent() {
         } else {
           console.log("Get error for FacultyID Metrics: ", response.error);
         }
-        setMetrics(metrics);
+
+        setAvailableMetrics(allMetrics);
       } catch (error) {
         console.log("An unexpected error occurred: ", error);
       }
@@ -150,6 +153,16 @@ export default function StudentPageContent() {
       prevMetrics.filter((metric) => metric.id != id)
     );
     return;
+  };
+
+  const handleAddMetric = () => {
+    if (selectedMetricId !== "") {
+      const metricToAdd = availableMetrics.find((m) => m.id === selectedMetricId);
+      if (metricToAdd && !metrics.find((m) => m.id === metricToAdd.id)) {
+        setMetrics((prevMetrics) => [...prevMetrics, { ...metricToAdd }]);
+      }
+      setSelectedMetricId("");
+    }
   };
 
   return (
@@ -187,11 +200,30 @@ export default function StudentPageContent() {
           <h1 className="text-2xl font-bold mb-4">
             Student Details for ID: {studentId}
           </h1>
+
+          {/* Metric Dropdown and Add Button */}
+          <div className="mb-4 flex gap-4 items-center">
+            <select
+              value={selectedMetricId}
+              onChange={(e) => setSelectedMetricId(Number(e.target.value))}
+              className="p-2 border border-gray-300 rounded"
+            >
+              <option value="">Select a metric to add...</option>
+              {availableMetrics.map((metric) => (
+                <option key={metric.id} value={metric.id}>
+                  {metric.name}
+                </option>
+              ))}
+            </select>
+            <Button onClick={handleAddMetric}>Add Metric</Button>
+          </div>
+
           <ReviewForm
             metrics={metrics}
             onDeleteMetric={handleOnDeleteMetric}
             onChangeMetric={handleOnChangeMetric}
           />
+
           <Textarea placeholder="Comments" />
 
           <Button asChild>
