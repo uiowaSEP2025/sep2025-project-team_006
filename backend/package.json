@@ -100,7 +100,9 @@
       "/src/entity/",
       ".*\\.module\\.ts$",
       "/src/main.ts",
-      "/src/database/migrations/.*\\.ts$"
+      "/src/database/migrations/.*\\.ts$",
+      "/src/database/.*\\.ts$",
+      "/src/common/logger/.*\\.ts$"
     ],
     "coverageDirectory": "../backend/coverage",
     "testEnvironment": "node"
