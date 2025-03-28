@@ -2,14 +2,14 @@
     {
         "faculty_id": 1,
         "application_id": 8,
-        "overall_score": null,
-        "comments": ""
+        "overall_score": 47,
+        "comments": "Great application overall"
     },
     {
         "faculty_id": 2,
         "application_id": 9,
-        "overall_score": null,
-        "comments": ""
+        "overall_score": 32,
+        "comments": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis sed lorem nec risus porta porttitor eu non nulla. Suspendisse molestie ultricies est sit amet imperdiet."
     },
     {
         "faculty_id": 3,
@@ -21,7 +21,7 @@
         "faculty_id": 4,
         "application_id": 11,
         "overall_score": null,
-        "comments": ""
+        "comments": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis sed lorem nec risus porta porttitor eu non nulla. Suspendisse molestie ultricies est sit amet imperdiet."
     },
     {
         "faculty_id": 5,

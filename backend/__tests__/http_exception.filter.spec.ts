@@ -4,7 +4,7 @@ import { HttpExceptionFilter } from 'src/config/http_exception.filter';
 
 describe('HttpExceptionFilter', () => {
   let filter: HttpExceptionFilter;
-  let loggerMock: object;
+  let loggerMock: any;
   let jsonMock: jest.Mock;
   let statusMock: jest.Mock;
   let responseMock: any;
@@ -19,7 +19,7 @@ describe('HttpExceptionFilter', () => {
       log: jest.fn(),
       warn: jest.fn(),
     };
-    filter = new HttpExceptionFilter(loggerMock as unknown as LoggerService);
+    filter = new HttpExceptionFilter(loggerMock as LoggerService);
     jsonMock = jest.fn();
     statusMock = jest.fn().mockReturnValue({ json: jsonMock });
     responseMock = { status: statusMock };
@@ -32,7 +32,7 @@ describe('HttpExceptionFilter', () => {
     };
   });
 
-  it('should format the error response correctly', () => {
+  it('should format the error response correctly for HttpException', () => {
     const exception = new HttpException('Not Found', HttpStatus.NOT_FOUND);
 
     filter.catch(exception, hostMock as any);
@@ -62,5 +62,19 @@ describe('HttpExceptionFilter', () => {
         path: requestMock.url,
       }),
     );
+  });
+
+  it('should log error when NODE_ENV is not "test"', () => {
+    // Save the original NODE_ENV value and set it to something else
+    const originalEnv = process.env.NODE_ENV;
+    process.env.NODE_ENV = 'development';
+
+    const exception = new HttpException('Test error', HttpStatus.BAD_REQUEST);
+    filter.catch(exception, hostMock as any);
+
+    expect(loggerMock.error).toHaveBeenCalledWith('HTTP Exception caught!', exception);
+
+    // Restore the original NODE_ENV
+    process.env.NODE_ENV = originalEnv;
   });
 });

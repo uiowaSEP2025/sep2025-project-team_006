@@ -11,6 +11,8 @@ import { Review } from 'src/entity/review.entity';
 import * as fs from 'fs';
 import * as path from 'path';
 import { LoggerService } from 'src/common/logger/logger.service';
+import * as dotenv from 'dotenv';
+dotenv.config();
 
 const dataSource = new DataSource({
   type: 'postgres',
@@ -38,7 +40,7 @@ export async function seedReviews(logger: LoggerService) {
   const reviewRepo = dataSource.getRepository(Review);
   const facultyRepo = dataSource.getRepository(Faculty);
   const applicationRepo = dataSource.getRepository(Application);
-  const dirname = __dirname.replace('dist', 'src');
+  const dirname = __dirname.replace('dist', '');
 
   // Remove previously stored data
   await dataSource.query(`TRUNCATE TABLE "reviews" RESTART IDENTITY CASCADE`);

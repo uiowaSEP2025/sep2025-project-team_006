@@ -11,6 +11,8 @@ import { Review } from 'src/entity/review.entity';
 import * as fs from 'fs';
 import * as path from 'path';
 import { LoggerService } from 'src/common/logger/logger.service';
+import * as dotenv from 'dotenv';
+dotenv.config();
 
 const dataSource = new DataSource({
   type: 'postgres',
@@ -53,7 +55,7 @@ export async function seedDocuments(logger: LoggerService) {
   await dataSource.initialize();
   const documentRepo = dataSource.getRepository(Document);
   const applicationRepo = dataSource.getRepository(Application);
-  const dirname = __dirname.replace('dist', 'src');
+  const dirname = __dirname.replace('dist', '');
   clearUploadsDirectory('../backend/uploads');
 
   const documentsDataPath = path.join(dirname, 'data', 'documents.json');
