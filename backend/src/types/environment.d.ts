@@ -4,7 +4,7 @@ declare global {
   namespace NodeJS {
     interface ProcessEnv {
       PORT?: number;
-      NODE_ENV: 'development' | 'production';
+      NODE_ENV: 'development' | 'production' | 'test';
       PGSQL_USER: string;
       PGSQL_PASSWORD: string;
       PGSQL_HOST: string;

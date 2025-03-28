@@ -1,5 +1,6 @@
 import { Test } from 'src/entity/test.entity';
 import { DataSource } from 'typeorm';
+import { LoggerService } from 'src/common/logger/logger.service';
 
 /**
  * Job: Seeds data in the test table, purely for API endpoint testing and production testing
@@ -15,12 +16,12 @@ const dataSource = new DataSource({
   synchronize: false, // Ensure migrations are used in production
 });
 
-export async function seedTestTable() {
+export async function seedTestTable(logger: LoggerService) {
   await dataSource.initialize();
   const testRepository = dataSource.getRepository(Test);
   const existingCount = await testRepository.count();
   if (existingCount > 0) {
-    console.log('Test table already seeded. Skipping...');
+    logger.warn('Test table already seeded. Skipping...');
     await dataSource.destroy();
     return;
   }
@@ -34,6 +35,6 @@ export async function seedTestTable() {
   ];
   await testRepository.save(testEntries);
 
-  console.log('Database seeded successfully with test data.');
+  logger.debug('Database seeded successfully with test data.');
   await dataSource.destroy();
 }

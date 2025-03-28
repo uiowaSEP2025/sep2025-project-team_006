@@ -1,8 +1,10 @@
 import { HttpException, HttpStatus } from '@nestjs/common';
+import { LoggerService } from 'src/common/logger/logger.service';
 import { HttpExceptionFilter } from 'src/config/http_exception.filter';
 
 describe('HttpExceptionFilter', () => {
   let filter: HttpExceptionFilter;
+  let loggerMock: object;
   let jsonMock: jest.Mock;
   let statusMock: jest.Mock;
   let responseMock: any;
@@ -10,7 +12,14 @@ describe('HttpExceptionFilter', () => {
   let hostMock: any;
 
   beforeEach(() => {
-    filter = new HttpExceptionFilter();
+    loggerMock = {
+      error: jest.fn(),
+      debug: jest.fn(),
+      verbose: jest.fn(),
+      log: jest.fn(),
+      warn: jest.fn(),
+    };
+    filter = new HttpExceptionFilter(loggerMock as unknown as LoggerService);
     jsonMock = jest.fn();
     statusMock = jest.fn().mockReturnValue({ json: jsonMock });
     responseMock = { status: statusMock };

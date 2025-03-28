@@ -10,6 +10,7 @@ import { ReviewMetric } from 'src/entity/review_metric.entity';
 import { Review } from 'src/entity/review.entity';
 import * as fs from 'fs';
 import * as path from 'path';
+import { LoggerService } from 'src/common/logger/logger.service';
 
 const dataSource = new DataSource({
   type: 'postgres',
@@ -32,7 +33,7 @@ const dataSource = new DataSource({
   synchronize: false,
 });
 
-export async function seedApplications() {
+export async function seedApplications(logger: LoggerService) {
   await dataSource.initialize();
   const studentRepo = dataSource.getRepository(Student);
   const applicationRepo = dataSource.getRepository(Application);
@@ -79,6 +80,6 @@ export async function seedApplications() {
     await applicationRepo.save(newApplication);
   }
 
-  console.log('Applications seeded successfully.');
+  logger.debug('Applications seeded successfully.');
   await dataSource.destroy();
 }
