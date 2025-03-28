@@ -1,6 +1,5 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
-import { seedTestTable } from './seed/seedTestTable';
 import { seedUserDatabase } from './seed/seed_users';
 import { seedFacultyMetrics } from './seed/seed_faculty_metrics';
 import { ResponseInterceptor } from './config/response.interceptor';
@@ -32,7 +31,6 @@ async function bootstrap() {
   // seed data ONLY when in development mode
   if (process.env.NODE_ENV === 'development') {
     try {
-      await seedTestTable(logger);
       await seedUserDatabase(logger);
       await seedFacultyMetrics(logger);
       await seedApplications(logger);

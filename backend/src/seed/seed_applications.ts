@@ -11,6 +11,8 @@ import { Review } from 'src/entity/review.entity';
 import * as fs from 'fs';
 import * as path from 'path';
 import { LoggerService } from 'src/common/logger/logger.service';
+import * as dotenv from 'dotenv';
+dotenv.config();
 
 const dataSource = new DataSource({
   type: 'postgres',

@@ -11,6 +11,8 @@ import { Session } from 'src/entity/session.entity';
 import { Student } from 'src/entity/student.entity';
 import { User } from 'src/entity/user.entity';
 import { LoggerService } from 'src/common/logger/logger.service';
+import * as dotenv from 'dotenv';
+dotenv.config();
 
 const dataSource = new DataSource({
   type: 'postgres',

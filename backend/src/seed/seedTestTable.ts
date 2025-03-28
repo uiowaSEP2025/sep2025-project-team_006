@@ -1,6 +1,8 @@
 import { Test } from 'src/entity/test.entity';
 import { DataSource } from 'typeorm';
 import { LoggerService } from 'src/common/logger/logger.service';
+import * as dotenv from 'dotenv';
+dotenv.config();
 
 /**
  * Job: Seeds data in the test table, purely for API endpoint testing and production testing
