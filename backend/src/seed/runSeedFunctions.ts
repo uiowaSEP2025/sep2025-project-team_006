@@ -10,21 +10,21 @@ import { LoggerService } from 'src/common/logger/logger.service';
  * Job: Holds all seed scripts to run from an NPM command
  */
 async function runSeeders() {
-    const logger = new LoggerService();
+  const logger = new LoggerService();
 
-    try {
-        await seedUserDatabase(logger);
-        await seedFacultyMetrics(logger);
-        await seedApplications(logger);
-        await seedDocuments(logger);
-        await seedReviews(logger);
-        await seedReviewMetrics(logger);
+  try {
+    await seedUserDatabase(logger);
+    await seedFacultyMetrics(logger);
+    await seedApplications(logger);
+    await seedDocuments(logger);
+    await seedReviews(logger);
+    await seedReviewMetrics(logger);
 
-        logger.log('All seeders executed successfully.');
-    } catch (err) {
-        logger.error('Error while running seeders', err);
-        process.exit(1);
-    }
+    logger.log('All seeders executed successfully.');
+  } catch (err) {
+    logger.error('Error while running seeders', err);
+    process.exit(1);
+  }
 }
 
 runSeeders();
