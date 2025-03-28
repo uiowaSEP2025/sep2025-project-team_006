@@ -28,41 +28,42 @@ interface MetricResponse {
   score: number;
 }
 
+interface DocumentInfo {
+  document_id: string | null;
+  document_type: string | null;
+}
+
 export default function StudentPageContent() {
   const searchParams = useSearchParams();
-  const studentId = searchParams.get('id'); // will be a string or null
+  const studentId = searchParams.get("id"); // will be a string or null
   const webService = new WebService();
   const [studentData, setStudentData] = useState<StudentData | null>(null);
-
-  /**
-   * Note: These are lengthy and annoying but because of table structure we must check all the way through.
-   * 
-   * Though this will have to become dynamic for whoever implements the ability to toggle which document to look at.
-   */
-  const documentId =
-    studentData &&
-      studentData.applications &&
-      studentData.applications.length > 0 &&
-      studentData.applications[0].documents &&
-      studentData.applications[0].documents.length > 0
-      ? String(studentData.applications[0].documents[0].document_id)
-      : null;
-
-  const documentType = studentData &&
-    studentData.applications &&
-    studentData.applications.length > 0 &&
-    studentData.applications[0].documents &&
-    studentData.applications[0].documents.length > 0
-    ? String(studentData.applications[0].documents[0].document_type)
-    : null;
+  const [currentDocIndex, setCurrentDocIndex] = useState<number>(0);
+  const [documentList, setDocumentList] = useState<DocumentInfo[]>([]);
 
   useEffect(() => {
     if (!studentId) return;
     const fetchStudentInfo = async (student_id: string) => {
       try {
-        const response = await apiGET(webService.STUDENTS_APPLICANT_INFO, student_id);
+        const response = await apiGET(
+          webService.STUDENTS_APPLICANT_INFO,
+          student_id
+        );
         if (response.success) {
           setStudentData(response.payload);
+          const docs = response.payload.applications?.[0]?.documents || [];
+          const formattedDocs = docs.map((doc: any) => ({
+            document_id: String(doc.document_id),
+            document_type: String(doc.document_type),
+          }));
+
+          // Add placeholders for additional documents
+          const placeholderDocs = [
+            { document_id: null, document_type: "placeholder" },
+            { document_id: null, document_type: "placeholder" },
+          ];
+
+          setDocumentList([...formattedDocs, ...placeholderDocs]);
         } else {
           console.error("GET error:", response.error);
         }
@@ -74,84 +75,109 @@ export default function StudentPageContent() {
     fetchStudentInfo(studentId);
   }, [studentId, webService.STUDENTS_APPLICANT_INFO]);
 
+  const handleDocToggle = (index: number) => {
+    setCurrentDocIndex(index);
+  };
+
+  const currentDocument = documentList[currentDocIndex] || {};
+
   const webServiceTwo = new WebService();
-   const [metrics, setMetrics] = useState<Metric[]>([]);
-  
+  const [metrics, setMetrics] = useState<Metric[]>([]);
 
-  useEffect(()=> {
-      const fetchMetrics = async () => {
-          try{
-              const [defaults, response] = await Promise.all([
-                  apiGET(webServiceTwo.FACULTY_METRIC_DEFAULTS),
-                  apiGET(webServiceTwo.FACULTY_METRIC_ID, "1")
-  
-              ]);
-  
-              let metrics: Metric[] = [];
-  
-              if(defaults.success) {
-                  metrics = [
-                      ...metrics,
-                      ...defaults.payload.map((metric: MetricResponse, index:number) => ({
-                          id: 1000 + index,
-                          name: metric.metric_name,
-                          description: metric.description,
-                          weight: metric.default_weight,
-                          score: 0,
-                          isDefault: true,
-                      }))
-                  ];
-              } else {
-                  console.log("GET error for defaults: ", defaults.error);
-              }
-  
-              if (response.success) {
-                  metrics = [
-                      ...metrics,
-                      ...response.payload.map((metric: MetricResponse) => ({
-                          id: metric.faculty_metric_id,
-                          name: metric.metric_name,
-                          description: metric.description,
-                          weight: metric.default_weight,
-                          score: 0,
-                          isDefault: false,
-                      }))
-                  ];
-              } else {
-                  console.log("Get error for FacultyID Metrics: ", response.error);
-              }
-                  setMetrics(metrics);
-          } catch (error){
-              console.log("An unexpected error occured: ", error)
-          }
+  useEffect(() => {
+    const fetchMetrics = async () => {
+      try {
+        const [defaults, response] = await Promise.all([
+          apiGET(webServiceTwo.FACULTY_METRIC_DEFAULTS),
+          apiGET(webServiceTwo.FACULTY_METRIC_ID, "1"),
+        ]);
+
+        let metrics: Metric[] = [];
+
+        if (defaults.success) {
+          metrics = [
+            ...metrics,
+            ...defaults.payload.map((metric: MetricResponse, index: number) => ({
+              id: 1000 + index,
+              name: metric.metric_name,
+              description: metric.description,
+              weight: metric.default_weight,
+              score: 0,
+              isDefault: true,
+            })),
+          ];
+        } else {
+          console.log("GET error for defaults: ", defaults.error);
+        }
+
+        if (response.success) {
+          metrics = [
+            ...metrics,
+            ...response.payload.map((metric: MetricResponse) => ({
+              id: metric.faculty_metric_id,
+              name: metric.metric_name,
+              description: metric.description,
+              weight: metric.default_weight,
+              score: 0,
+              isDefault: false,
+            })),
+          ];
+        } else {
+          console.log("Get error for FacultyID Metrics: ", response.error);
+        }
+        setMetrics(metrics);
+      } catch (error) {
+        console.log("An unexpected error occurred: ", error);
       }
-      fetchMetrics()
-   }, [webServiceTwo.FACULTY_METRIC_DEFAULTS, webServiceTwo.FACULTY_METRIC_ID]);
+    };
+    fetchMetrics();
+  }, [webServiceTwo.FACULTY_METRIC_DEFAULTS, webServiceTwo.FACULTY_METRIC_ID]);
 
-  const handleOnChangeMetric = (id: number, field: keyof Metric, value: string | number) => {
-    setMetrics((prevMetrics) => prevMetrics.map((metric)=>
-        metric.id == id ? { ...metric, [field]: value } : metric)
+  const handleOnChangeMetric = (
+    id: number,
+    field: keyof Metric,
+    value: string | number
+  ) => {
+    setMetrics((prevMetrics) =>
+      prevMetrics.map((metric) =>
+        metric.id == id ? { ...metric, [field]: value } : metric
+      )
     );
-  }
+  };
 
-  const handleOnDeleteMetric = async (id:number)=> {
-    setMetrics ((prevMetrics) => prevMetrics.filter((metric)=> metric.id != id));
+  const handleOnDeleteMetric = async (id: number) => {
+    setMetrics((prevMetrics) =>
+      prevMetrics.filter((metric) => metric.id != id)
+    );
     return;
-  }
+  };
 
   return (
     <div className="flex w-full h-screen">
       {/* Left half: File Viewer */}
       <div className="w-1/2 h-full border-r border-gray-300 p-6">
-        {documentId && documentType === 'pdf' ? (
-          <PdfViewer document_id={documentId} />
-        ) : documentId && documentType === 'xlsx' ? (
-          <ExcelViewer document_id={documentId} />
+        {currentDocument.document_id && currentDocument.document_type === "pdf" ? (
+          <PdfViewer document_id={currentDocument.document_id} />
+        ) : currentDocument.document_id && currentDocument.document_type === "xlsx" ? (
+          <ExcelViewer document_id={currentDocument.document_id} />
         ) : (
           <p className="h-full flex items-center justify-center text-center text-gray-600">
-            No document available.
+            {currentDocument.document_type === "placeholder"
+              ? "There will be a document here."
+              : "No document available."}
           </p>
         )}
+        <div className="mt-4 flex gap-2 justify-center">
+          {documentList.map((_, index) => (
+            <Button
+              key={index}
+              onClick={() => handleDocToggle(index)}
+              variant={index === currentDocIndex ? "default" : "outline"}
+            >
+              {index + 1}
+            </Button>
+          ))}
+        </div>
       </div>
 
       {/* Right half: Other Content - This is where the review UI should be */}
@@ -161,29 +187,15 @@ export default function StudentPageContent() {
           <h1 className="text-2xl font-bold mb-4">
             Student Details for ID: {studentId}
           </h1>
-          <ReviewForm metrics={metrics}
+          <ReviewForm
+            metrics={metrics}
             onDeleteMetric={handleOnDeleteMetric}
             onChangeMetric={handleOnChangeMetric}
-            />
-
-
-          {/*
-          {studentData ? (
-            <pre className="bg-gray-100 p-4 rounded shadow">
-              {JSON.stringify(studentData, null, 2)}
-            </pre>
-          ) : (
-            <p className="text-gray-600">Loading student data...</p>
-          )}
-            */}
-          <Textarea placeholder="Comments"/>
+          />
+          <Textarea placeholder="Comments" />
 
           <Button asChild>
-            <Link
-              href="/studentList"
-          >
-              Return to Student List
-          </Link>
+            <Link href="/studentList">Return to Student List</Link>
           </Button>
         </div>
       </div>
