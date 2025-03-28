@@ -37,7 +37,7 @@ export async function seedReviewMetrics(logger: LoggerService) {
   await dataSource.initialize();
   const reviewMetricRepo = dataSource.getRepository(ReviewMetric);
   const reviewRepo = dataSource.getRepository(Review);
-  const dirname = __dirname.replace('dist', 'src');
+  const dirname = __dirname.replace('dist', '');
 
   // Remove previously stored data
   await dataSource.query(

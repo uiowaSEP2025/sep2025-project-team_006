@@ -37,7 +37,7 @@ export async function seedFacultyMetrics(logger: LoggerService) {
   await dataSource.initialize();
   const facultyMetricRepo = dataSource.getRepository(FacultyMetric);
   const facultyRepo = dataSource.getRepository(Faculty);
-  const dirname = __dirname.replace('dist', 'src'); // the __dirname likes to grab from the /dist/ directory instead so we want local files
+  const dirname = __dirname.replace('dist', ''); // the __dirname likes to grab from the /dist/ directory instead so we want local files
 
   // remove previously stored data
   await dataSource.query(

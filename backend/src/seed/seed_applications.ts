@@ -37,7 +37,7 @@ export async function seedApplications(logger: LoggerService) {
   await dataSource.initialize();
   const studentRepo = dataSource.getRepository(Student);
   const applicationRepo = dataSource.getRepository(Application);
-  const dirname = __dirname.replace('dist', 'src');
+  const dirname = __dirname.replace('dist', '');
 
   const applicationsDataPath = path.join(dirname, 'data', 'applications.json');
   const applications = JSON.parse(

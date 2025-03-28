@@ -39,7 +39,7 @@ export async function seedUserDatabase(logger: LoggerService) {
   const userRepo = dataSource.getRepository(User);
   const facultyRepo = dataSource.getRepository(Faculty);
   const studentRepo = dataSource.getRepository(Student);
-  const dirname = __dirname.replace('dist', 'src'); // the __dirname likes to grab from the /dist/ directory instead so we want local files
+  const dirname = __dirname.replace('dist', ''); // the __dirname likes to grab from the /dist/ directory instead so we want local files
 
   // remove previously stored data
   await dataSource.query(`TRUNCATE TABLE "users" RESTART IDENTITY CASCADE`);
@@ -110,5 +110,6 @@ export async function seedUserDatabase(logger: LoggerService) {
     studentIndex++;
   }
 
+  logger.debug('Users seeded successfully.');
   await dataSource.destroy();
 }
