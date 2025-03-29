@@ -56,7 +56,6 @@ notes.txt
 /backend/*.pem
 # Excluding these to lower file size on repo
 /backend/uploads
-/backend/src/seed/documents
 
 ############
 # Frontend #
