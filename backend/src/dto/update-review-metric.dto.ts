@@ -3,7 +3,7 @@ import { IsString, IsNumber, IsOptional } from 'class-validator';
 export class UpdateReviewMetricDto {
   @IsOptional()
   @IsString()
-  metric_name?: string;
+  name?: string;
 
   @IsOptional()
   @IsString()

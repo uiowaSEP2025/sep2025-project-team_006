@@ -20,7 +20,7 @@ export default class WebService {
     APPLICATION_DOCUMENT_POST = `${this.serverUrl}/api/documents` // POST
     REVIEW_CREATE_POST = `${this.serverUrl}/api/reviews`; // POST
     REVIEW_UPDATE_PUT = `${this.serverUrl}/api/reviews/:id`; // PUT
-    REVIEW_METRICS_FOR_FACULTY = `${this.serverUrl}/api/reviews/metrics/app/:app_id/faculty/:faculty_id`; // GET
+    REVIEW_METRICS_FOR_FACULTY = `${this.serverUrl}/api/reviews/metrics/app/:id1/faculty/:id2`; // GET
     REVIEW_METRIC_POST = `${this.serverUrl}/api/reviews/metrics`; // POST
     REVIEW_METRIC_UPDATE = `${this.serverUrl}/api/reviews/metrics/:id`; // PUT, DELETE
 }

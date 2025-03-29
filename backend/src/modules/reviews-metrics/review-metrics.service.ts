@@ -18,7 +18,7 @@ export class ReviewMetricsService {
   async getReviewForApplicationAndFaculty(
     application_id: number,
     faculty_id: number,
-  ): Promise<Review> {
+  ) {
     const review = await this.reviewRepo.findOne({
       where: {
         application: { application_id },
@@ -27,11 +27,22 @@ export class ReviewMetricsService {
       relations: ['review_metrics'],
     });
     if (!review) {
-      throw new NotFoundException(
-        `Review for application ${application_id} by faculty ${faculty_id} not found`,
-      );
+      return {
+        review_exists: false,
+        review_id: null,
+        review_metrics: [],
+        comments: null,
+        overall_score: null,
+      };
     }
-    return review;
+
+    return {
+      review_exists: true,
+      review_id: review.review_id,
+      review_metrics: review.review_metrics,
+      comments: review.comments,
+      overall_score: review.overall_score,
+    };
   }
 
   async createReviewMetric(
@@ -47,7 +58,7 @@ export class ReviewMetricsService {
     }
 
     const newMetric = this.reviewMetricRepo.create({
-      name: createDto.metric_name,
+      name: createDto.name,
       description: createDto.description,
       selected_weight: createDto.selected_weight,
       value: createDto.value,

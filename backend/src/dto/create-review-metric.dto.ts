@@ -3,7 +3,7 @@ import { IsString, IsNotEmpty, IsNumber } from 'class-validator';
 export class CreateReviewMetricDto {
   @IsString()
   @IsNotEmpty()
-  metric_name: string;
+  name: string;
 
   @IsString()
   description: string;
