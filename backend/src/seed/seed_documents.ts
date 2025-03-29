@@ -10,6 +10,9 @@ import { ReviewMetric } from 'src/entity/review_metric.entity';
 import { Review } from 'src/entity/review.entity';
 import * as fs from 'fs';
 import * as path from 'path';
+import { LoggerService } from 'src/common/logger/logger.service';
+import * as dotenv from 'dotenv';
+dotenv.config();
 
 const dataSource = new DataSource({
   type: 'postgres',
@@ -48,11 +51,11 @@ async function clearUploadsDirectory(directory: string): Promise<void> {
   }
 }
 
-export async function seedDocuments() {
+export async function seedDocuments(logger: LoggerService) {
   await dataSource.initialize();
   const documentRepo = dataSource.getRepository(Document);
   const applicationRepo = dataSource.getRepository(Application);
-  const dirname = __dirname.replace('dist', 'src');
+  const dirname = __dirname.replace('dist', '');
   clearUploadsDirectory('../backend/uploads');
 
   const documentsDataPath = path.join(dirname, 'data', 'documents.json');
@@ -62,7 +65,7 @@ export async function seedDocuments() {
   for (const doc of documents) {
     const filePath = path.join(documentsFolder, doc.file_name);
     if (!fs.existsSync(filePath)) {
-      console.error(`File ${filePath} not found, skipping...`);
+      logger.warn(`File ${filePath} not found, skipping...`);
       continue;
     }
 
@@ -80,10 +83,10 @@ export async function seedDocuments() {
     });
 
     await documentRepo.save(newDocument);
-    console.log(
+    logger.debug(
       `Seeded document: ${doc.file_name} for application ${doc.application_id}`,
     );
   }
-  console.log('Documents seeded successfully.');
+  logger.debug('Documents seeded successfully.');
   await dataSource.destroy();
 }
