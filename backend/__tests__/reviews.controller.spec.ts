@@ -20,6 +20,7 @@ describe('ReviewsController', () => {
                     provide: ReviewsService,
                     useValue: {
                         createReview: jest.fn().mockResolvedValue(review),
+                        updateReviewComments: jest.fn(),
                     },
                 },
             ],
@@ -34,6 +35,19 @@ describe('ReviewsController', () => {
             const result = await controller.createReview(createReviewDto);
             expect(result).toEqual(review);
             expect(service.createReview).toHaveBeenCalledWith(createReviewDto);
+        });
+    });
+
+    describe('updateReviewComments', () => {
+        it('should update review comments and overall_score and return the updated review', async () => {
+            const reviewId = 1;
+            const updateDto = { comments: "Updated comments", overall_score: 95 };
+            const updatedReview = { review_id: reviewId, comments: "Updated comments", overall_score: 95, review_metrics: [] };
+            (service.updateReviewComments as jest.Mock).mockResolvedValue(updatedReview);
+
+            const result = await controller.updateReviewComments(reviewId, updateDto);
+            expect(result).toEqual(updatedReview);
+            expect(service.updateReviewComments).toHaveBeenCalledWith(reviewId, updateDto);
         });
     });
 });

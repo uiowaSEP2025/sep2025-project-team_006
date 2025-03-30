@@ -1,6 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CreateReviewDto } from 'src/dto/create-review.dto';
+import { UpdateReviewDto } from 'src/dto/update-review.dto';
 import { Application } from 'src/entity/application.entity';
 import { Faculty } from 'src/entity/faculty.entity';
 import { Review } from 'src/entity/review.entity';
@@ -39,6 +40,30 @@ export class ReviewsService {
       application,
       review_metrics: [],
     });
+
+    return this.reviewRepository.save(review);
+  }
+
+  async updateReviewComments(
+    reviewId: number,
+    updateReviewDto: UpdateReviewDto,
+  ): Promise<Review> {
+    const review = await this.reviewRepository.findOneBy({
+      review_id: reviewId,
+    });
+    if (!review) {
+      throw new NotFoundException(`Review not found for id ${reviewId}`);
+    }
+
+    // Update the review fields that are present in the DTO
+    if (typeof updateReviewDto.comments !== 'undefined') {
+      review.comments = updateReviewDto.comments;
+    }
+
+    // If you also want to update the overall_score
+    if (typeof updateReviewDto.overall_score !== 'undefined') {
+      review.overall_score = updateReviewDto.overall_score;
+    }
 
     return this.reviewRepository.save(review);
   }
