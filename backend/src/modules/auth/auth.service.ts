@@ -1,4 +1,8 @@
-import { Injectable, UnauthorizedException, NotFoundException } from '@nestjs/common';
+import {
+  Injectable,
+  UnauthorizedException,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { JwtService } from '@nestjs/jwt';
 import { Faculty } from 'src/entity/faculty.entity';
@@ -81,10 +85,12 @@ export class AuthService {
   }
 
   async getAuthInfo(req) {
-    const user = await this.userRepository.findOne({ where: { email: req.user.email }});
+    const user = await this.userRepository.findOne({
+      where: { email: req.user.email },
+    });
     if (!user) {
       // i dont think this will ever get called
-      throw new NotFoundException("User not found"); 
+      throw new NotFoundException('User not found');
     }
 
     return {
