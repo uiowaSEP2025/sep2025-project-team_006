@@ -1,3 +1,5 @@
+"use client";
+
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import {
@@ -9,11 +11,47 @@ import {
 } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import WebService from "@/api/WebService"
+import { useState } from "react"
+import { apiPOST } from "@/api/apiMethods"
 
 export function SignUpForm({
   className,
   ...props
 }: React.ComponentPropsWithoutRef<"div">) {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  const handleSubmit = async (event: React.FormEvent) => {
+    const webService = new WebService();
+    event.preventDefault(); // Prevent page reload
+
+    console.log("Logging in with:", { email, password });
+
+    // Simulate login request (replace with API call)
+    try {
+      // this is a terribly ugly hack.
+      let url, role, nnnext;
+      url = webService.AUTH_STUDENT_REGISTER;
+      role = "student";
+      nnnext = "/studentHome"
+
+      const resp = await apiPOST(url, JSON.stringify({ email, password }));
+      if (resp.success) {
+        console.log("Login successful!");
+        console.log(resp.payload);
+        localStorage.setItem("token", resp.payload["token"]);
+        localStorage.setItem("session", resp.payload["session"]);
+        localStorage.setItem("role", role);
+        window.location.replace(nnnext);
+      } else {
+        console.error("Login failed");
+      }
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  };
+
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>
       <Card>
@@ -24,7 +62,7 @@ export function SignUpForm({
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <form>
+          <form onSubmit={handleSubmit}>
             <div className="flex flex-col gap-6">
               <div className="grid gap-2">
                 <Label htmlFor="email">Email</Label>
@@ -32,6 +70,8 @@ export function SignUpForm({
                   id="email"
                   type="email"
                   placeholder="m@example.com"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
                   required
                 />
               </div>
@@ -46,7 +86,12 @@ export function SignUpForm({
                     Forgot your password?
                   </a>
                 </div>
-                <Input id="password" type="password" required />
+                <Input
+                  id="password"
+                  type="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  required />
               </div>
 
               <div className="grid gap-2">

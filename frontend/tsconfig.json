@@ -34,7 +34,7 @@
     ".next/types/**/*.ts",
     "next-env.d.ts",
     "out/types/**/*.ts"
-  ],
+, "hoc/ProtectedPage.js", "public/client_auth.js"  ],
   "exclude": [
     "node_modules"
   ]
