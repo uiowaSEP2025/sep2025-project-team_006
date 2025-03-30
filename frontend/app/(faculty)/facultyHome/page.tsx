@@ -5,40 +5,40 @@ import { Button } from "@/components/ui/button";
 export default function Home() {
 
   const Develompent = [
-    {label: "Student List", href: "/studentList", image: "/studentList.png"},
-    {label: "Metric Settings", href: "/metricSetting", image: "/metricSetting.png"},
+    {label: "Student List", href: "/studentList", image: "./studentList.png"},
+    {label: "Metric Settings", href: "/metricSetting", image: "./metricSetting.png"},
   ];
 
   const AdmissionsInformation = [
-    {label: "Admissions Profile", href: "/#", image: "/JPGOFIcon.png"},
-    {label: "Financial Aid", href: "/#", image: "/JPGOFIcon.png"},
-    {label: "Visit Campus", href: "/#", image: "/JPGOFIcon.png"},
-    {label: "Scholarship Portal", href: "/#", image: "/JPGOFIcon.png"},
-    {label: "Housing Information", href: "/#", image: "/JPGOFIcon.png"},
+    {label: "Admissions Profile", href: "/#", image: "./JPGOFIcon.png"},
+    {label: "Financial Aid", href: "/#", image: "./JPGOFIcon.png"},
+    {label: "Visit Campus", href: "/#", image: "./JPGOFIcon.png"},
+    {label: "Scholarship Portal", href: "/#", image: "./JPGOFIcon.png"},
+    {label: "Housing Information", href: "/#", image: "./JPGOFIcon.png"},
   ];
 
   const StudentLearning = [
-    {label: "ICON", href: "/#", image: "/JPGOFIcon.png"},
-    {label: "SPOT", href: "/#", image: "/JPGOFIcon.png"},
-    {label: "Study Spaces", href: "/#", image: "/JPGOFIcon.png"},
-    {label: "Student Spaces", href: "/#", image: "/JPGOFIcon.png"},
-    {label: "Printing", href: "/#", image: "/JPGOFIcon.png"},
-    {label: "LinkedIn Learning", href: "/#", image: "/JPGOFIcon.png"},
-    {label: "Academic Support", href: "/#", image: "/JPGOFIcon.png"},
-    {label: "UI Libraries", href: "/#", image: "/JPGOFIcon.png"},
+    {label: "ICON", href: "/#", image: "./JPGOFIcon.png"},
+    {label: "SPOT", href: "/#", image: "./JPGOFIcon.png"},
+    {label: "Study Spaces", href: "/#", image: "./JPGOFIcon.png"},
+    {label: "Student Spaces", href: "/#", image: "./JPGOFIcon.png"},
+    {label: "Printing", href: "/#", image: "./JPGOFIcon.png"},
+    {label: "LinkedIn Learning", href: "/#", image: "./JPGOFIcon.png"},
+    {label: "Academic Support", href: "/#", image: "./JPGOFIcon.png"},
+    {label: "UI Libraries", href: "/#", image: "./JPGOFIcon.png"},
   ];
 
   const StudentInformation = [
-    {label: "Academic Calendar", href: "/#", image: "/JPGOFIcon.png"},
-    {label: "Address Change", href: "/#", image: "/JPGOFIcon.png"},
-    {label: "Advising Appointment", href: "/#", image: "/JPGOFIcon.png"},
-    {label: "Admissions Profile", href: "/#", image: "/JPGOFIcon.png"},
+    {label: "Academic Calendar", href: "/#", image: "./JPGOFIcon.png"},
+    {label: "Address Change", href: "/#", image: "./JPGOFIcon.png"},
+    {label: "Advising Appointment", href: "/#", image: "./JPGOFIcon.png"},
+    {label: "Admissions Profile", href: "/#", image: "./JPGOFIcon.png"},
   ];
 
   const StudentInvolvement = [
-    {label: "TestOne", href: "/#", image: "/JPGOFIcon.png"},
-    {label: "TestTwo", href: "/#", image: "/JPGOFIcon.png"},
-    {label: "TestThree", href: "/#", image: "/JPGOFIcon.png"},
+    {label: "TestOne", href: "/#", image: "./JPGOFIcon.png"},
+    {label: "TestTwo", href: "/#", image: "./JPGOFIcon.png"},
+    {label: "TestThree", href: "/#", image: "./JPGOFIcon.png"},
   ];
 
 
