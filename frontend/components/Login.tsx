@@ -58,8 +58,8 @@ export function LoginForm({
         console.error("Login failed");
       }
     } catch(e) {
-      // silence
-      // (axios issues... i cant attach a catch to this call)
+      // (axios issues... i cant attach a catch to this call directly so i need to try/catch)
+      console.error(e);
     }
   };
 

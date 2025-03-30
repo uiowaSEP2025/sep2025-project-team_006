@@ -29,11 +29,10 @@ export function SignUpForm({
     console.log("Logging in with:", { email, password });
 
     // Simulate login request (replace with API call)
-    // this is a terribly ugly hack.
-    let url, role, nnnext;
-    url = webService.AUTH_STUDENT_REGISTER;
-    role = "student";
-    nnnext = "/studentHome"
+    // Similar to Login component, but hardcoded routes.
+    const url = webService.AUTH_STUDENT_REGISTER;
+    const role = "student";
+    const nnnext = "/studentHome"
     
     let resp;
     try {
@@ -47,8 +46,8 @@ export function SignUpForm({
         console.error("Login failed");
       }
     } catch(e) {
-      // silence
-      // (axios issues... i cant attach a catch to this call)
+      // (axios issues... i cant attach a catch to this call directly so i need to try/catch)
+      console.error(e);
     }
   };
 
