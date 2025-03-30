@@ -8,7 +8,6 @@ import { Review } from 'src/entity/review.entity';
 import { ReviewMetric } from 'src/entity/review_metric.entity';
 import { Session } from 'src/entity/session.entity';
 import { Student } from 'src/entity/student.entity';
-import { Test } from 'src/entity/test.entity';
 import { User } from 'src/entity/user.entity';
 import { DataSource } from 'typeorm';
 
@@ -25,7 +24,6 @@ export const AppDataSource = new DataSource({
   password: process.env.PGSQL_PASSWORD || 'password',
   database: process.env.PGSQL_DATABASE || 'gapdb',
   entities: [
-    Test,
     Application,
     Document,
     FacultyMetric,

@@ -8,8 +8,9 @@ import { Review } from 'src/entity/review.entity';
 import { ReviewMetric } from 'src/entity/review_metric.entity';
 import { Session } from 'src/entity/session.entity';
 import { Student } from 'src/entity/student.entity';
-import { Test } from 'src/entity/test.entity';
 import { User } from 'src/entity/user.entity';
+import * as dotenv from 'dotenv';
+dotenv.config();
 
 @Module({
   imports: [
@@ -22,7 +23,6 @@ import { User } from 'src/entity/user.entity';
       database: process.env.PGSQL_DATABASE || 'gapdb',
       // Add any entities into this list in alphabetical order
       entities: [
-        Test, // This will likely be removed at some point
         Application,
         Document,
         FacultyMetric,

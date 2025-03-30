@@ -50,6 +50,9 @@ $ npm run start:debug
 # start:prod - starts the compiled application in production mode
 $ npm run start:prod
 
+# seed - seeds the postgres database with all the seed scripts
+$ npm run seed
+
 # lint - runs ESLint to check and fix code style issues
 $ npm run lint
 
@@ -67,6 +70,18 @@ $ npm run test:debug
 
 # test:e2e - runs end-to-end tests, this helps verify system functions correctly
 $ npm run test:e2e
+
+# db:drop - drops all contents in the database
+$ npm run db:drop 
+
+# migrate:generate - creates a new migration with a generation name (recommend using full command)
+$ npm run migrate:generate 
+
+# migrate:run - runs the migration, synonymous to the "up" method
+$ npm run migrate:run
+
+# migrate:revert - reverts the migration, synonymous to the "down" method
+$ npm run migrate:revert
 ```
 
 ## Frontend Commands
