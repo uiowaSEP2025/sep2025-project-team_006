@@ -29,17 +29,16 @@ export function SignUpForm({
     console.log("Logging in with:", { email, password });
 
     // Simulate login request (replace with API call)
+    // this is a terribly ugly hack.
+    let url, role, nnnext;
+    url = webService.AUTH_STUDENT_REGISTER;
+    role = "student";
+    nnnext = "/studentHome"
+    
+    let resp;
     try {
-      // this is a terribly ugly hack.
-      let url, role, nnnext;
-      url = webService.AUTH_STUDENT_REGISTER;
-      role = "student";
-      nnnext = "/studentHome"
-
-      const resp = await apiPOST(url, JSON.stringify({ email, password }));
+      resp = await apiPOST(url, JSON.stringify({ email, password }));
       if (resp.success) {
-        console.log("Login successful!");
-        console.log(resp.payload);
         localStorage.setItem("token", resp.payload["token"]);
         localStorage.setItem("session", resp.payload["session"]);
         localStorage.setItem("role", role);
@@ -47,8 +46,9 @@ export function SignUpForm({
       } else {
         console.error("Login failed");
       }
-    } catch (error) {
-      console.error("Error:", error);
+    } catch(e) {
+      // silence
+      // (axios issues... i cant attach a catch to this call)
     }
   };
 

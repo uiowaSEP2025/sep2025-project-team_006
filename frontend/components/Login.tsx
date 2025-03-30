@@ -33,26 +33,23 @@ export function LoginForm({
     const webService = new WebService();
     event.preventDefault(); // Prevent page reload
 
-    console.log("Logging in with:", { email, password });
-
     // Simulate login request (replace with API call)
+    // this is a terribly ugly hack.
+    let url, role, nnnext;
+    if (location.pathname == "/students") {
+      url = webService.AUTH_STUDENT_LOGIN;
+      role = "student";
+      nnnext = "/studentHome"
+    } else {
+      url = webService.AUTH_STUDENT_LOGIN; // no faculty endpoint... but student login endpoint will "Just Work"
+      role = "faculty";
+      nnnext = "/facultyHome"
+    }
+    
+    let resp;
     try {
-      // this is a terribly ugly hack.
-      let url, role, nnnext;
-      if (location.pathname == "/students") {
-        url = webService.AUTH_STUDENT_LOGIN;
-        role = "student";
-        nnnext = "/studentHome"
-      } else {
-        url = webService.AUTH_STUDENT_LOGIN; // no faculty endpoint... but student login endpoint will "Just Work"
-        role = "faculty";
-        nnnext = "/facultyHome"
-      }
-
-      const resp = await apiPOST(url, JSON.stringify({ email, password }));
+      resp = await apiPOST(url, JSON.stringify({ email, password }));
       if (resp.success) {
-        console.log("Login successful!");
-        console.log(resp.payload);
         localStorage.setItem("token", resp.payload["token"]);
         localStorage.setItem("session", resp.payload["session"]);
         localStorage.setItem("role", role);
@@ -60,8 +57,9 @@ export function LoginForm({
       } else {
         console.error("Login failed");
       }
-    } catch (error) {
-      console.error("Error:", error);
+    } catch(e) {
+      // silence
+      // (axios issues... i cant attach a catch to this call)
     }
   };
 
