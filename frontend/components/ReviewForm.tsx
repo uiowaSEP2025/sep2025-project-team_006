@@ -1,13 +1,5 @@
 import React, { useEffect, useState } from "react";
 
-interface Metric {
-    id: number;
-    name: string;
-    description: string;
-    weight: number;
-    score: number;
-}
-
 interface MetricResponse {
     review_metric_id: number;
     name: string;

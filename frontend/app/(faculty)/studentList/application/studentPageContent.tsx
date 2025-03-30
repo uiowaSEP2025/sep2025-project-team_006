@@ -21,6 +21,19 @@ interface Metric {
   score: number;
 }
 
+interface DefaultMetricResponse {
+  metric_name: string;
+  description: string;
+  default_weight: number;
+}
+
+interface FacultyMetricResponse {
+  faculty_metric_id: number;
+  metric_name: string;
+  description: string;
+  default_weight: number;
+}
+
 interface MetricResponse {
   review_metric_id: number;
   name: string;
@@ -47,7 +60,6 @@ export default function StudentPageContent() {
   const [comments, setComments] = useState<string>("");
   const [reviewExists, setReviewExists] = useState<boolean>(false);
   const [reviewId, setReviewId] = useState<number>(0);
-  const [metrics, setMetrics] = useState<Metric[]>([]);
   const currentDocument = documentList[currentDocIndex] || {};
 
   /**
@@ -61,7 +73,7 @@ export default function StudentPageContent() {
         if (response.success) {
           setStudentData(response.payload);
           const docs = response.payload.applications?.[0]?.documents || [];
-          const formattedDocs = docs.map((doc: any) => ({
+          const formattedDocs = docs.map((doc: DocumentInfo) => ({
             document_id: String(doc.document_id),
             document_type: String(doc.document_type),
           }));
@@ -89,7 +101,7 @@ export default function StudentPageContent() {
         ]);
         if (defaults.success && response.success) {
           const combinedMetrics = [
-            ...defaults.payload.map((metric: any, index: number) => ({
+            ...defaults.payload.map((metric: DefaultMetricResponse, index: number) => ({
               id: 1000 + index, // generate a unique id for default metrics
               name: metric.metric_name,
               description: metric.description,
@@ -97,7 +109,7 @@ export default function StudentPageContent() {
               score: 0,
               isDefault: true,
             })),
-            ...response.payload.map((metric: any) => ({
+            ...response.payload.map((metric: FacultyMetricResponse) => ({
               id: metric.faculty_metric_id,
               name: metric.metric_name,
               description: metric.description,
@@ -147,7 +159,7 @@ export default function StudentPageContent() {
       }
     };
     fetchReviewMetrics();
-  }, [studentData]);
+  }, [studentData, webService.REVIEW_METRICS_FOR_FACULTY]);
 
   /**
    * Creates a new review from the button press
