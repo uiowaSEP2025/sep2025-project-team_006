@@ -1,6 +1,14 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Post,
+  UseGuards,
+  Request,
+} from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { CreateUserDto, RefreshTokenDto } from 'src/dto/auth.dto';
+import { AuthenticatedRequest, AuthGuard } from './auth.guard';
 
 /**
  * Job: These routes are for user authentication.
@@ -28,7 +36,14 @@ export class AuthController {
   // This way, people can't just create faculty accounts. However, given their email exists in the database, they should have no problem logging in.
   // There were stubs here, but they were removed. This will likely work a bit differently than previously intended.
 
-  @Post('refresh') // .*/api/auth/refresh
+  @UseGuards(AuthGuard)
+  @Get('')
+  async getAuthInfo(@Request() req: AuthenticatedRequest) {
+    return this.authService.getAuthInfo(req);
+  }
+
+  // This route refreshes the JWT.
+  @Post('') // .*/api/auth
   async postRefresh(@Body() refreshTokenDto: RefreshTokenDto) {
     return this.authService.refreshJWT(refreshTokenDto.session);
   }

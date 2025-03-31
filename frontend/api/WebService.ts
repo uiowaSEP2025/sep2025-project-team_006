@@ -10,6 +10,11 @@ export default class WebService {
     TEST_GET_ONE = `${this.serverUrl}/api/test/:id`;
     TEST_PUT = `${this.serverUrl}/api/test/:id`;
     TEST_POST = `${this.serverUrl}/api/test`;
+    // Authentication routes
+    AUTH_STUDENT_REGISTER = `${this.serverUrl}/api/auth/student/register`; // POST
+    AUTH_STUDENT_LOGIN = `${this.serverUrl}/api/auth/student/login`; // POST
+    AUTH_INFO = `${this.serverUrl}/api/auth`; // GET
+    AUTH_REFRESH = `${this.serverUrl}/api/auth`; // POST
     // API calls
     FACULTY_METRIC_ID = `${this.serverUrl}/api/faculty/metrics/:id`; // GET, PUT, DELETE
     FACULTY_METRIC_POST = `${this.serverUrl}/api/faculty/metrics`; // POST

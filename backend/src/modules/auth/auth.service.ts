@@ -1,5 +1,10 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import {
+  Injectable,
+  UnauthorizedException,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { AuthenticatedRequest } from './auth.guard';
 import { JwtService } from '@nestjs/jwt';
 import { Faculty } from 'src/entity/faculty.entity';
 import { Student } from 'src/entity/student.entity';
@@ -78,6 +83,24 @@ export class AuthService {
     } else {
       throw new UnauthorizedException();
     }
+  }
+
+  async getAuthInfo(req: AuthenticatedRequest) {
+    const user = await this.userRepository.findOne({
+      where: { email: req.user.email },
+    });
+    if (!user) {
+      // i dont think this will ever get called
+      throw new NotFoundException('User not found');
+    }
+
+    return {
+      email: user.email,
+      account_type: user.account_type,
+      provider: user.provider,
+      registered_at: user.registered_at.getTime(),
+      updated_at: user.updated_at.getTime(),
+    };
   }
 
   async createJWT(userRecord: User) {
