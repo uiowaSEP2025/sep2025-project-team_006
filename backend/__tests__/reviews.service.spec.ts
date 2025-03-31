@@ -1,5 +1,4 @@
 import { Test, TestingModule } from '@nestjs/testing';
-
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { NotFoundException } from '@nestjs/common';
@@ -23,6 +22,7 @@ describe('ReviewsService', () => {
                     useValue: {
                         create: jest.fn(),
                         save: jest.fn(),
+                        findOneBy: jest.fn(),
                     },
                 },
                 {
@@ -86,6 +86,42 @@ describe('ReviewsService', () => {
 
             await expect(service.createReview(createReviewDto)).rejects.toThrow(NotFoundException);
             expect(applicationRepository.findOneBy).toHaveBeenCalledWith({ application_id: createReviewDto.application_id });
+        });
+    });
+
+    describe('updateReviewComments', () => {
+        it('should update both comments and overall_score when provided', async () => {
+            const reviewId = 1;
+            const updateDto = { comments: "New comments", overall_score: 90 };
+            const existingReview = { review_id: reviewId, comments: "Old comments", overall_score: null } as unknown as Review;
+            jest.spyOn(reviewRepository, 'findOneBy').mockResolvedValue(existingReview);
+            const updatedReview = { ...existingReview, ...updateDto };
+            jest.spyOn(reviewRepository, 'save').mockResolvedValue(updatedReview);
+
+            const result = await service.updateReviewComments(reviewId, updateDto);
+            expect(result).toEqual(updatedReview);
+            expect(reviewRepository.findOneBy).toHaveBeenCalledWith({ review_id: reviewId });
+            expect(reviewRepository.save).toHaveBeenCalledWith(existingReview);
+        });
+
+        it('should update only comments when overall_score is not provided', async () => {
+            const reviewId = 1;
+            const updateDto = { comments: "Updated only comments" };
+            const existingReview = { review_id: reviewId, comments: "Old comments", overall_score: 80 } as Review;
+            jest.spyOn(reviewRepository, 'findOneBy').mockResolvedValue(existingReview);
+            const updatedReview = { ...existingReview, ...updateDto };
+            jest.spyOn(reviewRepository, 'save').mockResolvedValue(updatedReview);
+
+            const result = await service.updateReviewComments(reviewId, updateDto);
+            expect(result).toEqual(updatedReview);
+            expect(reviewRepository.findOneBy).toHaveBeenCalledWith({ review_id: reviewId });
+            expect(reviewRepository.save).toHaveBeenCalledWith(existingReview);
+        });
+
+        it('should throw NotFoundException if review not found', async () => {
+            jest.spyOn(reviewRepository, 'findOneBy').mockResolvedValue(null);
+            await expect(service.updateReviewComments(1, { comments: "Something" })).rejects.toThrow(NotFoundException);
+            expect(reviewRepository.findOneBy).toHaveBeenCalledWith({ review_id: 1 });
         });
     });
 });

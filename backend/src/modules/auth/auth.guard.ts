@@ -10,7 +10,7 @@ import { Request } from 'express';
 // Taken from documentation; https://docs.nestjs.com/security/authentication#implementing-the-authentication-guard
 
 @Injectable()
-export class AuthGuard implements CanActivate {
+class AuthGuard implements CanActivate {
   constructor(private jwtService: JwtService) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
@@ -35,3 +35,14 @@ export class AuthGuard implements CanActivate {
     return type === 'Bearer' ? token : undefined;
   }
 }
+
+// Interface representing a request with the authentication object.
+// Keys are defined in ./auth.service.ts:AuthService/createJWT
+interface AuthenticatedRequest extends Request {
+  user: {
+    id: number;
+    email: string;
+  };
+}
+
+export { AuthGuard, AuthenticatedRequest };

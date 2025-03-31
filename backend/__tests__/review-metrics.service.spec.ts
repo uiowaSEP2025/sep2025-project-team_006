@@ -19,7 +19,7 @@ describe('ReviewMetricsService', () => {
                     provide: getRepositoryToken(Review),
                     useValue: {
                         findOne: jest.fn(),
-                        findOneBy: jest.fn(), // in case needed
+                        findOneBy: jest.fn(),
                     },
                 },
                 {
@@ -41,7 +41,13 @@ describe('ReviewMetricsService', () => {
 
     describe('getReviewForApplicationAndFaculty', () => {
         it('should return a review with its metrics', async () => {
-            const mockReview = { review_id: 1, review_metrics: [] } as unknown as Review;
+            const mockReview = {
+                review_id: 1,
+                review_metrics: [],
+                comments: null,
+                overall_score: null,
+                review_exists: true,
+            } as unknown as Review;
             (reviewRepo.findOne as jest.Mock).mockResolvedValue(mockReview);
 
             const result = await service.getReviewForApplicationAndFaculty(2, 1);
@@ -52,17 +58,23 @@ describe('ReviewMetricsService', () => {
             });
         });
 
-        it('should throw NotFoundException if review not found', async () => {
+        it('should return an object indicating no review exists if review not found', async () => {
             (reviewRepo.findOne as jest.Mock).mockResolvedValue(null);
-            await expect(service.getReviewForApplicationAndFaculty(2, 1))
-                .rejects.toThrow(NotFoundException);
+            const result = await service.getReviewForApplicationAndFaculty(2, 1);
+            expect(result).toEqual({
+                review_exists: false,
+                review_id: null,
+                review_metrics: [],
+                comments: null,
+                overall_score: null,
+            });
         });
     });
 
     describe('createReviewMetric', () => {
         const createDto = {
             review_id: 1,
-            metric_name: 'Communication',
+            name: 'Communication',
             description: 'Effective communication skills',
             selected_weight: 0.5,
             value: 5,
@@ -72,7 +84,7 @@ describe('ReviewMetricsService', () => {
             const mockReview = { review_id: 1 } as Review;
             (reviewRepo.findOneBy as jest.Mock) = jest.fn().mockResolvedValue(mockReview);
             (reviewMetricRepo.create as jest.Mock).mockReturnValue({
-                name: createDto.metric_name,
+                name: createDto.name,
                 description: createDto.description,
                 selected_weight: createDto.selected_weight,
                 value: createDto.value,
@@ -80,7 +92,7 @@ describe('ReviewMetricsService', () => {
             });
             const savedMetric = {
                 review_metric_id: 5,
-                name: createDto.metric_name,
+                name: createDto.name,
                 description: createDto.description,
                 selected_weight: createDto.selected_weight,
                 value: createDto.value,
@@ -92,7 +104,7 @@ describe('ReviewMetricsService', () => {
             expect(result).toEqual(savedMetric);
             expect(reviewRepo.findOneBy).toHaveBeenCalledWith({ review_id: createDto.review_id });
             expect(reviewMetricRepo.create).toHaveBeenCalledWith({
-                name: createDto.metric_name,
+                name: createDto.name,
                 description: createDto.description,
                 selected_weight: createDto.selected_weight,
                 value: createDto.value,

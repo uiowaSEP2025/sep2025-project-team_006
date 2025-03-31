@@ -42,6 +42,91 @@ Example format of the error case, the important thing is to check if the success
 
 **Note: Because of this consistency only the happy path payload will be shown as part of the example response.**
 
+## Authentication
+Please see the authentication flow document for more information about the usage of this API.
+
+### POST
+---
+- **Method:** `POST`
+- **Endpoint:** `/api/auth`
+- **Description:** Resets your authentication token and returns the new one.
+- **Example:**
+    ```sh
+    $ curl -X POST http://localhost:5000/api/auth -H "Content-Type: application/json" -d '{"session": "fd0b2624dd9e341e26710521a51636a0a6d23511ecb10289a37eb4a05a2589d0"}'
+    ```
+- **Response:**
+    ```json
+    {
+        "success": true,
+        "payload": {
+            "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjIsImVtYWlsIjoidGVzdEBleGFtcGxlLmVkdSIsImlhdCI6MTc0Mjk0MzY1NCwiZXhwIjoxNzQyOTQ3MjU0fQ.QfKYi8k51CUF-5mNVPVs7fiMKOGu5jCZP7FqrO1DetE"
+        }
+    }
+    ```
+
+### GET
+---
+- **Method:** `GET`
+- **Endpoint:** `/api/auth`
+- **Description:** Gets information about your currently authenticated session.
+- **Example:**
+    ```sh
+    $ curl -X GET http://localhost:5000/api/auth -H "Content-Type: application/json" -H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjIsImVtYWlsIjoidGVzdEBleGFtcGxlLmVkdSIsImlhdCI6MTc0Mjg0NzE3MywiZXhwIjoxNzQyODUwNzczfQ.T7gTKaDQk8zhCuiU-bXDtEHaKbP1q_Ctq64_zneRYyw"
+    ```
+- **Response:**
+    ```json
+    {
+        "success": true,
+        "payload": {
+            "account_type": "student",
+            "email": "test@example.edu",
+            "provider": "none",
+            "registered_at": 1742943654858,
+            "updated_at": 1742943654858
+        }
+    }
+    ```
+
+### POST
+---
+- **Method:** `POST`
+- **Endpoint:** `/api/auth/student/register`
+- **Description:** Allows you to register as a student.
+- **Example:**
+    ```sh
+    $ curl -X POST http://localhost:5000/api/auth/student/register -H "Content-Type: application/json" -d '{"email": "example_user@example.edu", "password": "secure_password"}'
+    ```
+- **Response:**
+    ```json
+    {
+        "success": true,
+        "payload": {
+            "session": "aec1d1965e940ba2a63a88263555dd3b7d3e55fa8d11ff63fca6f63a7ce7910e",
+            "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjIsImVtYWlsIjoidGVzdEBleGFtcGxlLmVkdSIsImlhdCI6MTc0Mjk0MzY1NCwiZXhwIjoxNzQyOTQ3MjU0fQ.QfKYi8k51CUF-5mNVPVs7fiMKOGu5jCZP7FqrO1DetE"
+        }
+    }
+    ```
+
+### POST
+---
+- **Method:** `POST`
+- **Endpoint:** `/api/auth/student/login`
+- **Description:** Allows a student to log into their account.
+- **Example:**
+    ```sh
+    $ curl -X POST http://localhost:5000/api/auth/student/login -H "Content-Type: application/json" -d '{"email": "example_user@example.edu", "password": "secure_password"}'
+    ```
+- **Response:**
+    ```json
+    {
+        "success": true,
+        "payload": {
+            "session": "5947e7c8fa3ac41d56147ed71e3d53b2470b6b092468457ae63ed6b0b6d9e080",
+            "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTMsImVtYWlsIjoic3R1ZGVudDEyQGV4YW1wbGUuZWR1IiwiaWF0IjoxNzQyOTQ0NTcwLCJleHAiOjE3NDI5NDgxNzB9.9WeH37HW7cCBTsearryYUvzOfI07HT2gZjxCbBy3bDA"
+        }
+    }
+    ```
+
 ## Faculty Metrics Module
 
 ### GET
@@ -367,6 +452,35 @@ Example format of the error case, the important thing is to check if the success
     }
     ```
 
+### PUT
+---
+- **Method:** `PUT`
+- **Endpoint:** `/api/reviews/:id`
+- **Description:**  Updates the comments (and optionally overall_score) for an existing review. The `:id` in the endpoint corresponds to the `review_id` of the review to update.
+- **Request Body:**
+    ```json
+    {
+        "comments": "Updated comment text", // optional, new comment value
+        "overall_score": 95                 // optional, new overall score
+    }
+    ```
+- **Example:**
+    ```sh
+    $ curl -X PUT "http://localhost:5000/api/reviews/1" -H "Content-Type: application/json" -d "{ \"comments\": \"Updated comments\", \"overall_score\": 95 }"
+    ```
+- **Response:**
+    ```json
+    {
+        "success": true,
+        "payload": {
+            "review_id": 1,
+            "overall_score": 95,
+            "review_date": "2025-03-28T19:52:28.669Z",
+            "comments": "Updated comments"
+        }
+    }
+    ```
+
 ---
 
 ## Review Metrics Module
@@ -375,7 +489,7 @@ Example format of the error case, the important thing is to check if the success
 ---
 - **Method:** `GET`
 - **Endpoint:** `/api/reviews/metrics/app/:app_id/faculty/:faculty_id`
-- **Description:** Retrieves all review metric entries associated with a specific application (app_id) and faculty member (faculty_id).
+- **Description:** Retrieves all review metric entries associated with a specific application (app_id) and faculty member (faculty_id). Also indicated if a review exists or not, as well as the comments and overall score.
 - **Example:**
     ```sh
     $ curl -X GET "http://localhost:5000/api/reviews/metrics/app/8/faculty/1"
@@ -384,23 +498,28 @@ Example format of the error case, the important thing is to check if the success
     ```json
     {
         "success": true,
-        "payload": [
-            {
-                "review_metric_id": 1,
-                "name": "Communication",
-                "description": "Effective communication skills",
-                "selected_weight": 0.5,
-                "value": 4
-            },
-            {
-                "review_metric_id": 2,
-                "name": "Expertise",
-                "description": "Subject matter expertise",
-                "selected_weight": 0.3,
-                "value": 4
-            },
-            ...
-        ]
+        "payload": {
+            "review_exists": true,
+            "review_id": 1,
+            "review_metrics": [
+                {
+                    "review_metric_id": 2,
+                    "name": "Communication",
+                    "description": "Effective communication skills",
+                    "selected_weight": 0.5,
+                    "value": 5
+                },
+                {
+                    "review_metric_id": 3,
+                    "name": "Teamwork",
+                    "description": "Collaborative abilities",
+                    "selected_weight": 0.7,
+                    "value": 4
+                }
+            ],
+            "comments": "Candidate shows potential.",
+            "overall_score": 4.5
+        }
     }
     ```
 ---
