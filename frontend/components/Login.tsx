@@ -1,3 +1,7 @@
+"use client";
+
+import { useState } from "react";
+import WebService from "@/api/WebService";
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import {
@@ -9,6 +13,7 @@ import {
 } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import { apiPOST } from "@/api/apiMethods";
 import Link from "next/link"
 
 type LoginFormProps = React.ComponentPropsWithoutRef<"div"> & {
@@ -22,6 +27,43 @@ export function LoginForm({
   showSignUpLink = true,
   ...props
 }: LoginFormProps) {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  const handleSubmit = async (event: React.FormEvent) => {
+    const webService = new WebService();
+    event.preventDefault(); // Prevent page reload
+
+    // Simulate login request (replace with API call)
+    // this is a terribly ugly hack.
+    let url, role, nnnext;
+    if (location.pathname == "/students") {
+      url = webService.AUTH_STUDENT_LOGIN;
+      role = "student";
+      nnnext = "/studentHome"
+    } else {
+      url = webService.AUTH_STUDENT_LOGIN; // no faculty endpoint... but student login endpoint will "Just Work"
+      role = "faculty";
+      nnnext = "/facultyHome"
+    }
+    
+    let resp;
+    try {
+      resp = await apiPOST(url, JSON.stringify({ email, password }));
+      if (resp.success) {
+        localStorage.setItem("token", resp.payload["token"]);
+        localStorage.setItem("session", resp.payload["session"]);
+        localStorage.setItem("role", role);
+        window.location.replace(nnnext);
+      } else {
+        console.error("Login failed");
+      }
+    } catch(e) {
+      // (axios issues... i cant attach a catch to this call directly so i need to try/catch)
+      console.error(e);
+    }
+  };
+
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>
       <Card>
@@ -32,7 +74,7 @@ export function LoginForm({
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <form>
+          <form onSubmit={handleSubmit}>
             <div className="flex flex-col gap-6">
               <div className="grid gap-2">
                 <Label htmlFor="email">Email</Label>
@@ -40,6 +82,8 @@ export function LoginForm({
                   id="email"
                   type="email"
                   placeholder="m@example.com"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
                   required
                 />
               </div>
@@ -53,7 +97,12 @@ export function LoginForm({
                     Forgot your password?
                   </Link>
                 </div>
-                <Input id="password" type="password" required />
+                <Input
+                  id="password"
+                  type="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  required />
               </div>
               <Button type="submit" className="w-full">
                 Login
