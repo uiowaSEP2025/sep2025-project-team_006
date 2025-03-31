@@ -1,20 +1,20 @@
 "use client";
 
-import { cn } from "@/lib/utils"
-import { Button } from "@/components/ui/button"
+import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import WebService from "@/api/WebService"
-import { useState } from "react"
-import { apiPOST } from "@/api/apiMethods"
-import Link from "next/link"
+} from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import WebService from "@/api/WebService";
+import { useState } from "react";
+import { apiPOST } from "@/api/apiMethods";
+import Link from "next/link";
 
 export function SignUpForm({
   className,
@@ -33,8 +33,8 @@ export function SignUpForm({
     // Similar to Login component, but hardcoded routes.
     const url = webService.AUTH_STUDENT_REGISTER;
     const role = "student";
-    const nnnext = "/studentHome"
-    
+    const nnnext = "/studentHome";
+
     let resp;
     try {
       resp = await apiPOST(url, JSON.stringify({ email, password }));
@@ -46,7 +46,7 @@ export function SignUpForm({
       } else {
         console.error("Login failed");
       }
-    } catch(e) {
+    } catch (e) {
       // (axios issues... i cant attach a catch to this call directly so i need to try/catch)
       console.error(e);
     }
@@ -91,24 +91,24 @@ export function SignUpForm({
                   type="password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  required />
+                  required
+                />
               </div>
 
               <div className="grid gap-2">
                 <div className="flex items-center">
                   <Label htmlFor="password">Re-Enter Password</Label>
                 </div>
-                
+
                 <Input id="password" type="password" required />
               </div>
               <Button type="submit" className="w-full">
                 Sign-Up
               </Button>
             </div>
-            
           </form>
         </CardContent>
       </Card>
     </div>
-  )
+  );
 }
