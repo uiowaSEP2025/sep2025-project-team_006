@@ -489,7 +489,7 @@ Please see the authentication flow document for more information about the usage
 ---
 - **Method:** `GET`
 - **Endpoint:** `/api/reviews/metrics/app/:app_id/faculty/:faculty_id`
-- **Description:** Retrieves all review metric entries associated with a specific application (app_id) and faculty member (faculty_id).
+- **Description:** Retrieves all review metric entries associated with a specific application (app_id) and faculty member (faculty_id). Also indicated if a review exists or not, as well as the comments and overall score.
 - **Example:**
     ```sh
     $ curl -X GET "http://localhost:5000/api/reviews/metrics/app/8/faculty/1"
@@ -498,23 +498,28 @@ Please see the authentication flow document for more information about the usage
     ```json
     {
         "success": true,
-        "payload": [
-            {
-                "review_metric_id": 1,
-                "name": "Communication",
-                "description": "Effective communication skills",
-                "selected_weight": 0.5,
-                "value": 4
-            },
-            {
-                "review_metric_id": 2,
-                "name": "Expertise",
-                "description": "Subject matter expertise",
-                "selected_weight": 0.3,
-                "value": 4
-            },
-            ...
-        ]
+        "payload": {
+            "review_exists": true,
+            "review_id": 1,
+            "review_metrics": [
+                {
+                    "review_metric_id": 2,
+                    "name": "Communication",
+                    "description": "Effective communication skills",
+                    "selected_weight": 0.5,
+                    "value": 5
+                },
+                {
+                    "review_metric_id": 3,
+                    "name": "Teamwork",
+                    "description": "Collaborative abilities",
+                    "selected_weight": 0.7,
+                    "value": 4
+                }
+            ],
+            "comments": "Candidate shows potential.",
+            "overall_score": 4.5
+        }
     }
     ```
 ---

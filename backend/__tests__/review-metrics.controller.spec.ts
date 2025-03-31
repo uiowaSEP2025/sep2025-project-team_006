@@ -27,12 +27,18 @@ describe('ReviewMetricsController', () => {
     });
 
     describe('getReviewMetricsForFacultyAndApplication', () => {
-        it('should return the review_metrics from the review for the specified application and faculty', async () => {
-            const mockReview = { review_metrics: [{ review_metric_id: 2 }, { review_metric_id: 3 }] };
+        it('should return the review object for the specified application and faculty', async () => {
+            const mockReview = {
+                review_exists: true,
+                review_id: 1,
+                review_metrics: [{ review_metric_id: 2 }, { review_metric_id: 3 }],
+                comments: null,
+                overall_score: null,
+            };
             (service.getReviewForApplicationAndFaculty as jest.Mock).mockResolvedValue(mockReview);
 
             const result = await controller.getReviewMetricsForFacultyAndApplication(2, 1);
-            expect(result).toEqual(mockReview.review_metrics);
+            expect(result).toEqual(mockReview);
             expect(service.getReviewForApplicationAndFaculty).toHaveBeenCalledWith(2, 1);
         });
     });
@@ -40,7 +46,7 @@ describe('ReviewMetricsController', () => {
     describe('createReviewMetric', () => {
         const createDto = {
             review_id: 1,
-            metric_name: 'Communication',
+            name: 'Communication',
             description: 'Effective communication skills',
             selected_weight: 0.5,
             value: 5,
@@ -63,7 +69,12 @@ describe('ReviewMetricsController', () => {
         };
 
         it('should call the service to update a review metric', async () => {
-            const updatedMetric = { review_metric_id: 1, name: 'Communication', description: 'Effective communication skills', ...updateDto };
+            const updatedMetric = {
+                review_metric_id: 1,
+                name: 'Communication',
+                description: 'Effective communication skills',
+                ...updateDto
+            };
             (service.updateReviewMetric as jest.Mock).mockResolvedValue(updatedMetric);
 
             const result = await controller.updateReview(1, updateDto);

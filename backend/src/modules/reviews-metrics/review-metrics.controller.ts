@@ -28,7 +28,7 @@ export class ReviewMetricsController {
         application_id,
         faculty_id,
       );
-    return review.review_metrics;
+    return review;
   }
 
   @Post() // .*/api/reviews/metrics
