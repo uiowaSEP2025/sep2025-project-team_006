@@ -2,6 +2,8 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { AuthController } from 'src/modules/auth/auth.controller';
 import { AuthService } from 'src/modules/auth/auth.service';
 import { CreateUserDto, RefreshTokenDto } from 'src/dto/auth.dto';
+import { AuthGuard } from "src/modules/auth/auth.guard";
+import { JwtService } from '@nestjs/jwt';
 
 describe('AuthController', () => {
     let controller: AuthController;
@@ -23,6 +25,13 @@ describe('AuthController', () => {
                         login: jest.fn().mockResolvedValue(registrationResult),
                         refreshJWT: jest.fn().mockResolvedValue({ token: 'jwt-token' }),
                     },
+                },
+                {
+                  provide: JwtService, // Why this requires mocking is a mystery.
+                  useValue: {
+                    sign: jest.fn().mockReturnValue('mocked-jwt-token'),
+                    verify: jest.fn().mockReturnValue({ userId: 1 }),
+                  },
                 },
             ],
         }).compile();

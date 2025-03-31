@@ -1,7 +1,14 @@
-import { Body, Controller, Get, Post, UseGuards, Request } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Post,
+  UseGuards,
+  Request,
+} from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { CreateUserDto, RefreshTokenDto } from 'src/dto/auth.dto';
-import { AuthGuard } from './auth.guard';
+import { AuthenticatedRequest, AuthGuard } from './auth.guard';
 
 /**
  * Job: These routes are for user authentication.
@@ -31,7 +38,7 @@ export class AuthController {
 
   @UseGuards(AuthGuard)
   @Get('')
-  async getAuthInfo(@Request() req: Request) {
+  async getAuthInfo(@Request() req: AuthenticatedRequest) {
     return this.authService.getAuthInfo(req);
   }
 
