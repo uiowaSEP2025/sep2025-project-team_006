@@ -18,7 +18,6 @@ interface Profile {
 }
 
 export default function Home() {
-
   const router = useRouter();
   const webService = new WebService();
   const [profiles, setProfiles] = useState<Profile[]>([]);
@@ -26,7 +25,7 @@ export default function Home() {
   useEffect(() => {
     const fetchApplicants = async () => {
       try {
-        const response = await apiGET(webService.STUDENTS_APPLICANT_LIST)
+        const response = await apiGET(webService.STUDENTS_APPLICANT_LIST);
         if (response.success) {
           const fetchedProfiles: Profile[] = response.payload.map(
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -37,17 +36,17 @@ export default function Home() {
               department: applicant.department,
               degree_program: applicant.degree_program,
               image: "/defaultpfp.jpeg", // default profile picture
-            })
+            }),
           );
           setProfiles(fetchedProfiles);
         } else {
           console.log("GET error: ", response.error);
         }
       } catch (error) {
-        console.log("An unexpected error occured: ", error)
+        console.log("An unexpected error occured: ", error);
       }
-    }
-    fetchApplicants()
+    };
+    fetchApplicants();
   }, [webService.STUDENTS_APPLICANT_LIST]);
 
   const handleProfileClick = (profile: Profile) => {
@@ -59,12 +58,8 @@ export default function Home() {
       <h1 className="text-2xl font-bold mb-4">Select a Profile</h1>
       <ProfileList profiles={profiles} onProfileClick={handleProfileClick} />
       <Button asChild>
-          <Link
-            href="/facultyHome"
-          >
-            Return to Home
-          </Link>
-          </Button>
+        <Link href="/facultyHome">Return to Home</Link>
+      </Button>
     </div>
   );
 }

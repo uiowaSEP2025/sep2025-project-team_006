@@ -6,7 +6,7 @@
     "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
-    "format": "prettier --write \"app/**/*.ts\" \"types/**/*.ts\" \"api/**/*.ts\"",
+    "format": "prettier --write \"app/**/*.tsx\" \"types/**/*.ts\" \"api/**/*.ts\"",
     "lint": "next lint",
     "test": "jest",
     "test:watch": "jest --watch",
