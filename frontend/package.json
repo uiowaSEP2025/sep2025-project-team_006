@@ -6,6 +6,7 @@
     "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
+    "format": "prettier --write \"app/**/*.ts\" \"types/**/*.ts\" \"api/**/*.ts\"",
     "lint": "next lint",
     "test": "jest",
     "test:watch": "jest --watch",
@@ -25,6 +26,7 @@
     "cmdk": "^1.1.1",
     "lucide-react": "^0.483.0",
     "next": "15.1.6",
+    "prettier": "^3.5.3",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-resizable-panels": "^2.1.7",
@@ -34,6 +36,10 @@
     "xlsx": "^0.18.5"
   },
   "devDependencies": {
+    "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
+    "@babel/preset-env": "^7.25.4",
+    "@babel/preset-react": "^7.24.7",
+    "@babel/preset-typescript": "^7.24.7",
     "@eslint/eslintrc": "^3",
     "@testing-library/jest-dom": "^6.6.3",
     "@testing-library/react": "^16.2.0",
@@ -54,6 +60,10 @@
     "typescript": "^5"
   },
   "jest": {
+    "transform": {
+      "^.+\\.(js|jsx|ts|tsx)$": "babel-jest"
+    },
+    "testEnvironment": "jsdom",
     "moduleFileExtensions": [
       "js",
       "json",
@@ -65,21 +75,24 @@
       "<rootDir>/"
     ],
     "moduleNameMapper": {
+      "\\.(css|less|scss|sass)$": "<rootDir>/__tests__/styleMock.js",
       "^@/(.*)$": "<rootDir>/$1"
     },
     "testRegex": ".*\\.spec\\.tsx?$",
-    "transform": {
-      "^.+\\.(t|j)sx?$": "ts-jest"
-    },
     "collectCoverageFrom": [
-      "**/*.(t|j)sx?"
+      "**/*.(t|j)sx?",
+      "**/*.(t|j)s",
+      "**/*.{ts,tsx,js,jsx}",
+      "!**/*.test.{ts,tsx,js,jsx}",
+      "!**/*.spec.{ts,tsx,js,jsx}"
     ],
     "coveragePathIgnorePatterns": [
       "frontend/node_modules/",
       "frontend/coverage/",
+      "frontend/__tests__/",
+      "frontend/out/",
       "/frontend/.next"
     ],
-    "coverageDirectory": "../frontend/coverage",
-    "testEnvironment": "jsdom"
+    "coverageDirectory": "../frontend/coverage"
   }
 }

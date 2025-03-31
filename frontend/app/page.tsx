@@ -1,9 +1,9 @@
+import React from 'react'
 import Link from 'next/link';
 import "./globals.css";
 import { Button } from "@/components/ui/button"
 
-
-export default function Home() {
+export default function HomePage() {
   return (
     <div
       className="min-h-screen bg-cover bg-center"
@@ -16,7 +16,7 @@ export default function Home() {
         <p className="text-xl text-white mb-8">
           Your one-stop solution for graduate student management.
         </p>
-        <div className="flex gap-6">
+        <div className="flex gap-6">c
           <Button asChild>
           <Link
             href="/faculty">
