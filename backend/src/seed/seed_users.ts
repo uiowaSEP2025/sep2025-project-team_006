@@ -64,7 +64,6 @@ export async function seedUserDatabase(logger: LoggerService) {
     await facultyRepo.save(faculty);
 
     const providerId = `microsoft-faculty-${facultyIndex.toString().padStart(3, '0')}`;
-
     const userFaculty = userRepo.create({
       account_type: AccountType.FACULTY,
       faculty: faculty, // link to faculty entity
