@@ -26,13 +26,14 @@ interface MetricResponse {
 export default function Home() {
   const webService = new WebService();
   const [metrics, setMetrics] = useState<Metric[]>([]);
+  const faculty_id = localStorage.getItem("id") || "";
 
   useEffect(() => {
     const fetchMetrics = async () => {
       try {
         const [defaults, response] = await Promise.all([
           apiGET(webService.FACULTY_METRIC_DEFAULTS),
-          apiGET(webService.FACULTY_METRIC_ID, "1"),
+          apiGET(webService.FACULTY_METRIC_ID, faculty_id),
         ]);
 
         let metrics: Metric[] = [];
@@ -72,7 +73,7 @@ export default function Home() {
       }
     };
     fetchMetrics();
-  }, [webService.FACULTY_METRIC_DEFAULTS, webService.FACULTY_METRIC_ID]);
+  }, [webService.FACULTY_METRIC_DEFAULTS, webService.FACULTY_METRIC_ID, faculty_id]);
 
   const handleOnAddMetric = () => {
     const newMetric: Metric = {
@@ -130,7 +131,7 @@ export default function Home() {
       metric_name: updatedMetric.name,
       description: updatedMetric.description,
       default_weight: updatedMetric.weight,
-      faculty_id: 1,
+      faculty_id: faculty_id,
     });
     if (updatedMetric.isNew) {
       try {
