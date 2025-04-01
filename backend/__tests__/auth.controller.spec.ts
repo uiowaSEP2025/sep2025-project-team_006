@@ -14,9 +14,7 @@ describe('AuthController', () => {
         session: 'session-token',
     };
 
-    const authInfoResult = {
-
-    };
+    const authInfoResult = {};
 
     beforeEach(async () => {
         const module: TestingModule = await Test.createTestingModule({
