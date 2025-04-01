@@ -1,5 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { UnauthorizedException } from '@nestjs/common';
+import { NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { AuthService } from 'src/modules/auth/auth.service';
 import { JwtService } from '@nestjs/jwt';
 import { getRepositoryToken } from '@nestjs/typeorm';
@@ -9,6 +9,7 @@ import { Session } from 'src/entity/session.entity';
 import { Student } from 'src/entity/student.entity';
 import { Faculty } from 'src/entity/faculty.entity';
 import * as bcrypt from 'bcrypt';
+import { AuthenticatedRequest } from 'src/modules/auth/auth.guard';
 
 describe('AuthService', () => {
     let service: AuthService;
@@ -23,6 +24,8 @@ describe('AuthService', () => {
         email: 'test@example.com',
         password_digest: 'hashedpassword',
         sessions: [],
+        registered_at: new Date(),
+        updated_at: new Date(),
     } as unknown as User;
 
     // Provide extra properties to match Session entity shape.
@@ -176,4 +179,29 @@ describe('AuthService', () => {
             await expect(service.refreshJWT('invalid-session')).rejects.toThrow(UnauthorizedException);
         });
     });
+
+    describe('getAuthInfo', () => {
+        it("should return user info from provided JWT", async () => {
+            jest.spyOn(userRepo, 'findOne').mockResolvedValue(fakeUser);
+            const req = {
+                user: {
+                    id: fakeUser.user_id,
+                    email: fakeUser.email,
+                }
+            } as AuthenticatedRequest;
+            const result = await service.getAuthInfo(req);
+            expect(result).toHaveProperty('email', fakeUser.email);
+        });
+
+        it("should throw on invalid user info", async () => {
+            jest.spyOn(userRepo, 'findOne').mockResolvedValue(null);
+            const req = {
+                user: {
+                    id: fakeUser.user_id,
+                    email: fakeUser.email,
+                }
+            } as AuthenticatedRequest;
+            await expect(service.getAuthInfo(req)).rejects.toThrow(NotFoundException);
+        });
+    })
 });
