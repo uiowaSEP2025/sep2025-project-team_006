@@ -1,11 +1,11 @@
 import axios from "axios";
 
 // Note: This can be used to open file in new window, if needed.
-// window.open(fileURL, "_blank"); 
+// window.open(fileURL, "_blank");
 
 /**
  * Special API GET method with the purpose of fetching documents that are ready to download/view.
- * 
+ *
  * @param webService API link from `WebService.ts`
  * @param document_id identifier token of the document to be fetched
  * @returns fileURL to use for download or display
@@ -27,7 +27,7 @@ export async function apiGETDocument(webService: string, document_id: string) {
 
 /**
  * Special API POST method for uploading a document (e.g., PDF or Excel file).
- * 
+ *
  * @param webService API link from `WebService.ts`
  * @param file The File object to upload.
  * @param documentType The type of document ("pdf" or "xlsx").
@@ -38,7 +38,7 @@ export async function apiPOSTDocument(
   webService: string,
   file: File,
   documentType: string,
-  applicationId: number
+  applicationId: number,
 ) {
   const formData = new FormData();
   formData.append("file", file); // the file upload field
