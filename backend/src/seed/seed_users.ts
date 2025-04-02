@@ -64,22 +64,19 @@ export async function seedUserDatabase(logger: LoggerService) {
     await facultyRepo.save(faculty);
 
     const providerId = `microsoft-faculty-${facultyIndex.toString().padStart(3, '0')}`;
-    let userFaculty = await userRepo.findOne({
-      where: { provider_id: facultyData.provider_id },
+    const userFaculty = userRepo.create({
+      account_type: AccountType.FACULTY,
+      faculty: faculty, // link to faculty entity
+      provider: 'Microsoft',
+      provider_id: providerId,
+      password_digest: bcrypt.hashSync('meaningless', bcrypt.genSaltSync(10)),
+      email: facultyData.email,
     });
-    if (!userFaculty) {
-      userFaculty = userRepo.create({
-        account_type: AccountType.FACULTY,
-        faculty: faculty, // link to faculty entity
-        provider: 'Microsoft',
-        provider_id: providerId,
-        password_digest: bcrypt.hashSync('meaningless', bcrypt.genSaltSync(10)),
-        email: facultyData.email,
-      });
-      await userRepo.save(userFaculty);
-    }
+    await userRepo.save(userFaculty);
+
     facultyIndex++;
   }
+  logger.debug(await userRepo.find());
 
   // seed students - see `/data/student.json` to expand the data set
   const studentDataPath = path.join(dirname, 'data', 'students.json');

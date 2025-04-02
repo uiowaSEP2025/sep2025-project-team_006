@@ -9,7 +9,7 @@ import { JwtService } from '@nestjs/jwt';
 import { Faculty } from 'src/entity/faculty.entity';
 import { Student } from 'src/entity/student.entity';
 import { Session } from 'src/entity/session.entity';
-import { User } from 'src/entity/user.entity';
+import { AccountType, User } from 'src/entity/user.entity';
 import { Repository } from 'typeorm';
 import * as bcrypt from 'bcrypt';
 import * as crypto from 'node:crypto';
@@ -88,13 +88,22 @@ export class AuthService {
   async getAuthInfo(req: AuthenticatedRequest) {
     const user = await this.userRepository.findOne({
       where: { email: req.user.email },
+      relations: ['faculty', 'student'],
     });
     if (!user) {
       // i dont think this will ever get called
       throw new NotFoundException('User not found');
     }
 
+    let id: number;
+    if (user.account_type == AccountType.FACULTY) {
+      id = user.faculty.faculty_id;
+    } else {
+      id = user.student.student_id;
+    }
+
     return {
+      id: id,
       email: user.email,
       account_type: user.account_type,
       provider: user.provider,
