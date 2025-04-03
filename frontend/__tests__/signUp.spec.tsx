@@ -56,7 +56,7 @@ describe('SignUpForm', () => {
     expect(confirmPasswordInput).toHaveValue('mypassword');
   });
 
-  it('calls apiPOST and redirects on successful signup', async () => {
+  it('calls apiPOST and redirects on successful signup', () => { 
     const mockApiPOST = require('@/api/apiMethods').apiPOST;
     mockApiPOST.mockResolvedValue({
       success: true,
@@ -81,7 +81,7 @@ describe('SignUpForm', () => {
 
     fireEvent.click(screen.getByRole('button', { name: /Sign-Up/i }));
 
-    await waitFor(() => {
+    waitFor(() => {
       expect(mockApiPOST).toHaveBeenCalledWith(
         expectedUrl,
         JSON.stringify({
