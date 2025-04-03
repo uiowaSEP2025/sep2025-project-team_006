@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { LoginForm } from "@/components/Login";
 import { Button } from "@/components/ui/button";
+import React from "react";
 
 export default function Home() {
   return (
