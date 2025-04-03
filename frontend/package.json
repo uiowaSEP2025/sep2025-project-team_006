@@ -91,7 +91,8 @@
       "frontend/coverage/",
       "frontend/__tests__/",
       "frontend/out/",
-      "/frontend/.next"
+      "/frontend/.next",
+      "frontend/public/"
     ],
     "coverageDirectory": "../frontend/coverage"
   }
