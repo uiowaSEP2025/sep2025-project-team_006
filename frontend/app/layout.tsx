@@ -63,7 +63,6 @@ export default function RootLayout({
             />
           </div>
         </footer>
-        <script src="/client_auth.js" defer></script>
       </body>
     </html>
   );

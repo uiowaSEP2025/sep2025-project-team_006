@@ -2,7 +2,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { AuthController } from 'src/modules/auth/auth.controller';
 import { AuthService } from 'src/modules/auth/auth.service';
 import { CreateUserDto, RefreshTokenDto } from 'src/dto/auth.dto';
-import { AuthGuard } from "src/modules/auth/auth.guard";
+import { AuthenticatedRequest, AuthGuard } from "src/modules/auth/auth.guard";
 import { JwtService } from '@nestjs/jwt';
 
 describe('AuthController', () => {
@@ -14,6 +14,8 @@ describe('AuthController', () => {
         session: 'session-token',
     };
 
+    const authInfoResult = {};
+
     beforeEach(async () => {
         const module: TestingModule = await Test.createTestingModule({
             controllers: [AuthController],
@@ -24,6 +26,7 @@ describe('AuthController', () => {
                         register: jest.fn().mockResolvedValue(registrationResult),
                         login: jest.fn().mockResolvedValue(registrationResult),
                         refreshJWT: jest.fn().mockResolvedValue({ token: 'jwt-token' }),
+                        getAuthInfo: jest.fn().mockResolvedValue(authInfoResult),
                     },
                 },
                 {
@@ -66,4 +69,18 @@ describe('AuthController', () => {
             expect(service.refreshJWT).toHaveBeenCalledWith(dto.session);
         });
     });
+
+    describe('getAuthInfo', () => {
+        it('should return user info', async () => {
+            const req = {
+                user: {
+                    id: 0,
+                    email: "test@email.com"
+                }
+            } as AuthenticatedRequest;
+            const result = await controller.getAuthInfo(req);
+            expect(result).toEqual(authInfoResult);
+            expect(service.getAuthInfo).toHaveBeenCalledWith(req);
+        })
+    })
 });
