@@ -61,6 +61,7 @@ export default function StudentPageContent() {
   const [reviewExists, setReviewExists] = useState<boolean>(false);
   const [reviewId, setReviewId] = useState<number>(0);
   const currentDocument = documentList[currentDocIndex] || {};
+  const faculty_id = localStorage.getItem("id") || "";
 
   /**
    * Calls the student applicant information
@@ -100,7 +101,7 @@ export default function StudentPageContent() {
       try {
         const [defaults, response] = await Promise.all([
           apiGET(webService.FACULTY_METRIC_DEFAULTS),
-          apiGET(webService.FACULTY_METRIC_ID, "1"), // TODO: will eventually need to be faculty_id as input
+          apiGET(webService.FACULTY_METRIC_ID, faculty_id),
         ]);
         if (defaults.success && response.success) {
           const combinedMetrics = [
@@ -133,7 +134,7 @@ export default function StudentPageContent() {
       }
     };
     fetchMetrics();
-  }, [webService.FACULTY_METRIC_DEFAULTS, webService.FACULTY_METRIC_ID]);
+  }, [webService.FACULTY_METRIC_DEFAULTS, webService.FACULTY_METRIC_ID, faculty_id]);
 
   /**
    * Fetches any of the reviews the faculty has left previously (if any)
@@ -146,8 +147,8 @@ export default function StudentPageContent() {
         const response = await apiDoubleIdGET(
           webService.REVIEW_METRICS_FOR_FACULTY,
           applicationId.toString(),
-          "1",
-        ); // TODO: will replace with faculty_id
+          faculty_id,
+        );
         console.log("Review", response);
         if (response.success) {
           // will need to add check on UI for this part
@@ -168,7 +169,7 @@ export default function StudentPageContent() {
       }
     };
     fetchReviewMetrics();
-  }, [studentData, webService.REVIEW_METRICS_FOR_FACULTY]);
+  }, [studentData, webService.REVIEW_METRICS_FOR_FACULTY, faculty_id]);
 
   /**
    * Creates a new review from the button press
@@ -179,7 +180,7 @@ export default function StudentPageContent() {
     try {
       const reviewPayload = {
         application_id: applicationId,
-        faculty_id: "1", // TODO: replace with dynamic faculty id
+        faculty_id: faculty_id,
       };
       const data = JSON.stringify(reviewPayload);
       const response = await apiPOST(webService.REVIEW_CREATE_POST, data);

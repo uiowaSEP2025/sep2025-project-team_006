@@ -42,12 +42,15 @@ const redir_not_null = (loc) => (loc != null) ? window.location.replace(loc) : t
                     // Good response. Life's great.
                     resp.json().then(json => {
                         const role = json["payload"]["account_type"];
+                        const id = json["payload"]["id"]
+                        localStorage.setItem("id", id);
                         redir_not_null(goto[role]);
                     });
                 } else {
                     // Bad response, bad token, die here.
                     localStorage.removeItem("token");
                     localStorage.removeItem("role");
+                    localStorage.removeItem("id");
                     redir_not_null(goto["out"]);
                 }
             }).catch(e => {
