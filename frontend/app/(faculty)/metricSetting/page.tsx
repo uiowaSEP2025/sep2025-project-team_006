@@ -26,9 +26,12 @@ interface MetricResponse {
 export default function Home() {
   const webService = new WebService();
   const [metrics, setMetrics] = useState<Metric[]>([]);
-  const faculty_id = localStorage.getItem("id") || "";
+  const [faculty_id, setFacultyId] = useState<string>("");
+ 
 
   useEffect(() => {
+    const id = localStorage.getItem("id") || "";
+    setFacultyId(id);
     const fetchMetrics = async () => {
       try {
         const [defaults, response] = await Promise.all([
