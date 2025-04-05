@@ -61,7 +61,12 @@
   },
   "jest": {
     "transform": {
-      "^.+\\.(js|jsx|ts|tsx)$": ["babel-jest", { "configFile": "./babel.config.test.js" }]
+      "^.+\\.(js|jsx|ts|tsx)$": [
+        "babel-jest",
+        {
+          "configFile": "./babel.config.test.js"
+        }
+      ]
     },
     "testEnvironment": "jsdom",
     "moduleFileExtensions": [
