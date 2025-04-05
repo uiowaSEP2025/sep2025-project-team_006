@@ -2,24 +2,26 @@
 
 import { useState } from "react";
 import WebService from "@/api/WebService";
-import { cn } from "@/lib/utils"
-import { Button } from "@/components/ui/button"
+import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
+} from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import { apiPOST } from "@/api/apiMethods";
-import Link from "next/link"
+import Link from "next/link";
+import React from 'react';
+
 
 type LoginFormProps = React.ComponentPropsWithoutRef<"div"> & {
-    //signUpHref?: string
-    showSignUpLink?: boolean
-}
+  //signUpHref?: string
+  showSignUpLink?: boolean;
+};
 
 export function LoginForm({
   className,
@@ -40,13 +42,13 @@ export function LoginForm({
     if (location.pathname == "/students") {
       url = webService.AUTH_STUDENT_LOGIN;
       role = "student";
-      nnnext = "/studentHome"
+      nnnext = "/studentHome";
     } else {
       url = webService.AUTH_STUDENT_LOGIN; // no faculty endpoint... but student login endpoint will "Just Work"
       role = "faculty";
-      nnnext = "/facultyHome"
+      nnnext = "/facultyHome";
     }
-    
+
     let resp;
     try {
       resp = await apiPOST(url, JSON.stringify({ email, password }));
@@ -58,7 +60,7 @@ export function LoginForm({
       } else {
         console.error("Login failed");
       }
-    } catch(e) {
+    } catch (e) {
       // (axios issues... i cant attach a catch to this call directly so i need to try/catch)
       console.error(e);
     }
@@ -102,7 +104,8 @@ export function LoginForm({
                   type="password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  required />
+                  required
+                />
               </div>
               <Button type="submit" className="w-full">
                 Login
@@ -112,17 +115,19 @@ export function LoginForm({
               </Button>
             </div>
             {showSignUpLink && (
-            <div className="mt-4 text-center text-sm">
-              Don&apos;t have an account?{" "}
-              <Link href="/createAccount" className="underline underline-offset-4">
-                Sign up
-              </Link>
-            </div>
+              <div className="mt-4 text-center text-sm">
+                Don&apos;t have an account?{" "}
+                <Link
+                  href="/createAccount"
+                  className="underline underline-offset-4"
+                >
+                  Sign up
+                </Link>
+              </div>
             )}
-
           </form>
         </CardContent>
       </Card>
     </div>
-  )
+  );
 }

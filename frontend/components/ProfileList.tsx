@@ -15,7 +15,10 @@ interface ProfileListProps {
   onProfileClick: (profile: Profile) => void;
 }
 
-const ProfileList: React.FC<ProfileListProps> = ({ profiles, onProfileClick }) => {
+const ProfileList: React.FC<ProfileListProps> = ({
+  profiles,
+  onProfileClick,
+}) => {
   return (
     <div className="max-w-md mx-auto bg-white shadow-md rounded-lg overflow-hidden">
       {profiles.map((profile, index) => (
