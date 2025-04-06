@@ -341,7 +341,7 @@ export default function StudentPageContent() {
       <div className="w-1/2 h-full p-6 overflow-auto">
         <div className="p-6">
           <h1 className="text-2xl font-bold mb-4">
-            Review Details for {studentData?.first_name}{" "}
+            Review for {studentData?.first_name}{" "}
             {studentData?.last_name}
           </h1>
 
@@ -359,14 +359,14 @@ export default function StudentPageContent() {
                   onChange={(e) => setSelectedMetricId(Number(e.target.value))}
                   className="p-2 border border-gray-300 rounded"
                 >
-                  <option value="">Select a metric to add...</option>
+                  <option value="">Select a template to add...</option>
                   {availableMetrics.map((metric) => (
                     <option key={metric.id} value={metric.id}>
                       {metric.name}
                     </option>
                   ))}
                 </select>
-                <Button onClick={handleAddReviewMetric}>Add Metric</Button>
+                <Button onClick={handleAddReviewMetric}>Add Template</Button>
               </div>
 
               <ReviewForm
@@ -374,6 +374,7 @@ export default function StudentPageContent() {
                 onDeleteMetric={handleDeleteReviewMetric}
                 onChangeMetric={handleUpdateReviewMetric}
               />
+              <div className="gap-6 mb-4 mt-4">
               <h3 className="font-bold">
                 Comments:
               </h3>
@@ -383,6 +384,7 @@ export default function StudentPageContent() {
                 onChange={(e) => handleCommentChange(e.target.value)} 
                 className = "w-full h-32 bg-gray-50"
               />
+              </div>
             </>
           )}
           <div className= "w-48 flex flex-col gap-2">
