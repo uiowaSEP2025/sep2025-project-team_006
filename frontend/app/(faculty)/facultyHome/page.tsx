@@ -6,8 +6,9 @@ import { isExternal } from "util/types";
 
 export default function Home() {
   const Develompent = [
-    { label: "Student List", href: "/studentList", image: "./graduateProgram.png" },
-    { label: "Metric Settings", href: "/metricSetting", image: "./templateSettings.png"},
+    { label: "Student List", href: "/studentList", image: "./firstYearAdmin.png" },
+    { label: "Template Settings", href: "/metricSetting", image: "./templateSettings.png"},
+    { label: "Reviewed Applicants", href: "/reviewedApplicants", image: "./graduateProgram.png" },
     { label: "Information Page", href: "/informationPage", image: "./scoreInfo.png"},
   ];
 
