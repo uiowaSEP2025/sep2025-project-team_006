@@ -50,7 +50,7 @@ export default function Home() {
     fetchApplicants();
   }, [webService.STUDENTS_APPLICANT_LIST]);
 
-  const handleProfileClick = (profile: Profile) => {
+  const handleProfileClick = () => {
   };
 
   // Filtered and paginated profiles
