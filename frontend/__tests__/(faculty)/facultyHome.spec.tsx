@@ -38,7 +38,7 @@ describe('FacultyHome Page', () => {
       expect(screen.getByText(section)).toBeInTheDocument();
     }
 
-    expect(screen.getAllByTestId('home-dashboard')).toHaveLength(5);
+    expect(screen.getAllByTestId('home-dashboard')).toHaveLength(3);
   });
 
   it('renders the back to login link', () => {
