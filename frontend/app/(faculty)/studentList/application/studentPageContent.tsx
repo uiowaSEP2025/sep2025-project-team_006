@@ -65,6 +65,19 @@ export default function StudentPageContent() {
   const [faculty_id, setFacultyId] = useState<string>("");
 
   /**
+   * Validation for weight totals
+   */
+  const totalWeight = reviewMetrics.reduce(
+    (acc, metric) => acc + metric.selected_weight,
+    0,
+  );
+  const validWeights = Math.abs(totalWeight - 1) < 0.01;
+  const validScores = reviewMetrics.every(
+    (metric) => metric.value >= 0 && metric.value <= 5,
+  );
+  const canSubmit = validWeights && validScores;
+
+  /**
    * Calls the student applicant information
    */
   useEffect(() => {
@@ -312,10 +325,22 @@ export default function StudentPageContent() {
   };
 
   /**
+   * NEW: Saves all review metrics by iterating over them and calling the update handler.
+   */
+  const saveAllMetrics = async () => {
+    // Update all metrics concurrently
+    await Promise.all(
+      reviewMetrics.map((metric) => handleUpdateReviewMetric(metric)),
+    );
+  };
+
+  /**
    * Submits a review by marking it as submitted
    */
   const handleSubmitReview = async () => {
     try {
+      await saveAllMetrics();
+
       const response = await apiPUT(
         webService.REVIEW_SUBMIT,
         reviewId.toString(),
@@ -420,11 +445,18 @@ export default function StudentPageContent() {
           )}
           <div className="w-48 flex flex-col gap-2">
             <Button
+              disabled={!canSubmit}
               className="bg-black hover:bg-green-700 text-white"
               onClick={handleSubmitReview}
             >
               Submit Review
             </Button>
+            {!canSubmit && (
+              <p className="text-sm text-red-600">
+                Please ensure total weights equal 1.00 and scores are between 0
+                and 5.
+              </p>
+            )}
 
             <Button asChild>
               <Link href="/studentList">Return to Student List</Link>
