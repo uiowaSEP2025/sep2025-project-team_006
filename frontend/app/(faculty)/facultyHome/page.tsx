@@ -6,11 +6,8 @@ import React from "react";
 export default function Home() {
   const Develompent = [
     { label: "Student List", href: "/studentList", image: "./studentList.png" },
-    {
-      label: "Metric Settings",
-      href: "/metricSetting",
-      image: "./metricSetting.png",
-    },
+    { label: "Metric Settings", href: "/metricSetting", image: "./metricSetting.png"},
+    { label: "Information Page", href: "/informationPage", image: "./JPGOFIcon.png"},
   ];
 
   const AdmissionsInformation = [
