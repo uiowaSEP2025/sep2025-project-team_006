@@ -1,17 +1,8 @@
 import Link from "next/link";
 import HomeDashboard from "@/components/HomeDashboard";
 import { Button } from "@/components/ui/button";
-import { isExternal } from "util/types";
 
 export default function Home() {
-  const AdmissionsInformation = [
-    { label: "Admissions Profile", href: "/#", image: "./JPGOFIcon.png" },
-    { label: "Financial Aid", href: "/#", image: "./JPGOFIcon.png" },
-    { label: "Visit Campus", href: "/#", image: "./JPGOFIcon.png" },
-    { label: "Scholarship Portal", href: "/#", image: "./JPGOFIcon.png" },
-    { label: "Housing Information", href: "/#", image: "./JPGOFIcon.png" },
-  ];
-
   const GraduateAdmissions= [
     { label: "Graduate Form", href: " https://docs.google.com/forms/d/e/1FAIpQLSe3Vkjd09Fw_irsg62TQhr8_Z47ctYp0HMzhIMANFjNDYKXlw/viewform?usp=header", image: "./uploadIOWA.png", isExternal: true },
     { label: "First-Year Admission", href: "https://admissions.uiowa.edu/apply/how-apply/first-year-admissions", image: "./firstYearAdmin.png", isExternal: true },
