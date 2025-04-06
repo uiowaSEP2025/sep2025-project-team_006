@@ -40,7 +40,7 @@ describe('LoginForm', () => {
 
     const buttons = screen.getAllByRole('button');
     const loginButton = buttons.find(btn => btn.textContent?.trim() === 'Login');
-    const outlookButton = buttons.find(btn => btn.textContent?.includes('Login with Outlook'));
+    const outlookButton = buttons.find(btn => btn.textContent?.includes('Login with Microsoft'));
 
     expect(loginButton).toBeInTheDocument();
     expect(outlookButton).toBeInTheDocument();
