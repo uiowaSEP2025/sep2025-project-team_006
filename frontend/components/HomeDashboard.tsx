@@ -7,6 +7,7 @@ interface HomeButtonItem {
   label: string;
   href: string;
   image?: string;
+  isExternal?: boolean;
 }
 
 interface CategorySectionProps {
@@ -22,8 +23,10 @@ export default function HomeDashboard({ title, items }: CategorySectionProps) {
       </h2>
 
       <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
-        {items.map((item, idx) => (
-          <Link href={item.href} key={idx}>
+        {items.map((item, idx) => {
+          const { isExternal = false } = item;
+
+          const content = (
             <Card className="bg-black text-yellow-400 hover:bg-gray-600 transition-all rounded-xl shadow-md h-40 w-40 flex items-center justify-center mx-auto">
               <CardContent className="flex flex-col items-center justify-center p-2 text-center h-full w-full">
                 {item.image && (
@@ -33,13 +36,28 @@ export default function HomeDashboard({ title, items }: CategorySectionProps) {
                     width={40}
                     height={40}
                     className="mb-2 object-contain"
-                  />
+                  /> 
                 )}
+
                 <span className="underline">{item.label}</span>
               </CardContent>
             </Card>
-          </Link>
-        ))}
+        );
+          return isExternal ? (
+            <a
+              href={item.href}
+              target="_blank"
+              rel="noopener noreferrer"
+              key={idx}
+            >
+              {content}
+            </a>
+          ) : (
+            <Link href={item.href} key={idx}>
+              {content}
+            </Link>
+          );
+        })}
       </div>
     </div>
   );
