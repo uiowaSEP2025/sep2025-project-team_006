@@ -367,6 +367,9 @@ export default function StudentPageContent() {
                   ))}
                 </select>
                 <Button onClick={handleAddReviewMetric}>Add Template</Button>
+                <Button asChild>
+                  <Link href="/informationPage">Review Info</Link>
+                </Button>
               </div>
 
               <ReviewForm
