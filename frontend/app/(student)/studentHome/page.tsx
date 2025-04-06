@@ -1,6 +1,7 @@
 import Link from "next/link";
 import HomeDashboard from "@/components/HomeDashboard";
 import { Button } from "@/components/ui/button";
+import { isExternal } from "util/types";
 
 export default function Home() {
   const AdmissionsInformation = [
@@ -30,7 +31,7 @@ export default function Home() {
   ];
 
   const StudentInvolvement = [
-    { label: "TestOne", href: "/#", image: "./JPGOFIcon.png" },
+    { label: "Donations", href: "https://donate.givetoiowa.org/s/1773/foundation/interior.aspx?sid=1773&gid=2&pgid=501&cid=1237&appealcode=2021GFWA", image: "./JPGOFIcon.png", isExternal: true },
     { label: "TestTwo", href: "/#", image: "./JPGOFIcon.png" },
     { label: "TestThree", href: "/#", image: "./JPGOFIcon.png" },
   ];
