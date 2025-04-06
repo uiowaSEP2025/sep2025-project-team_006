@@ -48,7 +48,7 @@ export default function Home() {
         {" "}
         FACULTY HOME PAGE{" "}
       </h1>
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
+      <main className="flex flex-col row-start-2 items-center sm:items-start">
         <HomeDashboard title="Development Links" items={Develompent} />
         <HomeDashboard
           title="Admissions Information"
