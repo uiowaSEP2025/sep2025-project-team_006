@@ -5,44 +5,23 @@ import React from "react";
 
 export default function Home() {
   const Develompent = [
-    { label: "Student List", href: "/studentList", image: "./studentList.png" },
-    {
-      label: "Metric Settings",
-      href: "/metricSetting",
-      image: "./metricSetting.png",
-    },
+    { label: "Student List", href: "/studentList", image: "./firstYearAdmin.png" },
+    { label: "Template Settings", href: "/metricSetting", image: "./templateSettings.png"},
+    { label: "Reviewed Applicants", href: "/reviewedApplicants", image: "./graduateProgram.png" },
+    { label: "Information Page", href: "/informationPage", image: "./scoreInfo.png"},
   ];
 
   const AdmissionsInformation = [
-    { label: "Admissions Profile", href: "/#", image: "./JPGOFIcon.png" },
-    { label: "Financial Aid", href: "/#", image: "./JPGOFIcon.png" },
-    { label: "Visit Campus", href: "/#", image: "./JPGOFIcon.png" },
-    { label: "Scholarship Portal", href: "/#", image: "./JPGOFIcon.png" },
-    { label: "Housing Information", href: "/#", image: "./JPGOFIcon.png" },
+    { label: "Policy Manual", href: "https://opsmanual.uiowa.edu/table-of-contents", image: "./books.png", isExternal: true },
+    { label: "Procedures", href: "https://grad.uiowa.edu/faculty-staff/policies/departmental-and-program-review-procedures", image: "./procedures.png", isExternal: true},
+    { label: "Technology Services", href: "https://its.uiowa.edu/", image: "./information.png", isExternal: true },
+    { label: "Campus Resources", href: "https://provost.uiowa.edu/faculty-resources/faculty-resources", image: "./gradCollege.png", isExternal: true },
+    { label: "Faculty Directory", href: "https://engineering.uiowa.edu/directory", image: "./faculty.png", isExternal: true },
   ];
-
-  const StudentLearning = [
-    { label: "ICON", href: "/#", image: "./JPGOFIcon.png" },
-    { label: "SPOT", href: "/#", image: "./JPGOFIcon.png" },
-    { label: "Study Spaces", href: "/#", image: "./JPGOFIcon.png" },
-    { label: "Student Spaces", href: "/#", image: "./JPGOFIcon.png" },
-    { label: "Printing", href: "/#", image: "./JPGOFIcon.png" },
-    { label: "LinkedIn Learning", href: "/#", image: "./JPGOFIcon.png" },
-    { label: "Academic Support", href: "/#", image: "./JPGOFIcon.png" },
-    { label: "UI Libraries", href: "/#", image: "./JPGOFIcon.png" },
-  ];
-
-  const StudentInformation = [
-    { label: "Academic Calendar", href: "/#", image: "./JPGOFIcon.png" },
-    { label: "Address Change", href: "/#", image: "./JPGOFIcon.png" },
-    { label: "Advising Appointment", href: "/#", image: "./JPGOFIcon.png" },
-    { label: "Admissions Profile", href: "/#", image: "./JPGOFIcon.png" },
-  ];
-
-  const StudentInvolvement = [
-    { label: "TestOne", href: "/#", image: "./JPGOFIcon.png" },
-    { label: "TestTwo", href: "/#", image: "./JPGOFIcon.png" },
-    { label: "TestThree", href: "/#", image: "./JPGOFIcon.png" },
+  const Assistance = [
+    { label: "Graduate Specialist", href: "https://engineering.uiowa.edu/directory/emory-blair", image: "./personInfo.png", isExternal: true },
+    { label: "Graduate Admin", href: "https://engineering.uiowa.edu/directory/hans-johnson", image: "./boardroom.png", isExternal: true },
+    { label: "Help Video", href: "https://www.youtube.com/watch?v=dQw4w9WgXcQ", image: "./video.png", isExternal: true },
   ];
 
   return (
@@ -51,18 +30,13 @@ export default function Home() {
         {" "}
         FACULTY HOME PAGE{" "}
       </h1>
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <HomeDashboard title="Development Links" items={Develompent} />
+      <main className="flex flex-col row-start-2 items-center sm:items-start">
+        <HomeDashboard title="Faculty Review" items={Develompent} />
         <HomeDashboard
-          title="Admissions Information"
+          title="Information"
           items={AdmissionsInformation}
         />
-        <HomeDashboard title="Faculty Learning" items={StudentLearning} />
-        <HomeDashboard title="Faculty Information" items={StudentInformation} />
-        <HomeDashboard
-          title="Faculty Involvement and Support"
-          items={StudentInvolvement}
-        />
+        <HomeDashboard title="Assistance" items={Assistance} />
         <Button asChild>
           <Link href="/faculty">Move back to Login</Link>
         </Button>

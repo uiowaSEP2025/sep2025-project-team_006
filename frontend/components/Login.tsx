@@ -111,7 +111,7 @@ export function LoginForm({
                 Login
               </Button>
               <Button variant="outline" className="w-full">
-                Login with Outlook
+                Login with Microsoft
               </Button>
             </div>
             {showSignUpLink && (

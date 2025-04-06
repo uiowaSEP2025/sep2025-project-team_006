@@ -3,36 +3,22 @@ import HomeDashboard from "@/components/HomeDashboard";
 import { Button } from "@/components/ui/button";
 
 export default function Home() {
-  const AdmissionsInformation = [
-    { label: "Admissions Profile", href: "/#", image: "./JPGOFIcon.png" },
-    { label: "Financial Aid", href: "/#", image: "./JPGOFIcon.png" },
-    { label: "Visit Campus", href: "/#", image: "./JPGOFIcon.png" },
-    { label: "Scholarship Portal", href: "/#", image: "./JPGOFIcon.png" },
-    { label: "Housing Information", href: "/#", image: "./JPGOFIcon.png" },
+  const GraduateAdmissions= [
+    { label: "Graduate Form", href: " https://docs.google.com/forms/d/e/1FAIpQLSe3Vkjd09Fw_irsg62TQhr8_Z47ctYp0HMzhIMANFjNDYKXlw/viewform?usp=header", image: "./uploadIOWA.png", isExternal: true },
+    { label: "First-Year Admission", href: "https://admissions.uiowa.edu/apply/how-apply/first-year-admissions", image: "./firstYearAdmin.png", isExternal: true },
   ];
 
-  const StudentLearning = [
-    { label: "ICON", href: "/#", image: "./JPGOFIcon.png" },
-    { label: "SPOT", href: "/#", image: "./JPGOFIcon.png" },
-    { label: "Study Spaces", href: "/#", image: "./JPGOFIcon.png" },
-    { label: "Student Spaces", href: "/#", image: "./JPGOFIcon.png" },
-    { label: "Printing", href: "/#", image: "./JPGOFIcon.png" },
-    { label: "LinkedIn Learning", href: "/#", image: "./JPGOFIcon.png" },
-    { label: "Academic Support", href: "/#", image: "./JPGOFIcon.png" },
-    { label: "UI Libraries", href: "/#", image: "./JPGOFIcon.png" },
+  const StudentSites= [
+    { label: "UIOWA", href: "https://uiowa.edu/", image: "./oldCapitol.png", isExternal: true },
+    { label: "MyUI", href: " https://myui.uiowa.edu/my-ui/home.page", image: "./myUI.png", isExternal: true },
+    { label: "ICON", href: "https://icon.uiowa.edu/students", image: "./ICON icon_0.jpg", isExternal: true },
+    { label: "Graduate College", href:"https://grad.uiowa.edu/", image: "./gradCollege.png", isExternal: true },
+    { label: "Graduate Programs", href:"https://grad.uiowa.edu/", image: "./graduateProgram.png", isExternal: true }
   ];
 
-  const StudentInformation = [
-    { label: "Academic Calendar", href: "/#", image: "./JPGOFIcon.png" },
-    { label: "Address Change", href: "/#", image: "./JPGOFIcon.png" },
-    { label: "Advising Appointment", href: "/#", image: "./JPGOFIcon.png" },
-    { label: "Admissions Profile", href: "/#", image: "./JPGOFIcon.png" },
-  ];
-
-  const StudentInvolvement = [
-    { label: "TestOne", href: "/#", image: "./JPGOFIcon.png" },
-    { label: "TestTwo", href: "/#", image: "./JPGOFIcon.png" },
-    { label: "TestThree", href: "/#", image: "./JPGOFIcon.png" },
+  const Financial = [
+    { label: "Donations", href: "https://donate.givetoiowa.org/s/1773/foundation/interior.aspx?sid=1773&gid=2&pgid=501&cid=1237&appealcode=2021GFWA", image: "./donate.png", isExternal: true },
+    { label: "Financial Assistance", href: "https://grad.uiowa.edu/funding/graduate-assistantships-and-loans", image: "./piggyBank.png", isExternal: true },
   ];
 
   return (
@@ -41,17 +27,14 @@ export default function Home() {
         {" "}
         STUDENT HOME PAGE{" "}
       </h1>
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
+      <main className="flex flex-col row-start-2 items-center sm:items-start">
         <HomeDashboard
           title="Admissions Information"
-          items={AdmissionsInformation}
+          items={GraduateAdmissions}
         />
-        <HomeDashboard title="Student Learning" items={StudentLearning} />
-        <HomeDashboard title="Student Information" items={StudentInformation} />
-        <HomeDashboard
-          title="Student Involvement and Support"
-          items={StudentInvolvement}
-        />
+        <HomeDashboard title="Student Sites" items={StudentSites} />
+        <HomeDashboard title="Finances" items={Financial} />
+        
         <Button asChild>
           <Link href="/students">Move back to Login</Link>
         </Button>
