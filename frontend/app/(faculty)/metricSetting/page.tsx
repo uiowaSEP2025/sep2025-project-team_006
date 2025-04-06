@@ -199,7 +199,7 @@ export default function Home() {
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100 p-6">
-      <h1 className="text-2xl font-bold mb-4">Metric Settings</h1>
+      <h1 className="text-2xl font-bold mb-4">Template Settings</h1>
       <MetricForm
         metrics={metrics}
         onAddMetric={handleOnAddMetric}
