@@ -374,18 +374,26 @@ export default function StudentPageContent() {
                 onDeleteMetric={handleDeleteReviewMetric}
                 onChangeMetric={handleUpdateReviewMetric}
               />
-
+              <h3 className="font-bold">
+                Comments:
+              </h3>
               <Textarea
                 placeholder="Comments"
                 value={comments}
-                onChange={(e) => handleCommentChange(e.target.value)}
+                onChange={(e) => handleCommentChange(e.target.value)} 
+                className = "w-full h-32 bg-gray-50"
               />
             </>
           )}
+          <div className= "w-48 flex flex-col gap-2">
+          <Button className = "bg-black hover:bg-green-700 text-white">
+            Submit Review
+          </Button>
 
           <Button asChild>
             <Link href="/studentList">Return to Student List</Link>
           </Button>
+          </div>
         </div>
       </div>
     </div>
