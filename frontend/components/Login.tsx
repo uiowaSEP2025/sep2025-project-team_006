@@ -15,6 +15,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { apiPOST } from "@/api/apiMethods";
 import Link from "next/link";
+import { useRouter } from 'next/navigation';
 import React from 'react';
 
 
@@ -31,7 +32,41 @@ export function LoginForm({
 }: LoginFormProps) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState('');
+  const router = useRouter();
+  const webService = new WebService();
 
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setError('');
+
+    const res = await fetch('/api/login', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ email, password }),
+    });
+
+    // still a bit of an ugly hack... but its better now atleast
+    if (res.ok) {
+      let url, role;
+      if (location.pathname == "/students") {
+        role = "student";
+        localStorage.setItem("role", "student");
+        router.push('/studentHome');
+      } else {
+        role = "faculty";
+        localStorage.setItem("role", "student");
+        router.push('/facultyHome');
+      }
+    } else {
+      const data = await res.json();
+      setError(data.error || 'Login failed');
+    }
+  };
+
+  /*
   const handleSubmit = async (event: React.FormEvent) => {
     const webService = new WebService();
     event.preventDefault(); // Prevent page reload
@@ -65,6 +100,7 @@ export function LoginForm({
       console.error(e);
     }
   };
+  */
 
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>

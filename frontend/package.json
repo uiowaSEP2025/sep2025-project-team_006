@@ -24,6 +24,7 @@
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "cmdk": "^1.1.1",
+    "cookie": "^1.0.2",
     "lucide-react": "^0.483.0",
     "next": "15.1.6",
     "prettier": "^3.5.3",
@@ -61,7 +62,12 @@
   },
   "jest": {
     "transform": {
-      "^.+\\.(js|jsx|ts|tsx)$": ["babel-jest", { "configFile": "./babel.config.test.js" }]
+      "^.+\\.(js|jsx|ts|tsx)$": [
+        "babel-jest",
+        {
+          "configFile": "./babel.config.test.js"
+        }
+      ]
     },
     "testEnvironment": "jsdom",
     "moduleFileExtensions": [
