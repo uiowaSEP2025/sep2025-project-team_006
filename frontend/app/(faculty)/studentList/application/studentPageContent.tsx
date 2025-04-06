@@ -62,8 +62,6 @@ export default function StudentPageContent() {
   const [reviewId, setReviewId] = useState<number>(0);
   const currentDocument = documentList[currentDocIndex] || {};
   const [faculty_id, setFacultyId] = useState<string>("");
-  
-  //const faculty_id = localStorage.getItem("id") || "";
 
   /**
    * Calls the student applicant information
@@ -306,6 +304,17 @@ export default function StudentPageContent() {
     }
   };
 
+  /**
+   * Submits a review
+   */
+  const handleSubmitReview = async (id: number) => {
+    try {
+      
+    } catch (error) {
+      
+    }
+  };
+
   return (
     <div className="flex w-full h-screen">
       {/* Left half: File Viewer */}
@@ -391,7 +400,7 @@ export default function StudentPageContent() {
             </>
           )}
           <div className= "w-48 flex flex-col gap-2">
-          <Button className = "bg-black hover:bg-green-700 text-white">
+          <Button className = "bg-black hover:bg-green-700 text-white" onClick={() => handleSubmitReview(1)}>
             Submit Review
           </Button>
 

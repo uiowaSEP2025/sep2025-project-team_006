@@ -67,4 +67,15 @@ export class ReviewsService {
 
     return this.reviewRepository.save(review);
   }
+
+  async submitReview(reviewId: number): Promise<Review> {
+    const review = await this.reviewRepository.findOneBy({
+      review_id: reviewId,
+    });
+    if (!review) {
+      throw new NotFoundException(`Review not found for id ${reviewId}`);
+    }
+    review.submitted = true;
+    return this.reviewRepository.save(review);
+  }
 }
