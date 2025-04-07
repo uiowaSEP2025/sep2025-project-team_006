@@ -26,4 +26,9 @@ export class ReviewsController {
   ) {
     return this.reviewService.updateReviewComments(reviewId, updateReviewDto);
   }
+
+  @Put(':id/submit') // .*/api/reviews/:id/submit
+  async submitReview(@Param('id', ParseIntPipe) reviewId: number) {
+    return this.reviewService.submitReview(reviewId);
+  }
 }

@@ -36,13 +36,13 @@ export default function HomeDashboard({ title, items }: CategorySectionProps) {
                     width={40}
                     height={40}
                     className="mb-2 object-contain"
-                  /> 
+                  />
                 )}
 
                 <span className="underline">{item.label}</span>
               </CardContent>
             </Card>
-        );
+          );
           return isExternal ? (
             <a
               href={item.href}

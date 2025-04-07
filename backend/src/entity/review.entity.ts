@@ -24,6 +24,9 @@ export class Review {
   @Column({ type: 'text', nullable: true })
   comments: string;
 
+  @Column({ default: false })
+  submitted: boolean;
+
   @ManyToOne(() => Application, (application) => application.reviews)
   application: Application;
 

@@ -39,7 +39,7 @@ export default function Home() {
               department: applicant.department,
               degree_program: applicant.degree_program,
               image: "/defaultpfp.jpeg",
-            })
+            }),
           );
           setProfiles(fetchedProfiles);
         } else {
@@ -59,7 +59,7 @@ export default function Home() {
   // Filtered and paginated profiles
   const filteredProfiles = useMemo(() => {
     return profiles.filter((p) =>
-      p.name.toLowerCase().includes(searchQuery.toLowerCase())
+      p.name.toLowerCase().includes(searchQuery.toLowerCase()),
     );
   }, [profiles, searchQuery]);
 
@@ -84,7 +84,10 @@ export default function Home() {
         className="mb-4 p-2 border border-gray-300 rounded w-full max-w-md"
       />
 
-      <ProfileList profiles={paginatedProfiles} onProfileClick={handleProfileClick} />
+      <ProfileList
+        profiles={paginatedProfiles}
+        onProfileClick={handleProfileClick}
+      />
 
       {/* Pagination buttons */}
       <div className="flex space-x-2 my-4">

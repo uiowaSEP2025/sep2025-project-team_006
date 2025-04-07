@@ -124,4 +124,25 @@ describe('ReviewsService', () => {
             expect(reviewRepository.findOneBy).toHaveBeenCalledWith({ review_id: 1 });
         });
     });
+
+    describe('submitReview', () => {
+        it('should mark review as submitted and return updated review', async () => {
+            const reviewId = 1;
+            const existingReview = { review_id: reviewId, submitted: false } as unknown as Review;
+            jest.spyOn(reviewRepository, 'findOneBy').mockResolvedValue(existingReview);
+            const updatedReview = { ...existingReview, submitted: true };
+            jest.spyOn(reviewRepository, 'save').mockResolvedValue(updatedReview);
+
+            const result = await service.submitReview(reviewId);
+            expect(result).toEqual(updatedReview);
+            expect(reviewRepository.findOneBy).toHaveBeenCalledWith({ review_id: reviewId });
+            expect(reviewRepository.save).toHaveBeenCalledWith(existingReview);
+        });
+
+        it('should throw NotFoundException if review not found', async () => {
+            jest.spyOn(reviewRepository, 'findOneBy').mockResolvedValue(null);
+            await expect(service.submitReview(1)).rejects.toThrow(NotFoundException);
+            expect(reviewRepository.findOneBy).toHaveBeenCalledWith({ review_id: 1 });
+        });
+    });
 });
