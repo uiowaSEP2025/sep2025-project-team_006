@@ -40,6 +40,7 @@ export class ReviewMetricsService {
       review_exists: true,
       review_id: review.review_id,
       review_metrics: review.review_metrics,
+      submitted: review.submitted,
       comments: review.comments,
       overall_score: review.overall_score,
     };

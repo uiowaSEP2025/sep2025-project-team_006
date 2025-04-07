@@ -481,6 +481,28 @@ Please see the authentication flow document for more information about the usage
     }
     ```
 
+### PUT
+---
+- **Method:** `PUT`
+- **Endpoint:** `/api/reviews/:id/submit`
+- **Description:**  Updates the existing review to place the review in a submitted status.
+- **Example:**
+    ```sh
+    $ curl -X PUT "http://localhost:5000/api/reviews/1/submit" -H "Content-Type: application/json"
+    ```
+- **Response:**
+    ```json
+    {
+        "success":true,
+        "payload": {
+            "review_id": 1,
+            "overall_score": 47,
+            "review_date": "2025-04-06T20:31:43.622Z",
+            "comments": "Great application overall",
+            "submitted": true
+        }
+    }
+    ```
 ---
 
 ## Review Metrics Module

@@ -27,7 +27,6 @@ export default function Home() {
   const webService = new WebService();
   const [metrics, setMetrics] = useState<Metric[]>([]);
   const [faculty_id, setFacultyId] = useState<string>("");
- 
 
   useEffect(() => {
     const id = localStorage.getItem("id") || "";
@@ -76,7 +75,11 @@ export default function Home() {
       }
     };
     fetchMetrics();
-  }, [webService.FACULTY_METRIC_DEFAULTS, webService.FACULTY_METRIC_ID, faculty_id]);
+  }, [
+    webService.FACULTY_METRIC_DEFAULTS,
+    webService.FACULTY_METRIC_ID,
+    faculty_id,
+  ]);
 
   const handleOnAddMetric = () => {
     const newMetric: Metric = {
