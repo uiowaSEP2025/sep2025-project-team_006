@@ -46,7 +46,7 @@ export default function RootLayout({
 
         <footer className="bg-black text-[#F1BE48] h-20 text-4xl px-6 sm:px-12 py-4 flex justify-between items-center">
           <Image
-            src="/sep2025-project-team_006/IOWABLACKLogo.png"
+            src="/sep2025-project-team_006/IOWABlackLogo.png"
             alt="Iowa Logo"
             width={48}
             height={48}
