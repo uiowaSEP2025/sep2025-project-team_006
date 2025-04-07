@@ -41,11 +41,11 @@ export function LoginForm({
     if (location.pathname == "/students") {
       url = webService.AUTH_STUDENT_LOGIN;
       role = "student";
-      nnnext = "/studentHome";
+      nnnext = "/sep2025-project-team_006/studentHome"; // KEEP FOR PRODUCTION
     } else {
       url = webService.AUTH_STUDENT_LOGIN; // no faculty endpoint... but student login endpoint will "Just Work"
       role = "faculty";
-      nnnext = "/facultyHome";
+      nnnext = "/sep2025-project-team_006/facultyHome"; // KEEP FOR PRODUCTION
     }
 
     let resp;
