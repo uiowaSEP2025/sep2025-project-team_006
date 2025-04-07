@@ -26,10 +26,10 @@ interface MetricResponse {
 export default function Home() {
   const webService = new WebService();
   const [metrics, setMetrics] = useState<Metric[]>([]);
-  const [faculty_id, setFacultyId] = useState<string>("");
+  const [faculty_id, setFacultyId] = useState<string>("1");
 
   useEffect(() => {
-    const id = localStorage.getItem("id") || "";
+    const id = localStorage.getItem("id") || "1";
     setFacultyId(id);
     const fetchMetrics = async () => {
       try {
