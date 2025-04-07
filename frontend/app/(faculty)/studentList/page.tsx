@@ -38,7 +38,7 @@ export default function Home() {
               status: applicant.status,
               department: applicant.department,
               degree_program: applicant.degree_program,
-              image: "/defaultpfp.jpeg",
+              image: "./defaultpfp.jpeg",
             }),
           );
           setProfiles(fetchedProfiles);
