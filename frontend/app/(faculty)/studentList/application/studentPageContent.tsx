@@ -62,7 +62,7 @@ export default function StudentPageContent() {
   const [reviewSubmitted, setReviewSubmitted] = useState<boolean>(false);
   const [reviewId, setReviewId] = useState<number>(0);
   const currentDocument = documentList[currentDocIndex] || {};
-  const [faculty_id, setFacultyId] = useState<string>("");
+  const [faculty_id, setFacultyId] = useState<string>("1"); // Will need to remove at some point
 
   /**
    * Validation for weight totals
