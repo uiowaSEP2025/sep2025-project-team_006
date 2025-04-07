@@ -3,8 +3,8 @@
 // This isn't faking it or anything - authentication is still being done, and the user cant just disable javascript and run like the wind.
 // But it is baaaaaaad.
 
-//const API_BASE_URL = "https://gradappsite.tech";
-const API_BASE_URL = "http://localhost:5000"
+const API_BASE_URL = "https://gradappsite.tech";
+// const API_BASE_URL = "http://localhost:5000"
 
 // A map of where to redirect to based on the users condition.
 const redirects = {
