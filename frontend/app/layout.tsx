@@ -31,13 +31,12 @@ export default function RootLayout({
       >
         <header className="bg-black text-[#F1BE48] h-20 text-4xl px-6 sm:px-12 py-4 flex justify-between items-center">
           <Image
-            src="./GAPOfficial.png"
+            src="/sep2025-project-team_006/GAPOfficial.png"
             alt="GAP Official logo"
             width={48}
             height={48}
             className="h-12 w-auto"
           />
-
           <div className="flex items-center space-x-4">
             Graduate Admission Portal
           </div>
@@ -47,7 +46,7 @@ export default function RootLayout({
 
         <footer className="bg-black text-[#F1BE48] h-20 text-4xl px-6 sm:px-12 py-4 flex justify-between items-center">
           <Image
-            src="./IOWABLACKLogo.png"
+            src="/sep2025-project-team_006/IOWABLACKLogo.png"
             alt="Iowa Logo"
             width={48}
             height={48}
@@ -55,7 +54,7 @@ export default function RootLayout({
           />
           <div className="flex items-center space-x-4">
             <Image
-              src="./Tigerhawk.png"
+              src="/sep2025-project-team_006/Tigerhawk.png"
               alt="Tiger Hawk"
               width={48}
               height={48}
@@ -63,7 +62,7 @@ export default function RootLayout({
             />
           </div>
         </footer>
-        <script src="/client_auth.js" defer></script>
+        <script src="/sep2025-project-team_006/client_auth.js" defer></script>
       </body>
     </html>
   );
