@@ -3,7 +3,7 @@ import WebService from './api/WebService';
 
 const webService = new WebService();
 
-export const redirects = {
+export const redirects: Record<string, { out: string | null, student: string | null, faculty: string | null }> = {
     "/faculty": { out: null, student: null, faculty: "/facultyHome" },
     "/students": { out: null, student: "/studentHome", faculty: null }, 
     "/facultyHome": { out: "/faculty", student: "/faculty", faculty: null },
@@ -35,7 +35,7 @@ export async function middleware(req: NextRequest) {
     // If backend is unauthorized or returns a bad status, redirect
     if (backendRes.status === 401 || backendRes.status === 403) {
       if (url.pathname in redirects) {
-        url.pathname = redirects[url.pathname]["/"] ?? "/";
+        url.pathname = redirects[url.pathname]["out"] ?? "/";
       } else {
         url.pathname = '/login'; // or wherever you want to send them
       }
