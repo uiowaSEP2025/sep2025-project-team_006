@@ -7,15 +7,19 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 import { TemplateMetric } from './template_metric.entity';
+import { Departments } from 'src/modules/templates/departments.enum';
 
 @Entity('templates')
 export class Template {
   @PrimaryGeneratedColumn()
   template_id: string;
 
-  // TODO: Use an enum
-  @Column({ nullable: true })
-  department: string;
+  @Column({
+    type: 'enum',
+    enum: Departments,
+    default: Departments.NONE,
+  })
+  department: Departments;
 
   @Column()
   name: string;
