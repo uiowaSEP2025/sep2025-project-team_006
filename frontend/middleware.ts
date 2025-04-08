@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import WebService from './api/WebService';
+import { cookie_settings } from './lib/constants';
 
 const webService = new WebService();
 
@@ -15,38 +16,71 @@ export const redirects: Record<string, { out: string | null, student: string | n
 
 export async function middleware(req: NextRequest) {
     const url = req.nextUrl.clone();
-
     if (url.pathname in redirects && redirects[url.pathname]["out"] != null) {
-        // Example: Add an auth token from cookies (or elsewhere)
         const token = req.cookies.get('gap_token')?.value;
-
-        try {
-            // Forward the request to your backend
-            const backendRes = await fetch(webService.AUTH_INFO, {
-                method: req.method,
-                headers: {
-                  'Content-Type': 'application/json',
-                  ...(token ? { Authorization: `Bearer ${token}` } : {}),
-                },
-                body: req.body,
-            });
-
-            const json = backendRes.json();
-
-            // If backend is unauthorized or returns a bad status, redirect
-            if (backendRes.status === 401 || backendRes.status === 403) {
-              url.pathname = redirects[url.pathname]["out"] as string;
-              return NextResponse.redirect(url);
-            }
-
-            // Allow the request to continue
-            return NextResponse.next();
-        } catch (err) {
-            console.error('Middleware error:', err);
-
-            url.pathname = '/error';
-            url.searchParams.set('code', '500');
+        const session = req.cookies.get("gap_session")?.value;
+        if (!token || !session) {
+            url.pathname = redirects[url.pathname]["out"] as string;
             return NextResponse.redirect(url);
         }
+
+        let res;
+        const where_to = await checkAuthStatus(url.pathname, token, session);
+        if (where_to.location != null) {
+            // Something required us to redirect, so do so.
+            url.pathname = where_to.location;
+            res = NextResponse.redirect(url);
+        } else {
+            // We're good. Allow the request to continue.
+            res = NextResponse.next();
+        }
+
+        if (where_to.token != token) {
+            res.cookies.set("gap_token", where_to.token);
+        }
+        return res;
     }
+}
+
+const checkAuthStatus = async (path: string, token: string, session: string) => {
+    // Forward the request to the backend.
+    const info = await fetch(webService.AUTH_INFO, {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        }
+    });
+    const info_json = await info.json();
+
+    // If backend is unauthorized or returns a bad status, we redirect.
+    // One exception is if the auth token is expired. We refresh it via our session token and try again in this case.
+    console.log("INFO_JSON.STATUS IS: ", info_json.status)
+    if (info.status === 409) {
+        // Refresh the auth token.
+        console.log("REFRESHING!!!!!!");
+        const refresh = await fetch(webService.AUTH_REFRESH, {
+            method: "POST",
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ session })
+        });
+        const refresh_json = await refresh.json();
+
+        if (refresh.ok) {
+            // This should *only* ever recurse once.
+            console.log(`OLD > NEW\n${token}\n${refresh_json.payload.token}`);
+            return checkAuthStatus(path, refresh_json.payload.token, session);
+        } else {
+            return { location: redirects[path]["out"] as string, token };
+        }
+    } else if (!info.ok) {
+        // old conditional checked only 401 and 403, if anything goes haywire just go
+        console.log("AH SHIT");
+        console.log(info.status);
+        console.log(info.statusText);
+        return { location: redirects[path]["out"] as string, token };
+    }
+
+    return { location: null, token };
 }

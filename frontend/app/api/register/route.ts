@@ -19,7 +19,7 @@ export async function POST(
   console.log(body);
 
   // Authenticate with your backend
-  const backendRes = await fetch(webService.AUTH_STUDENT_LOGIN, {
+  const backendRes = await fetch(webService.AUTH_STUDENT_REGISTER, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ email: body.email, password: body.password }),

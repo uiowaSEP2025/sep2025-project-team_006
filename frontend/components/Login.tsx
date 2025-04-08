@@ -158,6 +158,7 @@ export function LoginForm({
                 </Link>
               </div>
             )}
+            {error && <p className="text-red-500">{error}</p>}
           </form>
         </CardContent>
       </Card>

@@ -1,5 +1,6 @@
 import {
   CanActivate,
+  ConflictException,
   ExecutionContext,
   Injectable,
   UnauthorizedException,
@@ -25,7 +26,22 @@ class AuthGuard implements CanActivate {
       });
       request['user'] = payload; // We're assigning the payload to the request object here, so that we can access it in our route handlers
     } catch {
-      throw new UnauthorizedException();
+      // Slight hack. Check if the token is expired, then throw a unique HTTP code.
+      let payload;
+      try {
+        payload = JSON.parse(atob(token.split(".")[1]));
+      } catch {
+        // Malormed token. Bad stuff.
+        throw new UnauthorizedException();
+      }
+
+      console.log("CHECKING EXPIRATiON");
+      if (payload.exp < (Date.now() / 1000)) {
+        console.log("EXPIRED!");
+        throw new ConflictException("Expired JWT");
+      } else {
+        throw new UnauthorizedException();
+      }
     }
     return true;
   }
