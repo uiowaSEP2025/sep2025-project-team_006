@@ -35,9 +35,7 @@ class AuthGuard implements CanActivate {
         throw new UnauthorizedException();
       }
 
-      console.log("CHECKING EXPIRATiON");
       if (payload.exp < (Date.now() / 1000)) {
-        console.log("EXPIRED!");
         throw new ConflictException("Expired JWT");
       } else {
         throw new UnauthorizedException();

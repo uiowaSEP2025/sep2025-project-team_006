@@ -54,10 +54,8 @@ const checkAuthStatus = async (path: string, token: string, session: string) => 
 
     // If backend is unauthorized or returns a bad status, we redirect.
     // One exception is if the auth token is expired. We refresh it via our session token and try again in this case.
-    console.log("INFO_JSON.STATUS IS: ", info_json.status)
     if (info.status === 409) {
         // Refresh the auth token.
-        console.log("REFRESHING!!!!!!");
         const refresh = await fetch(webService.AUTH_REFRESH, {
             method: "POST",
             headers: {
@@ -69,16 +67,12 @@ const checkAuthStatus = async (path: string, token: string, session: string) => 
 
         if (refresh.ok) {
             // This should *only* ever recurse once.
-            console.log(`OLD > NEW\n${token}\n${refresh_json.payload.token}`);
             return checkAuthStatus(path, refresh_json.payload.token, session);
         } else {
             return { location: redirects[path]["out"] as string, token };
         }
     } else if (!info.ok) {
         // old conditional checked only 401 and 403, if anything goes haywire just go
-        console.log("AH SHIT");
-        console.log(info.status);
-        console.log(info.statusText);
         return { location: redirects[path]["out"] as string, token };
     }
 
