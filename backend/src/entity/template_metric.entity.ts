@@ -1,4 +1,11 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, CreateDateColumn, UpdateDateColumn } from 'typeorm';
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  ManyToOne,
+  CreateDateColumn,
+  UpdateDateColumn,
+} from 'typeorm';
 import { Template } from './template.entity';
 
 @Entity('template_metrics')
@@ -9,13 +16,15 @@ export class TemplateMetric {
   @Column()
   metric_name: string;
 
-  @Column({ default: "" })
+  @Column({ default: '' })
   description: string;
 
   @Column()
   metric_weight: string;
 
-  @ManyToOne(() => Template, template => template.metrics, { onDelete: 'CASCADE' })
+  @ManyToOne(() => Template, (template) => template.metrics, {
+    onDelete: 'CASCADE',
+  })
   template: Template;
 
   @CreateDateColumn()

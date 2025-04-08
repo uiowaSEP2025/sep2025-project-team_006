@@ -1,4 +1,11 @@
-import { Entity, PrimaryGeneratedColumn, Column, OneToMany, CreateDateColumn, UpdateDateColumn } from 'typeorm';
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  OneToMany,
+  CreateDateColumn,
+  UpdateDateColumn,
+} from 'typeorm';
 import { TemplateMetric } from './template_metric.entity';
 
 @Entity('templates')
@@ -16,7 +23,9 @@ export class Template {
   @Column({ default: false })
   is_default: boolean;
 
-  @OneToMany(() => TemplateMetric, metric => metric.template, { cascade: true })
+  @OneToMany(() => TemplateMetric, (metric) => metric.template, {
+    cascade: true,
+  })
   metrics: TemplateMetric[];
 
   @CreateDateColumn()
