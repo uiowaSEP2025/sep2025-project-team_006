@@ -76,5 +76,5 @@ const checkAuthStatus = async (path: string, token: string, session: string) => 
         return { location: redirects[path]["out"] as string, token };
     }
 
-    return { location: null, token };
+    return { location: redirects[path][info_json.payload.account_type], token };
 }
