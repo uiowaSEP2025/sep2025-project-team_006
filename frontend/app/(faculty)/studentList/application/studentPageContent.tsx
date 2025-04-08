@@ -134,7 +134,11 @@ export default function StudentPageContent() {
       }
     };
     fetchMetrics();
-  }, [webService.FACULTY_METRIC_DEFAULTS, webService.FACULTY_METRIC_ID, faculty_id]);
+  }, [
+    webService.FACULTY_METRIC_DEFAULTS,
+    webService.FACULTY_METRIC_ID,
+    faculty_id,
+  ]);
 
   /**
    * Fetches any of the reviews the faculty has left previously (if any)

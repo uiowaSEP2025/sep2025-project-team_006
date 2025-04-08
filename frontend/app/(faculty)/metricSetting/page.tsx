@@ -73,7 +73,11 @@ export default function Home() {
       }
     };
     fetchMetrics();
-  }, [webService.FACULTY_METRIC_DEFAULTS, webService.FACULTY_METRIC_ID, faculty_id]);
+  }, [
+    webService.FACULTY_METRIC_DEFAULTS,
+    webService.FACULTY_METRIC_ID,
+    faculty_id,
+  ]);
 
   const handleOnAddMetric = () => {
     const newMetric: Metric = {

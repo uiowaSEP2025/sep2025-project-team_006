@@ -14,44 +14,39 @@ export const redirects: Record<string, { out: string | null, student: string | n
 };
 
 export async function middleware(req: NextRequest) {
-  const url = req.nextUrl.clone();
+    const url = req.nextUrl.clone();
 
-  // Example: Add an auth token from cookies (or elsewhere)
-  const token = req.cookies.get('token')?.value;
+    if (url.pathname in redirects && redirects[url.pathname]["out"] != null) {
+        // Example: Add an auth token from cookies (or elsewhere)
+        const token = req.cookies.get('gap_token')?.value;
 
-  try {
-    // Forward the request to your backend
-    const backendRes = await fetch(webService.AUTH_INFO, {
-      method: req.method,
-      headers: {
-        'Content-Type': 'application/json',
-        ...(token ? { Authorization: `Bearer ${token}` } : {}),
-      },
-      body: req.body,
-    });
+        try {
+            // Forward the request to your backend
+            const backendRes = await fetch(webService.AUTH_INFO, {
+                method: req.method,
+                headers: {
+                  'Content-Type': 'application/json',
+                  ...(token ? { Authorization: `Bearer ${token}` } : {}),
+                },
+                body: req.body,
+            });
 
-    const json = backendRes.json();
+            const json = backendRes.json();
 
-    // If backend is unauthorized or returns a bad status, redirect
-    if (backendRes.status === 401 || backendRes.status === 403) {
-      if (url.pathname in redirects) {
-        url.pathname = redirects[url.pathname]["out"] ?? "/";
-      } else {
-        url.pathname = '/login'; // or wherever you want to send them
-      }
-      url.searchParams.set('code', backendRes.status.toString());
-      return NextResponse.redirect(url);
+            // If backend is unauthorized or returns a bad status, redirect
+            if (backendRes.status === 401 || backendRes.status === 403) {
+              url.pathname = redirects[url.pathname]["out"] as string;
+              return NextResponse.redirect(url);
+            }
+
+            // Allow the request to continue
+            return NextResponse.next();
+        } catch (err) {
+            console.error('Middleware error:', err);
+
+            url.pathname = '/error';
+            url.searchParams.set('code', '500');
+            return NextResponse.redirect(url);
+        }
     }
-
-    // Optionally: rewrite the request to hit your own API handler
-    // Or just allow the request to continue
-    return NextResponse.next();
-
-  } catch (err) {
-    console.error('Middleware error:', err);
-
-    url.pathname = '/error';
-    url.searchParams.set('code', '500');
-    return NextResponse.redirect(url);
-  }
 }

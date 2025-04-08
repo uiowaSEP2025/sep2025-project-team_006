@@ -15,9 +15,8 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { apiPOST } from "@/api/apiMethods";
 import Link from "next/link";
-import { useRouter } from 'next/navigation';
-import React from 'react';
-
+import { useRouter } from "next/navigation";
+import React from "react";
 
 type LoginFormProps = React.ComponentPropsWithoutRef<"div"> & {
   //signUpHref?: string
@@ -32,37 +31,35 @@ export function LoginForm({
 }: LoginFormProps) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
   const router = useRouter();
   const webService = new WebService();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError('');
+    setError("");
 
-    const res = await fetch('/api/login', {
-      method: 'POST',
+    const res = await fetch("/api/login", {
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
       body: JSON.stringify({ email, password }),
     });
 
     // still a bit of an ugly hack... but its better now atleast
     if (res.ok) {
-      let url, role;
       if (location.pathname == "/students") {
-        role = "student";
         localStorage.setItem("role", "student");
-        router.push('/studentHome');
+        router.push("/studentHome");
       } else {
-        role = "faculty";
         localStorage.setItem("role", "student");
-        router.push('/facultyHome');
+        router.push("/facultyHome");
       }
     } else {
-      const data = await res.json();
-      setError(data.error || 'Login failed');
+      console.error("wah wah wah");
+      const data = await res.text();
+      setError(data || "Login failed");
     }
   };
 

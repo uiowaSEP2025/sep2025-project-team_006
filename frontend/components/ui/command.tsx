@@ -52,7 +52,8 @@ const CommandInput = React.forwardRef<
   </div>
 ));
 
-CommandInput.displayName = CommandPrimitive.Input?.displayName || "CommandInput";
+CommandInput.displayName =
+  CommandPrimitive.Input?.displayName || "CommandInput";
 
 const CommandList = React.forwardRef<
   React.ElementRef<typeof CommandPrimitive.List>,
@@ -78,7 +79,8 @@ const CommandEmpty = React.forwardRef<
   />
 ));
 
-CommandEmpty.displayName = CommandPrimitive.Empty?.displayName || "CommandEmpty";
+CommandEmpty.displayName =
+  CommandPrimitive.Empty?.displayName || "CommandEmpty";
 
 const CommandGroup = React.forwardRef<
   React.ElementRef<typeof CommandPrimitive.Group>,
@@ -94,7 +96,8 @@ const CommandGroup = React.forwardRef<
   />
 ));
 
-CommandGroup.displayName = CommandPrimitive.Group?.displayName || "CommandGroup";
+CommandGroup.displayName =
+  CommandPrimitive.Group?.displayName || "CommandGroup";
 
 const CommandSeparator = React.forwardRef<
   React.ElementRef<typeof CommandPrimitive.Separator>,
@@ -106,7 +109,8 @@ const CommandSeparator = React.forwardRef<
     {...props}
   />
 ));
-CommandSeparator.displayName = CommandPrimitive.Separator?.displayName || "CommandSeparator";
+CommandSeparator.displayName =
+  CommandPrimitive.Separator?.displayName || "CommandSeparator";
 
 const CommandItem = React.forwardRef<
   React.ElementRef<typeof CommandPrimitive.Item>,
