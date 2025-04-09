@@ -12,6 +12,8 @@ import * as fs from 'fs';
 import * as path from 'path';
 import { LoggerService } from 'src/common/logger/logger.service';
 import * as dotenv from 'dotenv';
+import { TemplateMetric } from 'src/entity/template_metric.entity';
+import { Template } from 'src/entity/template.entity';
 dotenv.config();
 
 const dataSource = new DataSource({
@@ -28,13 +30,14 @@ const dataSource = new DataSource({
     Faculty,
     ReviewMetric,
     Review,
+    TemplateMetric,
+    Template,
     Session,
     Student,
     User,
   ],
   synchronize: false,
 });
-
 export async function seedReviews(logger: LoggerService) {
   await dataSource.initialize();
   const reviewRepo = dataSource.getRepository(Review);

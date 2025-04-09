@@ -13,6 +13,8 @@ import * as fs from 'fs';
 import * as path from 'path';
 import { LoggerService } from 'src/common/logger/logger.service';
 import * as dotenv from 'dotenv';
+import { TemplateMetric } from 'src/entity/template_metric.entity';
+import { Template } from 'src/entity/template.entity';
 dotenv.config();
 
 const dataSource = new DataSource({
@@ -29,6 +31,8 @@ const dataSource = new DataSource({
     Faculty,
     ReviewMetric,
     Review,
+    TemplateMetric,
+    Template,
     Session,
     Student,
     User,
@@ -76,7 +80,6 @@ export async function seedUserDatabase(logger: LoggerService) {
 
     facultyIndex++;
   }
-  logger.debug(await userRepo.find());
 
   // seed students - see `/data/student.json` to expand the data set
   const studentDataPath = path.join(dirname, 'data', 'students.json');
