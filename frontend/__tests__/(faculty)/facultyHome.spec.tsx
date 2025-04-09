@@ -29,18 +29,16 @@ describe('FacultyHome Page', () => {
   it('renders all HomeDashboard sections', () => {
     render(<FacultyHome />);
     const sections = [
-      'Development Links',
-      'Admissions Information',
-      'Faculty Learning',
-      'Faculty Information',
-      'Faculty Involvement and Support',
+      'Faculty Review',
+      'Information',
+      'Assistance'
     ];
 
     for (const section of sections) {
       expect(screen.getByText(section)).toBeInTheDocument();
     }
 
-    expect(screen.getAllByTestId('home-dashboard')).toHaveLength(5);
+    expect(screen.getAllByTestId('home-dashboard')).toHaveLength(3);
   });
 
   it('renders the back to login link', () => {
@@ -53,8 +51,8 @@ describe('FacultyHome Page', () => {
   it('renders specific dashboard items', () => {
     render(<FacultyHome />);
     expect(screen.getByText(/Student List/i)).toBeInTheDocument();
-    expect(screen.getByText(/Metric Settings/i)).toBeInTheDocument();
-    expect(screen.getByText(/ICON/i)).toBeInTheDocument();
-    expect(screen.getByText(/TestTwo/i)).toBeInTheDocument();
+    expect(screen.getByText(/Template Settings/i)).toBeInTheDocument();
+    expect(screen.getByText(/Reviewed Applicants/i)).toBeInTheDocument();
+    expect(screen.getByText(/Help Video/i)).toBeInTheDocument();
   });
 });

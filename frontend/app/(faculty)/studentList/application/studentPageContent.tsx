@@ -59,14 +59,31 @@ export default function StudentPageContent() {
   const [reviewMetrics, setReviewMetrics] = useState<MetricResponse[]>([]);
   const [comments, setComments] = useState<string>("");
   const [reviewExists, setReviewExists] = useState<boolean>(false);
+  const [reviewSubmitted, setReviewSubmitted] = useState<boolean>(false);
   const [reviewId, setReviewId] = useState<number>(0);
   const currentDocument = documentList[currentDocIndex] || {};
-  const faculty_id = localStorage.getItem("id") || "";
+  const [faculty_id, setFacultyId] = useState<string>("");
+
+  /**
+   * Validation for weight totals
+   */
+  const totalWeight = reviewMetrics.reduce(
+    (acc, metric) => acc + metric.selected_weight,
+    0,
+  );
+  const validWeights = Math.abs(totalWeight - 1) < 0.01;
+  const validScores = reviewMetrics.every(
+    (metric) => metric.value >= 0 && metric.value <= 5,
+  );
+  const canSubmit = validWeights && validScores;
 
   /**
    * Calls the student applicant information
    */
   useEffect(() => {
+    const id = localStorage.getItem("id") || "";
+    setFacultyId(id);
+
     if (!studentId) return;
     const fetchStudentInfo = async (student_id: string) => {
       try {
@@ -158,11 +175,13 @@ export default function StudentPageContent() {
           // will need to add check on UI for this part
           if (!response.payload.review_exists) {
             setReviewExists(false);
+            setReviewSubmitted(false);
             return;
           }
 
           setReviewId(response.payload.review_id);
           setReviewExists(true);
+          setReviewSubmitted(response.payload.submitted);
           setReviewMetrics(response.payload.review_metrics);
           setComments(response.payload.comments || "");
         } else {
@@ -305,6 +324,38 @@ export default function StudentPageContent() {
     }
   };
 
+  /**
+   * NEW: Saves all review metrics by iterating over them and calling the update handler.
+   */
+  const saveAllMetrics = async () => {
+    // Update all metrics concurrently
+    await Promise.all(
+      reviewMetrics.map((metric) => handleUpdateReviewMetric(metric)),
+    );
+  };
+
+  /**
+   * Submits a review by marking it as submitted
+   */
+  const handleSubmitReview = async () => {
+    try {
+      await saveAllMetrics();
+
+      const response = await apiPUT(
+        webService.REVIEW_SUBMIT,
+        reviewId.toString(),
+        "{}",
+      );
+      if (response.success) {
+        setReviewSubmitted(true);
+      } else {
+        console.error("Error submitting review: ", response.error);
+      }
+    } catch (error) {
+      console.error("An unexpected error occurred: ", error);
+    }
+  };
+
   return (
     <div className="flex w-full h-screen">
       {/* Left half: File Viewer */}
@@ -340,14 +391,19 @@ export default function StudentPageContent() {
       <div className="w-1/2 h-full p-6 overflow-auto">
         <div className="p-6">
           <h1 className="text-2xl font-bold mb-4">
-            Review Details for {studentData?.first_name}{" "}
-            {studentData?.last_name}
+            Review for {studentData?.first_name} {studentData?.last_name}
           </h1>
 
           {!reviewExists ? (
             // Center the "Start Review" button when no review exists
             <div className="flex items-center justify-center h-96">
               <Button onClick={handleStartReview}>Start Review</Button>
+            </div>
+          ) : reviewSubmitted ? ( // NEW: If review is submitted, show message
+            <div className="flex items-center justify-center h-96">
+              <p className="text-xl text-green-700">
+                You have already submitted a review for this applicant.
+              </p>
             </div>
           ) : (
             <>
@@ -358,14 +414,17 @@ export default function StudentPageContent() {
                   onChange={(e) => setSelectedMetricId(Number(e.target.value))}
                   className="p-2 border border-gray-300 rounded"
                 >
-                  <option value="">Select a metric to add...</option>
+                  <option value="">Select a template to add...</option>
                   {availableMetrics.map((metric) => (
                     <option key={metric.id} value={metric.id}>
                       {metric.name}
                     </option>
                   ))}
                 </select>
-                <Button onClick={handleAddReviewMetric}>Add Metric</Button>
+                <Button onClick={handleAddReviewMetric}>Add Template</Button>
+                <Button asChild>
+                  <Link href="/informationPage">Review Info</Link>
+                </Button>
               </div>
 
               <ReviewForm
@@ -373,18 +432,36 @@ export default function StudentPageContent() {
                 onDeleteMetric={handleDeleteReviewMetric}
                 onChangeMetric={handleUpdateReviewMetric}
               />
-
-              <Textarea
-                placeholder="Comments"
-                value={comments}
-                onChange={(e) => handleCommentChange(e.target.value)}
-              />
+              <div className="gap-6 mb-4 mt-4">
+                <h3 className="font-bold">Comments:</h3>
+                <Textarea
+                  placeholder="Comments"
+                  value={comments}
+                  onChange={(e) => handleCommentChange(e.target.value)}
+                  className="w-full h-32 bg-gray-50"
+                />
+              </div>
             </>
           )}
+          <div className="w-48 flex flex-col gap-2">
+            <Button
+              disabled={!canSubmit}
+              className="bg-black hover:bg-green-700 text-white"
+              onClick={handleSubmitReview}
+            >
+              Submit Review
+            </Button>
+            {!canSubmit && (
+              <p className="text-sm text-red-600">
+                Please ensure total weights equal 1.00 and scores are between 0
+                and 5.
+              </p>
+            )}
 
-          <Button asChild>
-            <Link href="/studentList">Return to Student List</Link>
-          </Button>
+            <Button asChild>
+              <Link href="/studentList">Return to Student List</Link>
+            </Button>
+          </div>
         </div>
       </div>
     </div>

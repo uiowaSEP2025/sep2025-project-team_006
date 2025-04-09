@@ -4,7 +4,6 @@ import { useEffect, useState, useMemo } from "react";
 import ProfileList from "@/components/ProfileList";
 import WebService from "@/api/WebService";
 import { apiGET } from "@/api/apiMethods";
-import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 
@@ -18,7 +17,6 @@ interface Profile {
 }
 
 export default function Home() {
-  const router = useRouter();
   const webService = new WebService();
   const [profiles, setProfiles] = useState<Profile[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
@@ -52,9 +50,7 @@ export default function Home() {
     fetchApplicants();
   }, [webService.STUDENTS_APPLICANT_LIST]);
 
-  const handleProfileClick = (profile: Profile) => {
-    router.push(`/studentList/application?id=${profile.id}`);
-  };
+  const handleProfileClick = () => {};
 
   // Filtered and paginated profiles
   const filteredProfiles = useMemo(() => {

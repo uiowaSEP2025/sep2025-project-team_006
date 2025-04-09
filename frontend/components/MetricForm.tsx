@@ -93,6 +93,10 @@ const MetricForm: React.FC<MetricFormProps> = ({
       >
         + Add Metric
       </button>
+
+      <button className="w-full bg-black text-white font-bold py-2 rounded-lg mt-4 hover:bg-green-700 transition">
+        Create Template
+      </button>
     </div>
   );
 };

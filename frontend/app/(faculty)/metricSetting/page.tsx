@@ -26,9 +26,11 @@ interface MetricResponse {
 export default function Home() {
   const webService = new WebService();
   const [metrics, setMetrics] = useState<Metric[]>([]);
-  const faculty_id = localStorage.getItem("id") || "";
+  const [faculty_id, setFacultyId] = useState<string>("");
 
   useEffect(() => {
+    const id = localStorage.getItem("id") || "";
+    setFacultyId(id);
     const fetchMetrics = async () => {
       try {
         const [defaults, response] = await Promise.all([
@@ -200,7 +202,7 @@ export default function Home() {
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100 p-6">
-      <h1 className="text-2xl font-bold mb-4">Metric Settings</h1>
+      <h1 className="text-2xl font-bold mb-4">Template Settings</h1>
       <MetricForm
         metrics={metrics}
         onAddMetric={handleOnAddMetric}
