@@ -11,7 +11,7 @@ export class TemplateService {
   constructor(
     @InjectRepository(Template)
     private readonly templateRepository: Repository<Template>,
-  ) {}
+  ) { }
 
   async create(createTemplateDto: CreateTemplateDto): Promise<Template> {
     const template = this.templateRepository.create(createTemplateDto);
@@ -23,14 +23,20 @@ export class TemplateService {
       const dept = department as Departments;
       const templates = await this.templateRepository.find({
         where: { department: dept },
+        relations: ['metrics'],
       });
       if (templates.length) {
         return templates;
       }
       // Fallback to default template if a specific department template isn't found.
-      return this.templateRepository.find({ where: { is_default: true } });
+      return this.templateRepository.find({
+        where: { is_default: true },
+        relations: ['metrics'],
+      });
     }
-    return this.templateRepository.find();
+    return this.templateRepository.find({
+      relations: ['metrics'],
+    });
   }
 
   async findOne(id: string): Promise<Template> {

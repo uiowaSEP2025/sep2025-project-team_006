@@ -25,10 +25,14 @@ export default class WebService {
   STUDENTS_APPLICANT_INFO = `${this.serverUrl}/api/students/:id`; // GET
   APPLICATION_DOCUMENT_GET = `${this.serverUrl}/api/documents/:id`; // GET
   APPLICATION_DOCUMENT_POST = `${this.serverUrl}/api/documents`; // POST
+  // These might have to change slightly for the template migration
   REVIEW_CREATE_POST = `${this.serverUrl}/api/reviews`; // POST
   REVIEW_UPDATE_PUT = `${this.serverUrl}/api/reviews/:id`; // PUT
   REVIEW_SUBMIT = `${this.serverUrl}/api/reviews/:id/submit`; // PUT
   REVIEW_METRICS_FOR_FACULTY = `${this.serverUrl}/api/reviews/metrics/app/:id1/faculty/:id2`; // GET
   REVIEW_METRIC_POST = `${this.serverUrl}/api/reviews/metrics`; // POST
   REVIEW_METRIC_UPDATE = `${this.serverUrl}/api/reviews/metrics/:id`; // PUT, DELETE
+  TEMPLATE = `${this.serverUrl}/api/templates`; // POST, GET
+  TEMPLATE_GET_BY_DEPARTMENT = `${this.serverUrl}/api/templates/department/:id` // GET
+  TEMPLATE_BY_ID = `${this.serverUrl}/api/templates/:id` // GET, PUT, DELETE 
 }
