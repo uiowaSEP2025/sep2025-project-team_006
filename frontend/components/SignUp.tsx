@@ -28,8 +28,6 @@ export function SignUpForm({
     const webService = new WebService();
     event.preventDefault(); // Prevent page reload
 
-    console.log("Logging in with:", { email, password });
-
     // Simulate login request (replace with API call)
     // Similar to Login component, but hardcoded routes.
     const url = webService.AUTH_STUDENT_REGISTER;
