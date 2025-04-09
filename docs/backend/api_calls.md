@@ -637,3 +637,222 @@ Please see the authentication flow document for more information about the usage
     ```
 
 ---
+
+## Template Module
+
+### POST
+---  
+- **Method:** `POST`  
+- **Endpoint:** `/api/templates`  
+- **Description:** Creates a new template entry. The request body must include the department (one of the allowed values), the template name, and a flag indicating if it is the default template. Optionally, an array of metrics can be provided.  
+- **Request Body Example:**
+    ```json
+    {
+      "department": "ECE",
+      "name": "Electrical and Computer Engineering Template",
+      "is_default": false,
+      "metrics": [
+        {
+          "metric_name": "Recommendation",
+          "description": "Assessment based on technological innovation and problem-solving",
+          "metric_weight": "0.18"
+        },
+        {
+          "metric_name": "GPA (University Modifier)",
+          "description": "GPA weighted by the technical reputation of the institution",
+          "metric_weight": "0.22"
+        }
+      ]
+    }
+    ```
+- **Example Request:**
+    ```sh
+    curl -X POST "http://localhost:5000/api/templates" -H "Content-Type: application/json" -d "{ \"department\": \"ECE\", \"name\": \"Electrical and Computer Engineering Template\", \"is_default\": false, \"metrics\": [ { \"metric_name\": \"Recommendation\", \"description\": \"Assessment based on technological innovation and problem-solving\", \"metric_weight\": \"0.18\" }, { \"metric_name\": \"GPA (University Modifier)\", \"description\": \"GPA weighted by the technical reputation of the institution\", \"metric_weight\": \"0.22\" } ] }"
+    ```
+- **Response Example:**
+    ```json
+    {
+        "success": true,
+        "payload": {
+            "template_id": "123",
+            "department": "ECE",
+            "name": "Electrical and Computer Engineering Template",
+            "is_default": false,
+            "created_at": "2025-03-25T12:00:00.000Z",
+            "updated_at": "2025-03-25T12:00:00.000Z",
+            "metrics": [
+                {
+                    "template_metric_id": "456",
+                    "metric_name": "Recommendation",
+                    "description": "Assessment based on technological innovation and problem-solving",
+                    "metric_weight": "0.18",
+                    "created_at": "2025-03-25T12:00:00.000Z",
+                    "updated_at": "2025-03-25T12:00:00.000Z"
+                },
+                {
+                    "template_metric_id": "457",
+                    "metric_name": "GPA (University Modifier)",
+                    "description": "GPA weighted by the technical reputation of the institution",
+                    "metric_weight": "0.22",
+                    "created_at": "2025-03-25T12:00:00.000Z",
+                    "updated_at": "2025-03-25T12:00:00.000Z"
+                },
+                ...
+            ]
+        }
+    }
+    ```
+---
+
+### GET (All Templates)
+---  
+- **Method:** `GET`  
+- **Endpoint:** `/api/templates`  
+- **Description:** Retrieves all template entries regardless of department.  
+- **Example Request:**
+    ```sh
+    curl -X GET "http://localhost:5000/api/templates" -H "Content-Type: application/json"
+    ```
+- **Response Example:**
+    ```json
+    {
+        "success": true,
+        "payload": [
+            {
+                "template_id": "123",
+                "department": "ECE",
+                "name": "Electrical and Computer Engineering Template",
+                "is_default": false,
+                "created_at": "2025-03-25T12:00:00.000Z",
+                "updated_at": "2025-03-25T12:00:00.000Z",
+                "metrics": [ ... ]
+            },
+            {
+                "template_id": "124",
+                "department": "BME",
+                "name": "Biomedical Engineering Template",
+                "is_default": false,
+                "created_at": "2025-03-25T12:05:00.000Z",
+                "updated_at": "2025-03-25T12:05:00.000Z",
+                "metrics": [ ... ]
+            }
+        ]
+    }
+    ```
+---
+
+### GET (Templates by Department)
+---  
+- **Method:** `GET`  
+- **Endpoint:** `/api/templates/department/:department`  
+- **Description:** Retrieves all template entries for a given department. If no templates are found for the specified department, the default template(s) will be returned.  
+- **Example Request:**
+    ```sh
+    curl -X GET "http://localhost:5000/api/templates/department/ECE" -H "Content-Type: application/json"
+    ```
+- **Response Example:**
+    ```json
+    {
+        "success": true,
+        "payload": [
+            {
+                "template_id": "123",
+                "department": "ECE",
+                "name": "Electrical and Computer Engineering Template",
+                "is_default": false,
+                "created_at": "2025-03-25T12:00:00.000Z",
+                "updated_at": "2025-03-25T12:00:00.000Z",
+                "metrics": [ ... ]
+            }
+        ]
+    }
+    ```
+---
+
+### GET (Template by ID)
+---  
+- **Method:** `GET`  
+- **Endpoint:** `/api/templates/:id`  
+- **Description:** Retrieves a specific template by its unique identifier.
+- **Example Request:**
+    ```sh
+    curl -X GET "http://localhost:5000/api/templates/123" -H "Content-Type: application/json"
+    ```
+- **Response Example:**
+    ```json
+    {
+        "success": true,
+        "payload": {
+            "template_id": "123",
+            "department": "ECE",
+            "name": "Electrical and Computer Engineering Template",
+            "is_default": false,
+            "created_at": "2025-03-25T12:00:00.000Z",
+            "updated_at": "2025-03-25T12:00:00.000Z",
+            "metrics": [
+                {
+                    "template_metric_id": "456",
+                    "metric_name": "Recommendation",
+                    "description": "Assessment based on technological innovation and problem-solving",
+                    "metric_weight": "0.18",
+                    "created_at": "2025-03-25T12:00:00.000Z",
+                    "updated_at": "2025-03-25T12:00:00.000Z"
+                }
+            ]
+        }
+    }
+    ```
+---
+
+### PUT
+---  
+- **Method:** `PUT`  
+- **Endpoint:** `/api/templates/:id`  
+- **Description:** Updates an existing template. The `:id` parameter specifies which template to update. All fields in the request body are optional.
+- **Request Body Example:**
+    ```json
+    {
+      "name": "Updated Template Name",
+      "is_default": true
+    }
+    ```
+- **Example Request:**
+    ```sh
+    curl -X PUT "http://localhost:5000/api/templates/123" -H "Content-Type: application/json" -d "{ \"name\": \"Updated Template Name\", \"is_default\": true }"
+    ```
+- **Response Example:**
+    ```json
+    {
+        "success": true,
+        "payload": {
+            "template_id": "123",
+            "department": "ECE",
+            "name": "Updated Template Name",
+            "is_default": true,
+            "created_at": "2025-03-25T12:00:00.000Z",
+            "updated_at": "2025-03-25T12:10:00.000Z",
+            "metrics": [ ... ]
+        }
+    }
+    ```
+---
+
+### DELETE
+---  
+- **Method:** `DELETE`  
+- **Endpoint:** `/api/templates/:id`  
+- **Description:** Deletes an existing template identified by its unique `:id`.
+- **Example Request:**
+    ```sh
+    curl -X DELETE "http://localhost:5000/api/templates/123" -H "Content-Type: application/json"
+    ```
+- **Response Example:**
+    ```json
+    {
+      "success": true,
+      "payload": {
+        "message": "Template ID: 123 has been deleted."
+      }
+    }
+    ```
+---
