@@ -1,11 +1,8 @@
-import type { NextApiRequest } from "next";
 import WebService from "../../../api/WebService";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 const webService = new WebService();
 
-export async function POST(
-  req: NextApiRequest,
-) {
+export async function POST(req: NextRequest) {
   const body = await req.json();
 
   // Authenticate with backend

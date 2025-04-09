@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import WebService from "@/api/WebService";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import {
@@ -13,7 +12,6 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { apiPOST } from "@/api/apiMethods";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React from "react";
@@ -33,7 +31,6 @@ export function LoginForm({
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const router = useRouter();
-  const webService = new WebService();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -57,7 +54,6 @@ export function LoginForm({
         router.push("/facultyHome");
       }
     } else {
-      console.error("wah wah wah");
       const data = await res.text();
       setError(data || "Login failed");
     }

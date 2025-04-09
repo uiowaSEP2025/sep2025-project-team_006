@@ -148,3 +148,12 @@ export class AuthService {
     }
   }
 }
+
+export interface JwtProperties {
+  user: {
+    id: number;
+    email: string;
+  };
+  exp: number;
+  iat: number;
+}

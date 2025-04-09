@@ -1,8 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server';
 import WebService from './api/WebService';
-import { cookie_settings } from './lib/constants';
 
 const webService = new WebService();
+
+// We need to do this because building typescript is annoying and it helps linting
+type AccountType = "student" | "faculty" | "out";
 
 export const redirects: Record<string, { out: string | null, student: string | null, faculty: string | null }> = {
     "/faculty": { out: null, student: null, faculty: "/facultyHome" },
@@ -76,5 +78,5 @@ const checkAuthStatus = async (path: string, token: string, session: string) => 
         return { location: redirects[path]["out"] as string, token };
     }
 
-    return { location: redirects[path][info_json.payload.account_type], token };
+    return { location: redirects[path][info_json.payload.account_type as AccountType], token };
 }
