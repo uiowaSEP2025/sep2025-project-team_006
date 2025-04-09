@@ -33,6 +33,6 @@ export default class WebService {
   REVIEW_METRIC_POST = `${this.serverUrl}/api/reviews/metrics`; // POST
   REVIEW_METRIC_UPDATE = `${this.serverUrl}/api/reviews/metrics/:id`; // PUT, DELETE
   TEMPLATE = `${this.serverUrl}/api/templates`; // POST, GET
-  TEMPLATE_GET_BY_DEPARTMENT = `${this.serverUrl}/api/templates/department/:id` // GET
-  TEMPLATE_BY_ID = `${this.serverUrl}/api/templates/:id` // GET, PUT, DELETE 
+  TEMPLATE_GET_BY_DEPARTMENT = `${this.serverUrl}/api/templates/department/:id`; // GET
+  TEMPLATE_BY_ID = `${this.serverUrl}/api/templates/:id`; // GET, PUT, DELETE
 }
