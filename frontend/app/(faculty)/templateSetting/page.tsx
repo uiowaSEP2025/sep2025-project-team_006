@@ -74,6 +74,17 @@ export default function TemplateSettings() {
    * Handles saving/updating a template through API calls.
    */
   const handleSaveTemplate = async (template: Template) => {
+    const totalWeight = template.metrics.reduce((sum, metric) => {
+      return sum + parseFloat(metric.metric_weight || "0");
+    }, 0);
+
+    if (totalWeight !== 1.0) {
+      alert(
+        `Total metric weight must equal 1.00. Currently: ${totalWeight.toFixed(2)}`,
+      );
+      return; // prevent further saving
+    }
+
     const data = JSON.stringify({
       department: template.department,
       name: template.name,
