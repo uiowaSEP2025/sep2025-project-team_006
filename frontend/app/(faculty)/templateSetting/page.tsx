@@ -213,13 +213,13 @@ export default function TemplateSettings() {
 
         {/* Template toggle buttons */}
         <div className="flex justify-center space-x-2 mb-6">
-          {templates.map((_, index) => (
+          {templates.map((template, index) => (
             <Button
               key={index}
               onClick={() => setCurrentTemplateIndex(index)}
               variant={index === currentTemplateIndex ? "default" : "outline"}
             >
-              {index + 1}
+              {index + 1} - {template.department}
             </Button>
           ))}
         </div>
