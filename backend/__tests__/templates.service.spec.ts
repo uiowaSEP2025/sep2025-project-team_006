@@ -74,7 +74,7 @@ describe('TemplateService', () => {
             mockRepository.find.mockResolvedValue(templates);
 
             const result = await service.findAll();
-            expect(mockRepository.find).toHaveBeenCalledWith();
+            expect(mockRepository.find).toHaveBeenCalledWith({ relations: ['metrics'], });
             expect(result).toEqual(templates);
         });
 
@@ -84,7 +84,7 @@ describe('TemplateService', () => {
             mockRepository.find.mockResolvedValueOnce(templates);
 
             const result = await service.findAll(dept);
-            expect(mockRepository.find).toHaveBeenCalledWith({ where: { department: dept } });
+            expect(mockRepository.find).toHaveBeenCalledWith({ where: { department: dept }, relations: ['metrics'], });
             expect(result).toEqual(templates);
         });
 
@@ -96,8 +96,8 @@ describe('TemplateService', () => {
                 .mockResolvedValueOnce([{ template_id: 'default', is_default: true } as Template]);
 
             const result = await service.findAll(dept);
-            expect(mockRepository.find).toHaveBeenNthCalledWith(1, { where: { department: dept } });
-            expect(mockRepository.find).toHaveBeenNthCalledWith(2, { where: { is_default: true } });
+            expect(mockRepository.find).toHaveBeenNthCalledWith(1, { where: { department: dept }, relations: ['metrics'], });
+            expect(mockRepository.find).toHaveBeenNthCalledWith(2, { where: { is_default: true }, relations: ['metrics'], });
             expect(result).toEqual([{ template_id: 'default', is_default: true } as Template]);
         });
     });

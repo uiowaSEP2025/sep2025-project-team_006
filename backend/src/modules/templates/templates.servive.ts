@@ -11,7 +11,7 @@ export class TemplateService {
   constructor(
     @InjectRepository(Template)
     private readonly templateRepository: Repository<Template>,
-  ) { }
+  ) {}
 
   async create(createTemplateDto: CreateTemplateDto): Promise<Template> {
     const template = this.templateRepository.create(createTemplateDto);
