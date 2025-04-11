@@ -76,25 +76,43 @@ export class ReviewsService {
     return this.reviewRepository.save(review);
   }
 
-  async updateReviewComments(
+  async updateReview(
     reviewId: number,
     updateReviewDto: UpdateReviewDto,
   ): Promise<Review> {
-    const review = await this.reviewRepository.findOneBy({
-      review_id: reviewId,
+    const review = await this.reviewRepository.findOne({
+      where: { review_id: reviewId },
+      relations: ['review_metrics'],
     });
     if (!review) {
       throw new NotFoundException(`Review not found for id ${reviewId}`);
     }
 
-    // Update the review fields that are present in the DTO
+    // Update review properties if present in the DTO
     if (typeof updateReviewDto.comments !== 'undefined') {
       review.comments = updateReviewDto.comments;
     }
-
-    // If you also want to update the overall_score
     if (typeof updateReviewDto.overall_score !== 'undefined') {
       review.overall_score = updateReviewDto.overall_score;
+    }
+
+    if (
+      updateReviewDto.review_metrics &&
+      updateReviewDto.review_metrics.length > 0
+    ) {
+      review.review_metrics = review.review_metrics.map((metric) => {
+        const updatedMetric = updateReviewDto.review_metrics!.find(
+          (m) => m.review_metric_id === metric.review_metric_id,
+        );
+        if (updatedMetric) {
+          return {
+            ...metric,
+            selected_weight: updatedMetric.selected_weight,
+            value: updatedMetric.value,
+          };
+        }
+        return metric;
+      });
     }
 
     return this.reviewRepository.save(review);
