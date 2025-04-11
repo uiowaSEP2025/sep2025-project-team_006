@@ -40,7 +40,7 @@ export default function StudentPageContent() {
    * Calls the student applicant information
    */
   useEffect(() => {
-    const id = localStorage.getItem("id") || "1"; // TODO: change back to empty string for default
+    const id = localStorage.getItem("id") || "";
     setFacultyId(id);
 
     if (!studentId) return;
@@ -139,23 +139,6 @@ export default function StudentPageContent() {
    */
   const handleCommentChange = async (newComment: string) => {
     setComments(newComment);
-    // TODO: remove as the save button will update instead
-    try {
-      const data = JSON.stringify({
-        comments: newComment,
-        overall_score: null, // TODO: compute this score
-      });
-      const response = await apiPUT(
-        webService.REVIEW_UPDATE_PUT,
-        reviewId.toString(),
-        data,
-      );
-      if (!response.success) {
-        console.error("Error updating comment: ", response.error);
-      }
-    } catch (error) {
-      console.error("An unexpected error occurred: ", error);
-    }
   };
 
   /**
@@ -165,15 +148,12 @@ export default function StudentPageContent() {
   const handleSaveReview = async () => {
     const payload = {
       comments,
-      // The review_metrics are assumed to have name, selected_weight, and value.
-      // TODO: configure this payload and update the backend endpoint for this.
       review_metrics: reviewMetrics.map((metric) => ({
         review_metric_id: metric.review_metric_id,
         selected_weight: metric.selected_weight,
         value: metric.value,
-        // We assume the name remains unchanged as it comes from the template.
       })),
-      // overall_score can be computed on the backend based on weights & values.
+      // TODO: overall_score can be computed on the backend based on weights & values, will figure out best spot for this.
       overall_score: null,
     };
     const data = JSON.stringify(payload);
