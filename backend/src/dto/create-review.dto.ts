@@ -1,4 +1,5 @@
-import { IsNumber } from 'class-validator';
+import { IsNumber, IsString } from 'class-validator';
+import { Departments } from 'src/modules/templates/departments.enum';
 
 export class CreateReviewDto {
   @IsNumber()
@@ -6,4 +7,7 @@ export class CreateReviewDto {
 
   @IsNumber()
   application_id: number;
+
+  @IsString()
+  department: Departments;
 }

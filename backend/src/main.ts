@@ -8,7 +8,7 @@ import { seedApplications } from './seed/seed_applications';
 import { LoggerService } from './common/logger/logger.service';
 import { seedDocuments } from './seed/seed_documents';
 import { seedReviews } from './seed/seed_reviews';
-import { seedReviewMetrics } from './seed/seed_review_metrics';
+import { seedTemplates } from './seed/seed_templates';
 
 async function bootstrap() {
   const logger = new LoggerService();
@@ -35,8 +35,8 @@ async function bootstrap() {
       await seedFacultyMetrics(logger);
       await seedApplications(logger);
       await seedDocuments(logger);
+      await seedTemplates(logger);
       await seedReviews(logger);
-      await seedReviewMetrics(logger);
       logger.debug('Database seeding completed.');
     } catch (error) {
       logger.error('Error seeding database!');

@@ -10,6 +10,8 @@ import { Session } from 'src/entity/session.entity';
 import { Student } from 'src/entity/student.entity';
 import { User } from 'src/entity/user.entity';
 import * as dotenv from 'dotenv';
+import { TemplateMetric } from 'src/entity/template_metric.entity';
+import { Template } from 'src/entity/template.entity';
 dotenv.config();
 
 @Module({
@@ -29,6 +31,8 @@ dotenv.config();
         Faculty,
         ReviewMetric,
         Review,
+        TemplateMetric,
+        Template,
         Session,
         Student,
         User,

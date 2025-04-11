@@ -20,11 +20,11 @@ export class ReviewsController {
   }
 
   @Put(':id') // .*/api/reviews/:id
-  async updateReviewComments(
+  async updateReview(
     @Param('id', ParseIntPipe) reviewId: number,
     @Body() updateReviewDto: UpdateReviewDto,
   ) {
-    return this.reviewService.updateReviewComments(reviewId, updateReviewDto);
+    return this.reviewService.updateReview(reviewId, updateReviewDto);
   }
 
   @Put(':id/submit') // .*/api/reviews/:id/submit

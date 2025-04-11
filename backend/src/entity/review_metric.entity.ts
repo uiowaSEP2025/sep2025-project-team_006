@@ -9,11 +9,11 @@ export class ReviewMetric {
   @Column({ nullable: true })
   name: string;
 
-  @Column({ nullable: true })
-  description: string;
-
   @Column('float')
   selected_weight: number;
+
+  @Column('float')
+  template_weight: number;
 
   @Column('float')
   value: number;
