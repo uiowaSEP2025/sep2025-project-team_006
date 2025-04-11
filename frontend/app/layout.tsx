@@ -3,9 +3,9 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Image from "next/image";
 import React from "react";
-import tigerHawk from "../public/Tigerhawk.png"
-import gapOffical from "../public/GAPOfficial.png"
-import iowaBlackLogo from "../public/IOWABlackLogo.png"
+import tigerHawk from "../public/Tigerhawk.png";
+import gapOffical from "../public/GAPOfficial.png";
+import iowaBlackLogo from "../public/IOWABlackLogo.png";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",

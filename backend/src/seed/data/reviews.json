@@ -2,31 +2,41 @@
     {
         "faculty_id": 1,
         "application_id": 8,
+        "department": "ECE",
         "overall_score": 47,
-        "comments": "Great application overall"
+        "comments": "Great application overall",
+        "submitted": false
     },
     {
         "faculty_id": 2,
         "application_id": 9,
+        "department": "BME",
         "overall_score": 32,
-        "comments": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis sed lorem nec risus porta porttitor eu non nulla. Suspendisse molestie ultricies est sit amet imperdiet."
+        "comments": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis sed lorem nec risus porta porttitor eu non nulla. Suspendisse molestie ultricies est sit amet imperdiet.",
+        "submitted": false
     },
     {
         "faculty_id": 3,
         "application_id": 10,
+        "department": "CEE",
         "overall_score": null,
-        "comments": ""
+        "comments": "",
+        "submitted": false
     },
     {
         "faculty_id": 4,
         "application_id": 11,
+        "department": "ISE",
         "overall_score": null,
-        "comments": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis sed lorem nec risus porta porttitor eu non nulla. Suspendisse molestie ultricies est sit amet imperdiet."
+        "comments": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis sed lorem nec risus porta porttitor eu non nulla. Suspendisse molestie ultricies est sit amet imperdiet.",
+        "submitted": false
     },
     {
         "faculty_id": 5,
         "application_id": 12,
+        "department": "CBE",
         "overall_score": null,
-        "comments": ""
+        "comments": "",
+        "submitted": false
     }
 ]
