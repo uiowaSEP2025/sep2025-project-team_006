@@ -3,6 +3,9 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Image from "next/image";
 import React from "react";
+import tigerHawk from "../public/Tigerhawk.png"
+import gapOffical from "../public/GAPOfficial.png"
+import iowaBlackLogo from "../public/IOWABlackLogo.png"
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -31,7 +34,7 @@ export default function RootLayout({
       >
         <header className="bg-black text-[#F1BE48] h-20 text-4xl px-6 sm:px-12 py-4 flex justify-between items-center">
           <Image
-            src="./GAPOfficial.png"
+            src={gapOffical}
             alt="GAP Official logo"
             width={48}
             height={48}
@@ -47,7 +50,7 @@ export default function RootLayout({
 
         <footer className="bg-black text-[#F1BE48] h-20 text-4xl px-6 sm:px-12 py-4 flex justify-between items-center">
           <Image
-            src="./IOWABLACKLogo.png"
+            src={iowaBlackLogo}
             alt="Iowa Logo"
             width={48}
             height={48}
@@ -55,7 +58,7 @@ export default function RootLayout({
           />
           <div className="flex items-center space-x-4">
             <Image
-              src="./Tigerhawk.png"
+              src={tigerHawk}
               alt="Tiger Hawk"
               width={48}
               height={48}
