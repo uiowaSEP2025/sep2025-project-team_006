@@ -33,7 +33,7 @@ export class ReviewMetricsController {
 
   @Post() // .*/api/reviews/metrics
   async createReviewMetric(@Body() createDto: CreateReviewMetricDto) {
-    return this.reviewMetricsService.createReviewMetric(createDto);
+    // return this.reviewMetricsService.createReviewMetric(createDto);
   }
 
   @Put(':id') // .*/api/reviews/metrics/:id

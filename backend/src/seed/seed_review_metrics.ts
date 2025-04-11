@@ -71,14 +71,14 @@ export async function seedReviewMetrics(logger: LoggerService) {
       continue;
     }
 
-    const newMetric = reviewMetricRepo.create({
-      review: { review_id: metricData.review_id } as Review,
-      name: metricData.name,
-      description: metricData.description,
-      selected_weight: metricData.selected_weight,
-      value: metricData.value,
-    });
-    await reviewMetricRepo.save(newMetric);
+    // const newMetric = reviewMetricRepo.create({
+    //   review: { review_id: metricData.review_id } as Review,
+    //   name: metricData.name,
+    //   description: metricData.description,
+    //   selected_weight: metricData.selected_weight,
+    //   value: metricData.value,
+    // });
+    // await reviewMetricRepo.save(newMetric);
   }
 
   logger.debug('Review metrics seeded successfully.');

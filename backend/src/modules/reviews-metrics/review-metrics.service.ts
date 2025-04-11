@@ -46,27 +46,27 @@ export class ReviewMetricsService {
     };
   }
 
-  async createReviewMetric(
-    createDto: CreateReviewMetricDto,
-  ): Promise<ReviewMetric> {
-    const review = await this.reviewRepo.findOneBy({
-      review_id: createDto.review_id,
-    });
-    if (!review) {
-      throw new NotFoundException(
-        `Review with id ${createDto.review_id} not found`,
-      );
-    }
+  // async createReviewMetric(
+  //   createDto: CreateReviewMetricDto,
+  // ): Promise<ReviewMetric> {
+  //   const review = await this.reviewRepo.findOneBy({
+  //     review_id: createDto.review_id,
+  //   });
+  //   if (!review) {
+  //     throw new NotFoundException(
+  //       `Review with id ${createDto.review_id} not found`,
+  //     );
+  //   }
 
-    const newMetric = this.reviewMetricRepo.create({
-      name: createDto.name,
-      description: createDto.description,
-      selected_weight: createDto.selected_weight,
-      value: createDto.value,
-      review: review,
-    });
-    return await this.reviewMetricRepo.save(newMetric);
-  }
+  //   const newMetric = this.reviewMetricRepo.create({
+  //     name: createDto.name,
+  //     description: createDto.description,
+  //     selected_weight: createDto.selected_weight,
+  //     value: createDto.value,
+  //     review: review,
+  //   });
+  //   return await this.reviewMetricRepo
+  // }
 
   async updateReviewMetric(
     id: number,

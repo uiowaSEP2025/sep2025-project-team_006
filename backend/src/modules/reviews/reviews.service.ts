@@ -5,6 +5,8 @@ import { UpdateReviewDto } from 'src/dto/update-review.dto';
 import { Application } from 'src/entity/application.entity';
 import { Faculty } from 'src/entity/faculty.entity';
 import { Review } from 'src/entity/review.entity';
+import { ReviewMetric } from 'src/entity/review_metric.entity';
+import { Template } from 'src/entity/template.entity';
 import { Repository } from 'typeorm';
 
 @Injectable()
@@ -16,10 +18,12 @@ export class ReviewsService {
     private facultyRepository: Repository<Faculty>,
     @InjectRepository(Application)
     private applicationRepository: Repository<Application>,
+    @InjectRepository(Template)
+    private templateRepository: Repository<Template>,
   ) {}
 
   async createReview(createReviewDto: CreateReviewDto): Promise<Review> {
-    const { faculty_id, application_id } = createReviewDto;
+    const { faculty_id, application_id, department } = createReviewDto;
 
     const faculty = await this.facultyRepository.findOneBy({ faculty_id });
     if (!faculty) {
@@ -35,11 +39,39 @@ export class ReviewsService {
       );
     }
 
+    let template = await this.templateRepository.findOne({
+      where: { department },
+      relations: ['metrics'],
+    });
+    // Fallback to default template if no template was found for the department.
+    if (!template) {
+      template = await this.templateRepository.findOne({
+        where: { is_default: true },
+        relations: ['metrics'],
+      });
+    }
+    if (!template) {
+      throw new NotFoundException(`No template found for review creation`);
+    }
+
     const review = this.reviewRepository.create({
       faculty,
       application,
       review_metrics: [],
+      template,
     });
+
+    if (template.metrics && template.metrics.length > 0) {
+      review.review_metrics = template.metrics.map(
+        (tm) =>
+          ({
+            name: tm.metric_name,
+            selected_weight: parseFloat(tm.metric_weight),
+            template_weight: parseFloat(tm.metric_weight),
+            value: 0, // initialize value
+          }) as ReviewMetric,
+      );
+    }
 
     return this.reviewRepository.save(review);
   }
