@@ -1,6 +1,23 @@
 import { IsEmail, IsNotEmpty, IsHexadecimal } from 'class-validator';
 
-class CreateUserDto {
+class RegisterDto {
+  @IsNotEmpty()
+  first_name: string;
+
+  @IsNotEmpty()
+  last_name: string;
+
+  @IsNotEmpty()
+  phone_number: string;
+
+  @IsEmail()
+  email: string;
+
+  @IsNotEmpty()
+  password: string;
+}
+
+class LoginDto {
   @IsEmail()
   email: string;
 
@@ -14,4 +31,4 @@ class RefreshTokenDto {
   session: string;
 }
 
-export { CreateUserDto, RefreshTokenDto };
+export { RegisterDto, LoginDto, RefreshTokenDto };
