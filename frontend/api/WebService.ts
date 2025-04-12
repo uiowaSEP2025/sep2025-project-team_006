@@ -7,7 +7,7 @@ export default class WebService {
   private serverUrl = this.isDev
     ? "http://localhost:5000"
     : "http://3.87.63.34:5000";
-  // Test API calls - these do not exist anymore
+  // Test API calls - these do not exist anymore, but are used for unit testing
   TEST_GET = `${this.serverUrl}/api/test`;
   TEST_GET_ONE = `${this.serverUrl}/api/test/:id`;
   TEST_PUT = `${this.serverUrl}/api/test/:id`;
