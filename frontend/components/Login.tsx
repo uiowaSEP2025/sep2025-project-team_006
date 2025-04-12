@@ -47,10 +47,8 @@ export function LoginForm({
     // still a bit of an ugly hack... but its better now atleast
     if (res.ok) {
       if (location.pathname == "/students") {
-        localStorage.setItem("role", "student");
         router.push("/studentHome");
       } else {
-        localStorage.setItem("role", "student");
         router.push("/facultyHome");
       }
     } else {
@@ -58,42 +56,6 @@ export function LoginForm({
       setError(data || "Login failed");
     }
   };
-
-  /*
-  const handleSubmit = async (event: React.FormEvent) => {
-    const webService = new WebService();
-    event.preventDefault(); // Prevent page reload
-
-    // Simulate login request (replace with API call)
-    // this is a terribly ugly hack.
-    let url, role, nnnext;
-    if (location.pathname == "/students") {
-      url = webService.AUTH_STUDENT_LOGIN;
-      role = "student";
-      nnnext = "/studentHome";
-    } else {
-      url = webService.AUTH_STUDENT_LOGIN; // no faculty endpoint... but student login endpoint will "Just Work"
-      role = "faculty";
-      nnnext = "/facultyHome";
-    }
-
-    let resp;
-    try {
-      resp = await apiPOST(url, JSON.stringify({ email, password }));
-      if (resp.success) {
-        localStorage.setItem("token", resp.payload["token"]);
-        localStorage.setItem("session", resp.payload["session"]);
-        localStorage.setItem("role", role);
-        window.location.replace(nnnext);
-      } else {
-        console.error("Login failed");
-      }
-    } catch (e) {
-      // (axios issues... i cant attach a catch to this call directly so i need to try/catch)
-      console.error(e);
-    }
-  };
-  */
 
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>

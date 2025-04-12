@@ -19,14 +19,14 @@ export async function POST(req: NextRequest) {
 
   const res = NextResponse.json({ success: true }, { status: 200 });
   res.cookies.set("gap_token", data.payload.token, {
-    httpOnly: true,
+    //httpOnly: true,
     secure: process.env.NODE_ENV === "production",
     maxAge: 60 * 60,
     path: "/",
     sameSite: "lax",
   });
   res.cookies.set("gap_session", data.payload.session, {
-    httpOnly: true,
+    //httpOnly: true,
     secure: process.env.NODE_ENV === "production",
     maxAge: 60 * 60 * 24,
     path: "/",

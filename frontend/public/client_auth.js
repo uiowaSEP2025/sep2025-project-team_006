@@ -1,3 +1,5 @@
+// This is superceded by the proper frontend auth system, but I think it's worth keeping around still.
+
 // Our current frontend is not built to be deployed outside of a static environment currently.
 // As a stopgap for now, all authentication procedures are done directly on the client.
 // This isn't faking it or anything - authentication is still being done, and the user cant just disable javascript and run like the wind.

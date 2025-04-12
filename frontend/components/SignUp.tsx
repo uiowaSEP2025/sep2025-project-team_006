@@ -31,16 +31,12 @@ export function SignUpForm({
     // Simulate login request (replace with API call)
     // Similar to Login component, but hardcoded routes.
     const url = webService.AUTH_STUDENT_REGISTER;
-    const role = "student";
     const nnnext = "/studentHome";
 
     let resp;
     try {
       resp = await apiPOST(url, JSON.stringify({ email, password }));
       if (resp.success) {
-        localStorage.setItem("token", resp.payload["token"]);
-        localStorage.setItem("session", resp.payload["session"]);
-        localStorage.setItem("role", role);
         window.location.replace(nnnext);
       } else {
         console.error("Login failed");
