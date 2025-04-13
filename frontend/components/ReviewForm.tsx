@@ -68,6 +68,7 @@ const ReviewForm: React.FC<ReviewFormProps> = ({ metrics, onChangeMetric }) => {
                   parseFloat(e.target.value),
                 )
               }
+              step="0.01"
               className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500"
             />
           </div>

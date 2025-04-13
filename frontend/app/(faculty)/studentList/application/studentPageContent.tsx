@@ -13,6 +13,7 @@ import { Textarea } from "@/components/ui/textarea";
 import Link from "next/link";
 import { apiDoubleIdGET } from "@/api/methods";
 import { MetricResponse } from "@/types/MetricData";
+import React from "react";
 
 interface DocumentInfo {
   document_id: string | null;
@@ -146,6 +147,26 @@ export default function StudentPageContent() {
    * This function acts as our overall save call.
    */
   const handleSaveReview = async () => {
+    const totalWeight = reviewMetrics.reduce(
+      (sum, metric) => sum + metric.selected_weight,
+      0,
+    );
+    const validWeights = totalWeight === 1.0;
+    const validScores = reviewMetrics.every(
+      (metric) => metric.value >= 0 && metric.value <= 5,
+    );
+
+    if (!validWeights || !validScores) {
+      let errorMessage = "Please fix the following before saving:";
+      if (!validWeights) {
+        errorMessage += "\n- Total selected weights must equal 1.00.";
+      }
+      if (!validScores) {
+        errorMessage += "\n- Each metric score must be between 0 and 5.";
+      }
+      alert(errorMessage);
+      return;
+    }
     const payload = {
       comments,
       review_metrics: reviewMetrics.map((metric) => ({
@@ -153,7 +174,7 @@ export default function StudentPageContent() {
         selected_weight: metric.selected_weight,
         value: metric.value,
       })),
-      // TODO: overall_score can be computed on the backend based on weights & values, will figure out best spot for this.
+      // overall_score can be computed on the backend based on weights & values.
       overall_score: null,
     };
     const data = JSON.stringify(payload);
