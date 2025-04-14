@@ -81,7 +81,7 @@ export default function StudentPageContent() {
    * Calls the student applicant information
    */
   useEffect(() => {
-    const id = localStorage.getItem("id") || "";
+    const id = (window.__USER__?.id + "") || "";
     setFacultyId(id);
 
     if (!studentId) return;

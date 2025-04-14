@@ -1,10 +1,12 @@
 import {
   CanActivate,
+  ConflictException,
   ExecutionContext,
   Injectable,
   UnauthorizedException,
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
+import { JwtProperties } from './auth.service';
 import { Request } from 'express';
 
 // Taken from documentation; https://docs.nestjs.com/security/authentication#implementing-the-authentication-guard
@@ -25,7 +27,21 @@ class AuthGuard implements CanActivate {
       });
       request['user'] = payload; // We're assigning the payload to the request object here, so that we can access it in our route handlers
     } catch {
-      throw new UnauthorizedException();
+      // Slight hack. Check if the token is expired, then throw a unique HTTP code.
+      let payload: JwtProperties;
+      try {
+        payload = JSON.parse(atob(token.split('.')[1])) as JwtProperties;
+      } catch {
+        // Malormed token. Bad stuff.
+        throw new UnauthorizedException();
+      }
+
+      // No chance of this being undefined. Type added to sate linting.
+      if (payload.exp < Date.now() / 1000) {
+        throw new ConflictException('Expired JWT');
+      } else {
+        throw new UnauthorizedException();
+      }
     }
     return true;
   }
