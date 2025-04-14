@@ -1,4 +1,6 @@
 import type { Metadata } from "next";
+import { cookies } from "next/headers";
+import { unstable_noStore } from 'next/cache';
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Image from "next/image";
@@ -6,6 +8,10 @@ import React from "react";
 import tigerHawk from "../public/Tigerhawk.png";
 import gapOffical from "../public/GAPOfficial.png";
 import iowaBlackLogo from "../public/IOWABlackLogo.png";
+import WebService from "@/api/WebService";
+import UserContextProvider from "@/components/UserContextProvider";
+
+const webService = new WebService();
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -22,11 +28,32 @@ export const metadata: Metadata = {
   description: "GAP",
 };
 
-export default function RootLayout({
+const getUserInfo = async () => {
+  const cookieStore = await cookies();
+  const token = cookieStore.get("gap_token")?.value;
+  if (token) {
+    const resp = await fetch(webService.AUTH_INFO, {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      }
+    });
+    if (resp.ok) {
+      const json = await resp.json();
+      return json.payload;
+    }
+  }
+};
+
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  // this supposedly forces rerendering of the page, which is required
+  // as we want to inject the user info on every load
+  unstable_noStore();
+
   return (
     <html lang="en">
       <body
@@ -46,7 +73,9 @@ export default function RootLayout({
           </div>
         </header>
 
-        {children}
+        <UserContextProvider user={await getUserInfo()}>
+          {children}
+        </UserContextProvider>
 
         <footer className="bg-black text-[#F1BE48] h-20 text-4xl px-6 sm:px-12 py-4 flex justify-between items-center">
           <Image
@@ -66,7 +95,6 @@ export default function RootLayout({
             />
           </div>
         </footer>
-        <script src="/client_auth.js" defer></script>
       </body>
     </html>
   );
