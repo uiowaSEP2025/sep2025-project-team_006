@@ -30,6 +30,9 @@ export default function TemplateSettings() {
   const [currentTemplateIndex, setCurrentTemplateIndex] = useState<number>(0);
 
   useEffect(() => {
+    const is_admin = (window.__USER__?.is_admin as boolean) || false;
+    setIsAdmin(is_admin);
+
     const fetchTemplates = async () => {
       try {
         const response = await apiGET(webService.TEMPLATE);
@@ -45,10 +48,6 @@ export default function TemplateSettings() {
 
     fetchTemplates();
   }, [webService.TEMPLATE]);
-
-  const toggleAdmin = () => {
-    setIsAdmin((prev) => !prev);
-  };
 
   /**
    * Handles Adding a new template
@@ -204,10 +203,6 @@ export default function TemplateSettings() {
             <Link href="/facultyHome">
               <Button>Return to Home</Button>
             </Link>
-            {/* TODO: Remove once admin role is implemented */}
-            <Button onClick={toggleAdmin}>
-              Toggle Admin ({isAdmin ? "ON" : "OFF"})
-            </Button>
           </div>
         </div>
 

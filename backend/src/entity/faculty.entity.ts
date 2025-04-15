@@ -22,6 +22,9 @@ export class Faculty {
   @Column()
   job_title: string;
 
+  @Column({ default: false })
+  is_admin: boolean;
+
   @OneToMany(() => Review, (review) => review.faculty)
   reviews: Review[];
 
