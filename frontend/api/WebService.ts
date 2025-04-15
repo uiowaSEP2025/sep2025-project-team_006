@@ -7,7 +7,7 @@ export default class WebService {
   private serverUrl = this.isDev
     ? "http://localhost:5000"
     : "http://3.87.63.34:5000";
-  // Test API calls - these do not exist anymore
+  // Test API calls - these do not exist anymore, but are used for unit testing
   TEST_GET = `${this.serverUrl}/api/test`;
   TEST_GET_ONE = `${this.serverUrl}/api/test/:id`;
   TEST_PUT = `${this.serverUrl}/api/test/:id`;
@@ -25,10 +25,12 @@ export default class WebService {
   STUDENTS_APPLICANT_INFO = `${this.serverUrl}/api/students/:id`; // GET
   APPLICATION_DOCUMENT_GET = `${this.serverUrl}/api/documents/:id`; // GET
   APPLICATION_DOCUMENT_POST = `${this.serverUrl}/api/documents`; // POST
+  // These might have to change slightly for the template migration
   REVIEW_CREATE_POST = `${this.serverUrl}/api/reviews`; // POST
   REVIEW_UPDATE_PUT = `${this.serverUrl}/api/reviews/:id`; // PUT
   REVIEW_SUBMIT = `${this.serverUrl}/api/reviews/:id/submit`; // PUT
   REVIEW_METRICS_FOR_FACULTY = `${this.serverUrl}/api/reviews/metrics/app/:id1/faculty/:id2`; // GET
-  REVIEW_METRIC_POST = `${this.serverUrl}/api/reviews/metrics`; // POST
-  REVIEW_METRIC_UPDATE = `${this.serverUrl}/api/reviews/metrics/:id`; // PUT, DELETE
+  TEMPLATE = `${this.serverUrl}/api/templates`; // POST, GET
+  TEMPLATE_GET_BY_DEPARTMENT = `${this.serverUrl}/api/templates/department/:id`; // GET, unused
+  TEMPLATE_BY_ID = `${this.serverUrl}/api/templates/:id`; // GET, PUT, DELETE
 }

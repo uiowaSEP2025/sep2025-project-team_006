@@ -1,0 +1,228 @@
+{
+    "templates": [
+        {
+            "department": "BME",
+            "name": "Biomedical Engineering Template",
+            "is_default": false,
+            "metrics": [
+                {
+                    "metric_name": "Recommendation",
+                    "description": "Evaluation of recommendation letters by industry leaders",
+                    "metric_weight": 0.15
+                },
+                {
+                    "metric_name": "GPA (University Modifier)",
+                    "description": "GPA modified by university reputation in biomedical research",
+                    "metric_weight": 0.30
+                },
+                {
+                    "metric_name": "Work/Research Relevancy",
+                    "description": "Relevance of research in life sciences and clinical experience",
+                    "metric_weight": 0.20
+                },
+                {
+                    "metric_name": "Academic Awards",
+                    "description": "Honors and scholarships specific to biomedical achievements",
+                    "metric_weight": 0.10
+                },
+                {
+                    "metric_name": "Publications",
+                    "description": "Quality and quantity of publications in biomedical journals",
+                    "metric_weight": 0.25
+                }
+            ]
+        },
+        {
+            "department": "CBE",
+            "name": "Chemical and Biochemical Engineering Template",
+            "is_default": false,
+            "metrics": [
+                {
+                    "metric_name": "Recommendation",
+                    "description": "Strength of recommendations emphasizing chemical process skills",
+                    "metric_weight": 0.20
+                },
+                {
+                    "metric_name": "GPA (University Modifier)",
+                    "description": "Adjusted GPA score based on institution ranking in chemical engineering",
+                    "metric_weight": 0.20
+                },
+                {
+                    "metric_name": "Work/Research Relevancy",
+                    "description": "Pertinence of lab work and research in chemical processes",
+                    "metric_weight": 0.15
+                },
+                {
+                    "metric_name": "Academic Awards",
+                    "description": "Awards recognizing innovation in chemical sciences",
+                    "metric_weight": 0.10
+                },
+                {
+                    "metric_name": "Publications",
+                    "description": "Publications in high-impact chemical journals",
+                    "metric_weight": 0.35
+                }
+            ]
+        },
+        {
+            "department": "CEE",
+            "name": "Civil and Environmental Engineering Template",
+            "is_default": false,
+            "metrics": [
+                {
+                    "metric_name": "Recommendation",
+                    "description": "Quality recommendations based on civil infrastructure experience",
+                    "metric_weight": 0.10
+                },
+                {
+                    "metric_name": "GPA (University Modifier)",
+                    "description": "GPA influenced by civil engineering school ranking",
+                    "metric_weight": 0.25
+                },
+                {
+                    "metric_name": "Work/Research Relevancy",
+                    "description": "Relevance of experience in infrastructure and environmental projects",
+                    "metric_weight": 0.30
+                },
+                {
+                    "metric_name": "Academic Awards",
+                    "description": "Honors in construction, design, and environmental studies",
+                    "metric_weight": 0.15
+                },
+                {
+                    "metric_name": "Publications",
+                    "description": "Publications in civil or environmental research",
+                    "metric_weight": 0.20
+                }
+            ]
+        },
+        {
+            "department": "ECE",
+            "name": "Electrical and Computer Engineering Template",
+            "is_default": false,
+            "metrics": [
+                {
+                    "metric_name": "Recommendation",
+                    "description": "Assessment based on technological innovation and problem-solving",
+                    "metric_weight": 0.18
+                },
+                {
+                    "metric_name": "GPA (University Modifier)",
+                    "description": "GPA weighted by the technical reputation of the institution",
+                    "metric_weight": 0.22
+                },
+                {
+                    "metric_name": "Work/Research Relevancy",
+                    "description": "Experience in electrical or computing projects",
+                    "metric_weight": 0.20
+                },
+                {
+                    "metric_name": "Academic Awards",
+                    "description": "Honors and recognitions in electronics and computing",
+                    "metric_weight": 0.10
+                },
+                {
+                    "metric_name": "Publications",
+                    "description": "Research output in electrical and computer engineering",
+                    "metric_weight": 0.30
+                }
+            ]
+        },
+        {
+            "department": "ISE",
+            "name": "Industrial and Systems Engineering Template",
+            "is_default": false,
+            "metrics": [
+                {
+                    "metric_name": "Recommendation",
+                    "description": "Industry recommendations focused on operations and processes",
+                    "metric_weight": 0.12
+                },
+                {
+                    "metric_name": "GPA (University Modifier)",
+                    "description": "GPA adjusted by systems engineering expertise",
+                    "metric_weight": 0.28
+                },
+                {
+                    "metric_name": "Work/Research Relevancy",
+                    "description": "Practical experience in systems optimization and logistics",
+                    "metric_weight": 0.25
+                },
+                {
+                    "metric_name": "Academic Awards",
+                    "description": "Awards for excellence in operations research and process improvement",
+                    "metric_weight": 0.15
+                },
+                {
+                    "metric_name": "Publications",
+                    "description": "Publications in operational research and systems engineering",
+                    "metric_weight": 0.20
+                }
+            ]
+        },
+        {
+            "department": "ME",
+            "name": "Mechanical Engineering Template",
+            "is_default": false,
+            "metrics": [
+                {
+                    "metric_name": "Recommendation",
+                    "description": "Recommendations emphasizing mechanical design and innovation",
+                    "metric_weight": 0.15
+                },
+                {
+                    "metric_name": "GPA (University Modifier)",
+                    "description": "GPA reflecting strength in mechanical fundamentals",
+                    "metric_weight": 0.30
+                },
+                {
+                    "metric_name": "Work/Research Relevancy",
+                    "description": "Experience in prototyping, design, and simulation",
+                    "metric_weight": 0.20
+                },
+                {
+                    "metric_name": "Academic Awards",
+                    "description": "Recognition for mechanical design excellence and innovation",
+                    "metric_weight": 0.10
+                },
+                {
+                    "metric_name": "Publications",
+                    "description": "Publications or patents in mechanical engineering fields",
+                    "metric_weight": 0.25
+                }
+            ]
+        },
+        {
+            "department": "None",
+            "name": "Default Template",
+            "is_default": true,
+            "metrics": [
+                {
+                    "metric_name": "Recommendation",
+                    "description": "General evaluation of recommendation letters",
+                    "metric_weight": 0.18
+                },
+                {
+                    "metric_name": "GPA (University Modifier)",
+                    "description": "Standard GPA adjustment considering various factors",
+                    "metric_weight": 0.22
+                },
+                {
+                    "metric_name": "Work/Research Relevancy",
+                    "description": "General background relevance across disciplines",
+                    "metric_weight": 0.20
+                },
+                {
+                    "metric_name": "Academic Awards",
+                    "description": "General honors and awards assessment",
+                    "metric_weight": 0.15
+                },
+                {
+                    "metric_name": "Publications",
+                    "description": "General evaluation of publication records",
+                    "metric_weight": 0.25
+                }
+            ]
+        }
+    ]
+}

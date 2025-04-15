@@ -8,6 +8,8 @@ import { Review } from 'src/entity/review.entity';
 import { ReviewMetric } from 'src/entity/review_metric.entity';
 import { Session } from 'src/entity/session.entity';
 import { Student } from 'src/entity/student.entity';
+import { Template } from 'src/entity/template.entity';
+import { TemplateMetric } from 'src/entity/template_metric.entity';
 import { User } from 'src/entity/user.entity';
 import { DataSource } from 'typeorm';
 
@@ -30,6 +32,8 @@ export const AppDataSource = new DataSource({
     Faculty,
     ReviewMetric,
     Review,
+    TemplateMetric,
+    Template,
     Session,
     Student,
     User,

@@ -12,6 +12,8 @@ import { Student } from 'src/entity/student.entity';
 import { User } from 'src/entity/user.entity';
 import { LoggerService } from 'src/common/logger/logger.service';
 import * as dotenv from 'dotenv';
+import { TemplateMetric } from 'src/entity/template_metric.entity';
+import { Template } from 'src/entity/template.entity';
 dotenv.config();
 
 const dataSource = new DataSource({
@@ -28,6 +30,8 @@ const dataSource = new DataSource({
     Faculty,
     ReviewMetric,
     Review,
+    TemplateMetric,
+    Template,
     Session,
     Student,
     User,
