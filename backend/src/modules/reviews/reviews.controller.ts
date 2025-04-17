@@ -13,12 +13,10 @@ import { UpdateReviewDto } from 'src/dto/update-review.dto';
 
 @Controller('api/reviews') // .*/api/reviews/.*
 export class ReviewsController {
-  constructor(private readonly reviewService: ReviewsService) { }
+  constructor(private readonly reviewService: ReviewsService) {}
 
   @Get(':id/scores') // .*/api/reviews/:id/scores
-  async getReviewScores(
-    @Param('id', ParseIntPipe) reviewId: number,
-  ) {
+  async getReviewScores(@Param('id', ParseIntPipe) reviewId: number) {
     return this.reviewService.getReviewScores(reviewId);
   }
 

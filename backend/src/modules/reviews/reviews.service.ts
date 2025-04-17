@@ -22,7 +22,7 @@ export class ReviewsService {
     private applicationRepository: Repository<Application>,
     @InjectRepository(Template)
     private templateRepository: Repository<Template>,
-  ) { }
+  ) {}
 
   async getReviewScores(reviewId: number) {
     const review = await this.reviewRepository.findOne({
