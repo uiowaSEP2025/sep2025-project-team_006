@@ -5,6 +5,7 @@ import {
   Put,
   Param,
   ParseIntPipe,
+  Get,
 } from '@nestjs/common';
 import { ReviewsService } from './reviews.service';
 import { CreateReviewDto } from 'src/dto/create-review.dto';
@@ -13,6 +14,11 @@ import { UpdateReviewDto } from 'src/dto/update-review.dto';
 @Controller('api/reviews') // .*/api/reviews/.*
 export class ReviewsController {
   constructor(private readonly reviewService: ReviewsService) {}
+
+  @Get(":id/scores")
+  async getReviewScores() {
+    // TODO: Fetch overall score and compute and return the faculty score
+  }
 
   @Post() // .*/api/reviews
   async createReview(@Body() createReviewDto: CreateReviewDto) {

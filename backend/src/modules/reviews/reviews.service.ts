@@ -22,6 +22,10 @@ export class ReviewsService {
     private templateRepository: Repository<Template>,
   ) {}
 
+  async getReviewScores() {
+    // TODO: Fetch overall score and compute and return the faculty score
+  }
+
   async createReview(createReviewDto: CreateReviewDto): Promise<Review> {
     const { faculty_id, application_id, department } = createReviewDto;
 
@@ -126,6 +130,9 @@ export class ReviewsService {
       throw new NotFoundException(`Review not found for id ${reviewId}`);
     }
     review.submitted = true;
+
+    // TODO: calculate overall score and add it
+
     return this.reviewRepository.save(review);
   }
 }
