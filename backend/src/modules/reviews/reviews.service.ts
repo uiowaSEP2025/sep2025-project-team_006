@@ -7,6 +7,8 @@ import { Faculty } from 'src/entity/faculty.entity';
 import { Review } from 'src/entity/review.entity';
 import { ReviewMetric } from 'src/entity/review_metric.entity';
 import { Template } from 'src/entity/template.entity';
+import { calculateFacultyScore } from 'src/util/calculate_faculty_score';
+import { calculateOverallScore } from 'src/util/calculate_overall_score';
 import { Repository } from 'typeorm';
 
 @Injectable()
@@ -20,10 +22,24 @@ export class ReviewsService {
     private applicationRepository: Repository<Application>,
     @InjectRepository(Template)
     private templateRepository: Repository<Template>,
-  ) {}
+  ) { }
 
-  async getReviewScores() {
-    // TODO: Fetch overall score and compute and return the faculty score
+  async getReviewScores(reviewId: number) {
+    const review = await this.reviewRepository.findOne({
+      where: { review_id: reviewId },
+      relations: ['review_metrics'],
+    });
+    if (!review) {
+      throw new NotFoundException(`Review not found for id ${reviewId}`);
+    }
+
+    const overall_score = calculateOverallScore(review);
+    const faculty_score = calculateFacultyScore(review);
+
+    return {
+      overall_score: overall_score,
+      faculty_score: faculty_score,
+    };
   }
 
   async createReview(createReviewDto: CreateReviewDto): Promise<Review> {
@@ -130,9 +146,7 @@ export class ReviewsService {
       throw new NotFoundException(`Review not found for id ${reviewId}`);
     }
     review.submitted = true;
-
-    // TODO: calculate overall score and add it
-
+    review.overall_score = calculateOverallScore(review);
     return this.reviewRepository.save(review);
   }
 }
