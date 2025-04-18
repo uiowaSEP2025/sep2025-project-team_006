@@ -64,6 +64,7 @@ export async function seedUserDatabase(logger: LoggerService) {
       department: facultyData.department,
       job_title: facultyData.job_title,
       reviews: facultyData.reviews,
+      is_admin: facultyData.is_admin,
     });
     await facultyRepo.save(faculty);
 
