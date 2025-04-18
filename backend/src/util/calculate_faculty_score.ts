@@ -5,11 +5,10 @@ import { Review } from 'src/entity/review.entity';
  * @returns faculty_score
  */
 export const calculateFacultyScore = (review: Review): number => {
-  const metrics = review.review_metrics;
-  let faculty_score: number = 0.0;
-  metrics.forEach((metric) => {
+  const metrics = review.review_metrics ?? [];
+  let faculty_score = 0;
+  for (const metric of metrics) {
     faculty_score += metric.selected_weight * metric.value;
-  });
-
+  }
   return faculty_score;
 };

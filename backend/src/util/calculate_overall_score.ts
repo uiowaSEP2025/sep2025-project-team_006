@@ -5,11 +5,10 @@ import { Review } from 'src/entity/review.entity';
  * @returns overall_score
  */
 export const calculateOverallScore = (review: Review): number => {
-  const metrics = review.review_metrics;
-  let overall_score: number = 0.0;
-  metrics.forEach((metric) => {
+  const metrics = review.review_metrics ?? [];
+  let overall_score = 0;
+  for (const metric of metrics) {
     overall_score += metric.template_weight * metric.value;
-  });
-
+  }
   return overall_score;
 };
