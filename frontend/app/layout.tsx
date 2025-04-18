@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { cookies } from "next/headers";
-import { unstable_noStore } from 'next/cache';
+import { unstable_noStore } from "next/cache";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Image from "next/image";
@@ -36,7 +36,7 @@ const getUserInfo = async () => {
       method: "GET",
       headers: {
         Authorization: `Bearer ${token}`,
-      }
+      },
     });
     if (resp.ok) {
       const json = await resp.json();

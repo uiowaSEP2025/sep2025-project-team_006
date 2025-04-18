@@ -21,6 +21,9 @@ export function SignUpForm({
   className,
   ...props
 }: React.ComponentPropsWithoutRef<"div">) {
+  const [first_name, setFirstName] = useState("");
+  const [last_name, setLastName] = useState("");
+  const [phone_number, setPhoneNumber] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
@@ -35,7 +38,16 @@ export function SignUpForm({
 
     let resp;
     try {
-      resp = await apiPOST(url, JSON.stringify({ email, password }));
+      resp = await apiPOST(
+        url,
+        JSON.stringify({
+          first_name,
+          last_name,
+          phone_number,
+          email,
+          password,
+        }),
+      );
       if (resp.success) {
         window.location.replace(nnnext);
       } else {
@@ -59,6 +71,41 @@ export function SignUpForm({
         <CardContent>
           <form onSubmit={handleSubmit}>
             <div className="flex flex-col gap-6">
+              <div className="grid grid-cols-2 gap-4">
+                <div className="grid gap-2">
+                  <Label htmlFor="first_name">First Name</Label>
+                  <Input
+                    id="first_name"
+                    type="text"
+                    placeholder="Your first name"
+                    value={first_name}
+                    onChange={(e) => setFirstName(e.target.value)}
+                    required
+                  />
+                </div>
+                <div className="grid gap-2">
+                  <Label htmlFor="last_name">Last Name</Label>
+                  <Input
+                    id="last_name"
+                    type="text"
+                    placeholder="Your last name"
+                    value={last_name}
+                    onChange={(e) => setLastName(e.target.value)}
+                    required
+                  />
+                </div>
+              </div>
+              <div className="grid gap-2">
+                <Label htmlFor="email">Phone Number</Label>
+                <Input
+                  id="phone_number"
+                  type="phone_number"
+                  placeholder="(888) 888-8888"
+                  value={phone_number}
+                  onChange={(e) => setPhoneNumber(e.target.value)}
+                  required
+                />
+              </div>
               <div className="grid gap-2">
                 <Label htmlFor="email">Email</Label>
                 <Input

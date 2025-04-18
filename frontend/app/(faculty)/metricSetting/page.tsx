@@ -29,7 +29,7 @@ export default function Home() {
   const [faculty_id, setFacultyId] = useState<string>("");
 
   useEffect(() => {
-    const id = (window.__USER__?.id + "") || "";
+    const id = window.__USER__?.id + "" || "";
     setFacultyId(id);
     const fetchMetrics = async () => {
       try {
