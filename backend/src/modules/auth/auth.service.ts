@@ -122,6 +122,7 @@ export class AuthService {
       provider: user.provider,
       registered_at: user.registered_at.getTime(),
       updated_at: user.updated_at.getTime(),
+      is_admin: user.faculty?.is_admin || false,
     };
   }
 
