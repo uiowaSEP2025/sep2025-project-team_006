@@ -118,6 +118,13 @@ export class ReviewsService {
     return this.reviewRepository.save(review);
   }
 
+  async getSubmittedReviews(): Promise<Review[]> {
+    return await this.reviewRepository.find({
+      where: { submitted: true },
+      relations: ['application', 'application.student'],
+    });
+  }
+
   async submitReview(reviewId: number): Promise<Review> {
     const review = await this.reviewRepository.findOneBy({
       review_id: reviewId,

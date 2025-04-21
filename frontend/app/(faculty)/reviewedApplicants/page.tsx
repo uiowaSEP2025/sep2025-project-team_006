@@ -26,18 +26,21 @@ export default function Home() {
   useEffect(() => {
     const fetchApplicants = async () => {
       try {
-        const response = await apiGET(webService.STUDENTS_APPLICANT_LIST);
+        const response = await apiGET(webService.REVIEW_SUBMITTED);
         if (response.success) {
           const fetchedProfiles: Profile[] = response.payload.map(
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            (applicant: any) => ({
-              id: applicant.student_id,
-              name: applicant.full_name,
-              status: applicant.status,
-              department: applicant.department,
-              degree_program: applicant.degree_program,
-              image: "/defaultpfp.jpeg",
-            }),
+            (review: any) => {
+              const applicant = review.application;
+              return {
+                id: applicant.application_id,
+                name: `${applicant.student.first_name} ${applicant.student.last_name}`,
+                status: applicant.status,
+                department: applicant.department,
+                degree_program: applicant.degree_program,
+                image: "/defaultpfp.jpeg",
+              };
+            },
           );
           setProfiles(fetchedProfiles);
         } else {
@@ -48,7 +51,7 @@ export default function Home() {
       }
     };
     fetchApplicants();
-  }, [webService.STUDENTS_APPLICANT_LIST]);
+  }, [webService.REVIEW_SUBMITTED]);
 
   const handleProfileClick = () => {};
 

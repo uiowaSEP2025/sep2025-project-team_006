@@ -5,6 +5,7 @@ import {
   Put,
   Param,
   ParseIntPipe,
+  Get,
 } from '@nestjs/common';
 import { ReviewsService } from './reviews.service';
 import { CreateReviewDto } from 'src/dto/create-review.dto';
@@ -30,5 +31,10 @@ export class ReviewsController {
   @Put(':id/submit') // .*/api/reviews/:id/submit
   async submitReview(@Param('id', ParseIntPipe) reviewId: number) {
     return this.reviewService.submitReview(reviewId);
+  }
+
+  @Get('submitted')
+  async getReviewedApplicants() {
+    return this.reviewService.getSubmittedReviews();
   }
 }
