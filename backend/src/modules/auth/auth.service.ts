@@ -32,7 +32,14 @@ export class AuthService {
   ) {}
 
   // Registration logic is handled between students and faculty.
-  async register(email: string, password: string, isFaculty: boolean) {
+  async register(
+    first_name: string,
+    last_name: string,
+    phone_number: string,
+    email: string,
+    password: string,
+    isFaculty: boolean,
+  ) {
     if (await this.userRepository.findOne({ where: { email: email } })) {
       throw new Error('User already exists'); // exists.
     }
@@ -49,10 +56,16 @@ export class AuthService {
     // These will, assumedly, get filled out later.
     if (isFaculty) {
       const facultyRecord = this.facultyRepository.create({});
+      facultyRecord.first_name = first_name;
+      facultyRecord.last_name = last_name;
+      facultyRecord.phone_number = phone_number;
       await this.facultyRepository.save(facultyRecord);
       userRecord.faculty = facultyRecord;
     } else {
       const studentRecord = this.studentRepository.create({});
+      studentRecord.first_name = first_name;
+      studentRecord.last_name = last_name;
+      studentRecord.phone_number = phone_number;
       await this.studentRepository.save(studentRecord);
       userRecord.student = studentRecord;
     }
@@ -109,6 +122,7 @@ export class AuthService {
       provider: user.provider,
       registered_at: user.registered_at.getTime(),
       updated_at: user.updated_at.getTime(),
+      is_admin: user.faculty?.is_admin || false,
     };
   }
 

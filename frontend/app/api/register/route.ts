@@ -11,7 +11,7 @@ export async function POST(
   const backendRes = await fetch(webService.AUTH_STUDENT_REGISTER, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ email: body.email, password: body.password }),
+    body: JSON.stringify({ first_name: body.first_name, last_name: body.last_name, phone_number: body.phone_number, email: body.email, password: body.password }),
   });
   const data = await backendRes.json();
 

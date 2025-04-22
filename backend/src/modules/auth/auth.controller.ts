@@ -7,7 +7,7 @@ import {
   Request,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { CreateUserDto, RefreshTokenDto } from 'src/dto/auth.dto';
+import { RegisterDto, LoginDto, RefreshTokenDto } from 'src/dto/auth.dto';
 import { AuthenticatedRequest, AuthGuard } from './auth.guard';
 
 /**
@@ -18,16 +18,19 @@ export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
   @Post('student/register') // .*/api/auth/student/register
-  async postStudentRegistration(@Body() createUserDto: CreateUserDto) {
+  async postStudentRegistration(@Body() registerUserDto: RegisterDto) {
     return this.authService.register(
-      createUserDto.email,
-      createUserDto.password,
+      registerUserDto.first_name,
+      registerUserDto.last_name,
+      registerUserDto.phone_number,
+      registerUserDto.email,
+      registerUserDto.password,
       false,
     );
   }
 
   @Post('student/login') // .*/api/auth/student/login
-  async postStudentLogin(@Body() createUserDto: CreateUserDto) {
+  async postStudentLogin(@Body() createUserDto: LoginDto) {
     return this.authService.login(createUserDto.email, createUserDto.password);
   }
 

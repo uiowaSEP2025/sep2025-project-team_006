@@ -15,6 +15,11 @@ import { UpdateReviewDto } from 'src/dto/update-review.dto';
 export class ReviewsController {
   constructor(private readonly reviewService: ReviewsService) {}
 
+  @Get(':id/scores') // .*/api/reviews/:id/scores
+  async getReviewScores(@Param('id', ParseIntPipe) reviewId: number) {
+    return this.reviewService.getReviewScores(reviewId);
+  }
+
   @Post() // .*/api/reviews
   async createReview(@Body() createReviewDto: CreateReviewDto) {
     return this.reviewService.createReview(createReviewDto);
