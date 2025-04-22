@@ -18,6 +18,7 @@ export class StudentsService {
       .innerJoin('student.applications', 'application')
       .where('application.status = :status', { status: 'submitted' })
       .select([
+        'application.application_id AS application_id',
         'student.student_id AS student_id',
         "CONCAT(student.first_name, ' ', student.last_name) AS full_name",
         'application.status AS status',
