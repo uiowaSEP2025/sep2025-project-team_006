@@ -118,11 +118,35 @@ export class ReviewsService {
     return this.reviewRepository.save(review);
   }
 
-  async getSubmittedReviews(): Promise<Review[]> {
-    return await this.reviewRepository.find({
-      where: { submitted: true },
+  async getReview(reviewId: number): Promise<Review | null> {
+    return await this.reviewRepository.findOne({
+      where: { review_id: reviewId },
       relations: ['application', 'application.student'],
     });
+  }
+
+  async getSubmittedReviews(facultyId?: number): Promise<Review[]> {
+    if (facultyId) {
+      const faculty = await this.facultyRepository.findOneBy({
+        faculty_id: facultyId,
+      });
+      if (!faculty) {
+        throw new NotFoundException(`Faculty not found for id ${facultyId}`);
+      }
+
+      return await this.reviewRepository.find({
+        where: {
+          submitted: true,
+          faculty,
+        },
+        relations: ['application', 'application.student'],
+      });
+    } else {
+      return await this.reviewRepository.find({
+        where: { submitted: true },
+        relations: ['application', 'application.student'],
+      });
+    }
   }
 
   async submitReview(reviewId: number): Promise<Review> {
