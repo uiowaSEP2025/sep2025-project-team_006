@@ -4,7 +4,6 @@ import { useEffect, useState, useMemo } from "react";
 import ProfileList from "@/components/ProfileList";
 import WebService from "@/api/WebService";
 import { apiGET } from "@/api/apiMethods";
-import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 
@@ -18,7 +17,6 @@ interface Profile {
 }
 
 export default function Home() {
-  const router = useRouter();
   const webService = new WebService();
   const [profiles, setProfiles] = useState<Profile[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
@@ -35,7 +33,7 @@ export default function Home() {
             (review: any) => {
               const applicant = review.application;
               return {
-                id: applicant.student.student_id,
+                id: applicant.application_id,
                 name: `${applicant.student.first_name} ${applicant.student.last_name}`,
                 status: applicant.status,
                 department: applicant.department,
@@ -55,9 +53,7 @@ export default function Home() {
     fetchApplicants();
   }, [webService.REVIEW_SUBMITTED]);
 
-  const handleProfileClick = (profile: Profile) => {
-    router.push(`/reviewedApplicants/application?id=${profile.id}`);
-  };
+  const handleProfileClick = () => {};
 
   // Filtered and paginated profiles
   const filteredProfiles = useMemo(() => {
