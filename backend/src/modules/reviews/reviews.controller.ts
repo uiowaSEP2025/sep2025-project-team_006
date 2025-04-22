@@ -20,6 +20,13 @@ export class ReviewsController {
     return this.reviewService.createReview(createReviewDto);
   }
 
+  @Get(':id') // .*/api/reviews/:id
+  async getReview(
+    @Param('id', ParseIntPipe) reviewId: number,
+  ) {
+    return this.reviewService.getReview(reviewId);
+  }
+
   @Put(':id') // .*/api/reviews/:id
   async updateReview(
     @Param('id', ParseIntPipe) reviewId: number,
@@ -33,7 +40,7 @@ export class ReviewsController {
     return this.reviewService.submitReview(reviewId);
   }
 
-  @Get('submitted')
+  @Get('submitted') // .*/api/reviews/submitted
   async getReviewedApplicants() {
     return this.reviewService.getSubmittedReviews();
   }

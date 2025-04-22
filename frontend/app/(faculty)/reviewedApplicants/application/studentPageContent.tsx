@@ -81,6 +81,8 @@ export default function StudentPageContent() {
     const applicationId = studentData.applications[0].application_id;
     const fetchReviewMetrics = async () => {
       try {
+
+        console.log("visiting", webService.REVIEW_METRICS_FOR_FACULTY, applicationId.toString(), faculty_id);
         const response = await apiDoubleIdGET(
           webService.REVIEW_METRICS_FOR_FACULTY,
           applicationId.toString(),
@@ -296,7 +298,7 @@ export default function StudentPageContent() {
               Submit Review
             </Button>
             <Button asChild>
-              <Link href="/studentList">Return to Student List</Link>
+              <Link href="/reviewedApplicants">Return to Reviewed Applicants</Link>
             </Button>
           </div>
         </div>
