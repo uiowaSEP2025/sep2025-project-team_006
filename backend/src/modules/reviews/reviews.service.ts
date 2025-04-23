@@ -170,8 +170,9 @@ export class ReviewsService {
   }
 
   async submitReview(reviewId: number): Promise<Review> {
-    const review = await this.reviewRepository.findOneBy({
-      review_id: reviewId,
+    const review = await this.reviewRepository.findOne({
+      where: { review_id: reviewId },
+      relations: ['review_metrics'],
     });
     if (!review) {
       throw new NotFoundException(`Review not found for id ${reviewId}`);

@@ -31,6 +31,7 @@ export default class WebService {
   REVIEW_SUBMIT = `${this.serverUrl}/api/reviews/:id/submit`; // PUT
   REVIEW_METRICS_FOR_FACULTY = `${this.serverUrl}/api/reviews/metrics/app/:id1/faculty/:id2`; // GET
   REVIEW_SUBMITTED = `${this.serverUrl}/api/reviews/submitted/:id`; // GET
+  REVIEW_GET_SCORES = `${this.serverUrl}/api/reviews/:id/scores`
   TEMPLATE = `${this.serverUrl}/api/templates`; // POST, GET
   TEMPLATE_GET_BY_DEPARTMENT = `${this.serverUrl}/api/templates/department/:id`; // GET, unused
   TEMPLATE_BY_ID = `${this.serverUrl}/api/templates/:id`; // GET, PUT, DELETE
