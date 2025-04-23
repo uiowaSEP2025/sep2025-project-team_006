@@ -10,5 +10,6 @@ export const calculateFacultyScore = (review: Review): number => {
   for (const metric of metrics) {
     faculty_score += metric.selected_weight * metric.value;
   }
-  return faculty_score;
+  faculty_score = (faculty_score / 5) * 100;
+  return Math.trunc(faculty_score);
 };
