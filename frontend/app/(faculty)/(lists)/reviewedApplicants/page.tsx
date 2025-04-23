@@ -42,7 +42,7 @@ export default function Home() {
                 degree_program: applicant.degree_program,
                 image: "/defaultpfp.jpeg",
                 isReview: true,
-                reviewScore: 100,
+                reviewScore: review.overall_score,
               };
             },
           );

@@ -45,8 +45,8 @@ const ProfileList: React.FC<ProfileListProps> = ({
               {profile.status} – {profile.department} – {profile.degree_program}
             </div>
             {profile.isReview && profile.reviewScore !== null && (
-              <div className="text-sm text-blue-600 font-semibold mt-1">
-                Review Score: {profile.reviewScore}
+              <div className="text-sm text-yellow-600 font-semibold mt-1">
+                Score: {profile.reviewScore}%
               </div>
             )}
           </div>
