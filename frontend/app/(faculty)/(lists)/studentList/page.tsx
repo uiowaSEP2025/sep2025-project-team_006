@@ -15,6 +15,8 @@ interface Profile {
   department: string;
   degree_program: string;
   image: string;
+  isReview: boolean;
+  reviewScore: number | null;
 }
 
 export default function Home() {
@@ -53,6 +55,8 @@ export default function Home() {
               department: applicant.department,
               degree_program: applicant.degree_program,
               image: "/defaultpfp.jpeg",
+              isReview: false,
+              reviewScore: null,
             }),
           );
           setProfiles(fetchedProfiles);

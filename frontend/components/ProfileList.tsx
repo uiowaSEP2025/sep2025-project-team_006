@@ -8,6 +8,8 @@ interface Profile {
   department: string;
   degree_program: string;
   image: string;
+  isReview: boolean;
+  reviewScore: number | null;
 }
 
 interface ProfileListProps {
@@ -42,6 +44,11 @@ const ProfileList: React.FC<ProfileListProps> = ({
             <div className="text-sm text-gray-600">
               {profile.status} – {profile.department} – {profile.degree_program}
             </div>
+            {profile.isReview && profile.reviewScore !== null && (
+              <div className="text-sm text-blue-600 font-semibold mt-1">
+                Review Score: {profile.reviewScore}
+              </div>
+            )}
           </div>
         </button>
       ))}
