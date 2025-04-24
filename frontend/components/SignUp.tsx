@@ -11,35 +11,32 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import WebService from "@/api/WebService";
 import { useState } from "react";
 import { apiPOST } from "@/api/apiMethods";
 import Link from "next/link";
+import { useRouter } from 'next/navigation'
 import React from "react";
 
 export function SignUpForm({
   className,
   ...props
 }: React.ComponentPropsWithoutRef<"div">) {
+  const router = useRouter();
   const [first_name, setFirstName] = useState("");
   const [last_name, setLastName] = useState("");
   const [phone_number, setPhoneNumber] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
+  // Simulate login request (replace with API call)
+  // Similar to Login component, but hardcoded routes.
   const handleSubmit = async (event: React.FormEvent) => {
-    const webService = new WebService();
     event.preventDefault(); // Prevent page reload
-
-    // Simulate login request (replace with API call)
-    // Similar to Login component, but hardcoded routes.
-    const url = webService.AUTH_STUDENT_REGISTER;
-    const nnnext = "/studentHome";
 
     let resp;
     try {
       resp = await apiPOST(
-        url,
+        "/api/register",
         JSON.stringify({
           first_name,
           last_name,
@@ -49,7 +46,7 @@ export function SignUpForm({
         }),
       );
       if (resp.success) {
-        window.location.replace(nnnext);
+        router.push("/studentHome");
       } else {
         console.error("Login failed");
       }
