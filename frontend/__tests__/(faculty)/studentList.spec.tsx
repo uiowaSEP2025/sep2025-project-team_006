@@ -47,23 +47,49 @@ describe("StudentList", () => {
 
   beforeEach(() => {
     jest.clearAllMocks();
+    // reset WebService endpoints
+    MockedWebService.mockImplementation(() => ({
+      STUDENTS_APPLICANT_LIST: "/students",
+      REVIEW_SUBMITTED: "/reviews",
+    } as unknown as WebService));
   });
 
-  it.skip("renders profiles on successful fetch", async () => {
+  it("renders profiles on successful fetch", async () => {
+    // First API returns one applicant, second returns no reviews
     mockedApiGET.mockResolvedValueOnce({
       success: true,
       payload: [
-        { student_id: 1, full_name: "Alice", status: "A", department: "D", degree_program: "DP" },
+        { application_id: 11, student_id: 1, full_name: "Alice", status: "A", department: "D", degree_program: "DP" },
       ],
     });
+    mockedApiGET.mockResolvedValueOnce({ success: true, payload: [] });
 
     render(<StudentList />);
     expect(await screen.findByText("Alice")).toBeInTheDocument();
   });
 
+  it("filters out reviewed applicants", async () => {
+    // applicant list has Bob and Carol; reviews list includes Carol
+    mockedApiGET.mockResolvedValueOnce({
+      success: true,
+      payload: [
+        { application_id: 21, student_id: 2, full_name: "Bob", status: "", department: "", degree_program: "" },
+        { application_id: 22, student_id: 3, full_name: "Carol", status: "", department: "", degree_program: "" },
+      ],
+    });
+    mockedApiGET.mockResolvedValueOnce({
+      success: true,
+      payload: [{ application: { application_id: 22 } }],
+    });
+
+    render(<StudentList />);
+    // Bob should appear, Carol filtered out
+    expect(await screen.findByText("Bob")).toBeInTheDocument();
+    expect(screen.queryByText("Carol")).toBeNull();
+  });
+
   it("handles fetch error gracefully", async () => {
     mockedApiGET.mockResolvedValueOnce({ success: false, error: "err" });
-
     render(<StudentList />);
     await waitFor(() => {
       expect(screen.queryByTestId("profile-1")).not.toBeInTheDocument();
@@ -72,56 +98,48 @@ describe("StudentList", () => {
 
   it("handles exception in fetch", async () => {
     mockedApiGET.mockRejectedValueOnce(new Error("fail"));
-
     render(<StudentList />);
     await waitFor(() => {
       expect(screen.queryByTestId("profile-1")).not.toBeInTheDocument();
     });
   });
 
-  it.skip("calls router.push on profile click", async () => {
+  it("calls router.push on profile click", async () => {
+    mockedApiGET.mockResolvedValueOnce({
+      success: true,
+      payload: [{ application_id: 31, student_id: 4, full_name: "Dave", status: "", department: "", degree_program: "" }],
+    });
+    mockedApiGET.mockResolvedValueOnce({ success: true, payload: [] });
+
+    render(<StudentList />);
+    fireEvent.click(await screen.findByTestId("profile-4"));
+    expect(push).toHaveBeenCalledWith("/studentList/application?id=4");
+  });
+
+  it("filters profiles by search query", async () => {
     mockedApiGET.mockResolvedValueOnce({
       success: true,
       payload: [
-        { student_id: 2, full_name: "Bob", status: "", department: "", degree_program: "" },
+        { application_id: 41, student_id: 5, full_name: "Eve", status: "", department: "", degree_program: "" },
+        { application_id: 42, student_id: 6, full_name: "Frank", status: "", department: "", degree_program: "" },
       ],
     });
+    mockedApiGET.mockResolvedValueOnce({ success: true, payload: [] });
 
     render(<StudentList />);
-    fireEvent.click(await screen.findByTestId("profile-2"));
-    expect(push).toHaveBeenCalledWith("/studentList/application?id=2");
+    await screen.findByText("Eve");
+    fireEvent.change(screen.getByPlaceholderText(/Search by name/i), { target: { value: 'fra' } });
+    expect(screen.queryByText("Eve")).toBeNull();
+    expect(screen.getByText("Frank")).toBeInTheDocument();
   });
 
-  it.skip("filters profiles by search query", async () => {
-    mockedApiGET.mockResolvedValueOnce({
-      success: true,
-      payload: [
-        { student_id: 3, full_name: "Charlie", status: "", department: "", degree_program: "" },
-        { student_id: 4, full_name: "Dave", status: "", department: "", degree_program: "" },
-      ],
-    });
-
-    render(<StudentList />);
-    await screen.findByText("Charlie");
-
-    fireEvent.change(screen.getByPlaceholderText(/Search by name/i), { target: { value: 'dav' } });
-    expect(screen.queryByText("Charlie")).not.toBeInTheDocument();
-    expect(screen.getByText("Dave")).toBeInTheDocument();
-  });
-
-  it.skip("paginates profiles correctly", async () => {
-    const many = Array.from({ length: 7 }, (_, i) => ({
-      student_id: i + 1,
-      full_name: `U${i + 1}`,
-      status: "",
-      department: "",
-      degree_program: "",
-    }));
+  it("paginates profiles correctly", async () => {
+    const many = Array.from({ length: 7 }, (_, i) => ({ application_id: 50 + i, student_id: i + 1, full_name: `U${i + 1}`, status: "", department: "", degree_program: "" }));
     mockedApiGET.mockResolvedValueOnce({ success: true, payload: many });
+    mockedApiGET.mockResolvedValueOnce({ success: true, payload: [] });
 
     render(<StudentList />);
     await screen.findByText("U1");
-
     expect(screen.queryByText("U6")).toBeNull();
     fireEvent.click(screen.getByText('2'));
     expect(screen.getByText("U6")).toBeInTheDocument();
@@ -129,6 +147,7 @@ describe("StudentList", () => {
   });
 
   it("renders Return to Home link", async () => {
+    mockedApiGET.mockResolvedValueOnce({ success: true, payload: [] });
     mockedApiGET.mockResolvedValueOnce({ success: true, payload: [] });
 
     render(<StudentList />);
