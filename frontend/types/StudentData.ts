@@ -7,4 +7,7 @@ export interface StudentData {
   phone_number: string;
   address: string;
   applications: ApplicationData[];
+  original_gpa: number;
+  original_scale: string;
+  standardized_gpa: number;
 }
