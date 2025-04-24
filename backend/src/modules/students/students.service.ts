@@ -16,7 +16,7 @@ export class StudentsService {
     const rawApplicants = await this.studentRepo
       .createQueryBuilder('student')
       .innerJoin('student.applications', 'application')
-      .where('application.status = :status', { status: 'submitted' })
+      //.where('application.status = :status', { status: 'submitted' })
       .select([
         'application.application_id AS application_id',
         'student.student_id AS student_id',
