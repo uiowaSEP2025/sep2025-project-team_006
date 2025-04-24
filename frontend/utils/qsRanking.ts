@@ -1,7 +1,8 @@
 import Papa from "papaparse";
 
-export function parseQsRanking(csvText: string): Record<string, string> {
+export function parseQsCsv(csvText: string): Record<string, string> {
   const rankingMap: Record<string, string> = {};
+
   Papa.parse(csvText, {
     header: true,
     skipEmptyLines: true,
@@ -15,11 +16,13 @@ export function parseQsRanking(csvText: string): Record<string, string> {
       });
     },
   });
+
   return rankingMap;
 }
 
 export async function loadQsRankings(): Promise<Record<string, string>> {
   const response = await fetch("/qs_rankings.csv");
   const csvText = await response.text();
-  return parseQsRanking(csvText);
+  return parseQsCsv(csvText);
 }
+
