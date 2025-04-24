@@ -14,7 +14,7 @@ import Link from "next/link";
 import { apiDoubleIdGET } from "@/api/methods";
 import { MetricResponse } from "@/types/MetricData";
 import React from "react";
-import Papa from "papaparse";
+import { loadQsRankings } from "@/utils/qsRanking";
 
 interface DocumentInfo {
   document_id: string | null;
@@ -43,24 +43,10 @@ export default function StudentPageContent() {
   const currentDocument = documentList[currentDocIndex] || {};
 
   useEffect(() => {
-    fetch("/qs_rankings.csv")
-      .then((res) => res.text())
-      .then((csvText) => {
-        Papa.parse(csvText, {
-          header: true,
-          skipEmptyLines: true,
-          complete: (results) => {
-            const rankingMap: Record<string, string> = {};
-            results.data.forEach((row: any) => {
-              const name = row["Institution"]?.trim()?.toLowerCase();
-              const rank = row["Rank"]?.trim();
-              if (name && rank) {
-                rankingMap[name] = rank;
-              }
-            });
-            setQsRankings(rankingMap);
-          },
-        });
+    loadQsRankings()
+      .then(setQsRankings)
+      .catch((err) => {
+        console.error("Failed to load QS rankings:", err);
       });
   }, []);
 
