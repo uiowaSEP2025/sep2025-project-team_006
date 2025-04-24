@@ -29,6 +29,7 @@ describe('ReviewsService', () => {
                     useValue: {
                         findOne: jest.fn(),
                         findOneBy: jest.fn(),
+                        find: jest.fn(),
                         create: jest.fn(),
                         save: jest.fn(),
                     },
@@ -248,6 +249,74 @@ describe('ReviewsService', () => {
             (reviewRepo.findOneBy as jest.Mock).mockResolvedValue(null);
             await expect(service.submitReview(99)).rejects.toThrow(NotFoundException);
             expect(reviewRepo.findOneBy).toHaveBeenCalledWith({ review_id: 99 });
+        });
+    });
+
+    describe('getReview', () => {
+        it('should return a review when found', async () => {
+            const mock = { review_id: 77 } as Review;
+            (reviewRepo.findOne as jest.Mock).mockResolvedValue(mock);
+
+            const result = await service.getReview(77);
+            expect(reviewRepo.findOne).toHaveBeenCalledWith({
+                where: { review_id: 77 },
+                relations: ['application', 'application.student'],
+            });
+            expect(result).toBe(mock);
+        });
+
+        it('should return null when not found', async () => {
+            (reviewRepo.findOne as jest.Mock).mockResolvedValue(null);
+
+            const result = await service.getReview(99);
+            expect(result).toBeNull();
+        });
+    });
+
+    describe('getSubmittedReviews', () => {
+        it('should return all submitted reviews when no facultyId', async () => {
+            const list = [{ review_id: 5 }, { review_id: 6 }] as Review[];
+            (reviewRepo.find as jest.Mock).mockResolvedValue(list);
+
+            const result = await service.getSubmittedReviews();
+            expect(reviewRepo.find).toHaveBeenCalledWith({
+                where: { submitted: true },
+                relations: ['application', 'application.student'],
+            });
+            expect(result).toBe(list);
+        });
+
+        it('should throw if faculty not found', async () => {
+            (facultyRepo.findOneBy as jest.Mock).mockResolvedValue(null);
+
+            await expect(service.getSubmittedReviews(3)).rejects.toThrow(NotFoundException);
+            expect(facultyRepo.findOneBy).toHaveBeenCalledWith({ faculty_id: 3 });
+        });
+
+        it('should return filtered reviews when facultyId provided', async () => {
+            const faculty = { faculty_id: 4 } as Faculty;
+            const list = [{ review_id: 7 }] as Review[];
+            (facultyRepo.findOneBy as jest.Mock).mockResolvedValue(faculty);
+            (reviewRepo.find as jest.Mock).mockResolvedValue(list);
+
+            const result = await service.getSubmittedReviews(4);
+            expect(facultyRepo.findOneBy).toHaveBeenCalledWith({ faculty_id: 4 });
+            expect(reviewRepo.find).toHaveBeenCalledWith({
+                where: { submitted: true, faculty },
+                relations: ['application', 'application.student'],
+            });
+            expect(result).toBe(list);
+        });
+    });
+
+    describe('submitReview', () => {
+        it('should throw if review not found', async () => {
+            (reviewRepo.findOne as jest.Mock).mockResolvedValue(null);
+            await expect(service.submitReview(99)).rejects.toThrow(NotFoundException);
+            expect(reviewRepo.findOne).toHaveBeenCalledWith({
+                where: { review_id: 99 },
+                relations: ['review_metrics', 'application'],
+            });
         });
     });
 });
