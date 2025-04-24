@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { cookies } from "next/headers";
 import { CookiesProvider } from 'next-client-cookies/server';
 import { unstable_noStore } from "next/cache";
 import { Geist, Geist_Mono } from "next/font/google";
@@ -29,7 +30,6 @@ export const metadata: Metadata = {
   description: "GAP",
 };
 
-/*
 const getUserInfo = async () => {
   const cookieStore = await cookies();
   const token = cookieStore.get("gap_token")?.value;
@@ -46,7 +46,6 @@ const getUserInfo = async () => {
     }
   }
 };
-*/
 
 export default async function RootLayout({
   children,
@@ -62,7 +61,9 @@ export default async function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
+        <UserContextProvider user={await getUserInfo()}>
         <CookiesProvider>
+
         <header className="bg-black text-[#F1BE48] h-20 text-4xl px-6 sm:px-12 py-4 flex justify-between items-center">
           <Image
             src={gapOffical}
@@ -76,7 +77,9 @@ export default async function RootLayout({
             <LogoutButton />
           </div>
         </header>
+
         {children}
+        
         <footer className="bg-black text-[#F1BE48] h-20 text-4xl px-6 sm:px-12 py-4 flex justify-between items-center">
           <Image
             src={iowaBlackLogo}
@@ -96,6 +99,7 @@ export default async function RootLayout({
           </div>
         </footer>
         </CookiesProvider>
+        </UserContextProvider>
       </body>
     </html>
   );
