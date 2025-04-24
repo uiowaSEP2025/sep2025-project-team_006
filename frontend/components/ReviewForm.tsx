@@ -4,9 +4,10 @@ import React, { useEffect, useState } from "react";
 interface ReviewFormProps {
   metrics: MetricResponse[];
   onChangeMetric: (updatedMetrics: MetricResponse[]) => void;
+  isReview: boolean;
 }
 
-const ReviewForm: React.FC<ReviewFormProps> = ({ metrics, onChangeMetric }) => {
+const ReviewForm: React.FC<ReviewFormProps> = ({ metrics, onChangeMetric, isReview }) => {
   const [localMetrics, setLocalMetrics] = useState<MetricResponse[]>(metrics);
 
   // Update local state when the incoming metrics prop changes.
@@ -47,6 +48,7 @@ const ReviewForm: React.FC<ReviewFormProps> = ({ metrics, onChangeMetric }) => {
               type="number"
               placeholder="Selected Weight"
               value={metric.selected_weight}
+              disabled={isReview}
               onChange={(e) =>
                 handleFieldChange(
                   metric.review_metric_id,
@@ -61,6 +63,7 @@ const ReviewForm: React.FC<ReviewFormProps> = ({ metrics, onChangeMetric }) => {
               type="number"
               placeholder="Value"
               value={metric.value}
+              disabled={isReview}
               onChange={(e) =>
                 handleFieldChange(
                   metric.review_metric_id,

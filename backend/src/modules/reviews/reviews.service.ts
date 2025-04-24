@@ -102,12 +102,12 @@ export class ReviewsService {
   ): Promise<Review> {
     const review = await this.reviewRepository.findOne({
       where: { review_id: reviewId },
-      relations: ['review_metrics'],
+      relations: ['review_metrics', 'application'],
     });
     if (!review) {
       throw new NotFoundException(`Review not found for id ${reviewId}`);
     }
-
+    review.application.status = "In Progress";
     // Update review properties if present in the DTO
     if (typeof updateReviewDto.comments !== 'undefined') {
       review.comments = updateReviewDto.comments;
@@ -134,19 +134,53 @@ export class ReviewsService {
         return metric;
       });
     }
-
+    void this.applicationRepository.save(review.application);
     return this.reviewRepository.save(review);
   }
 
+  async getReview(reviewId: number): Promise<Review | null> {
+    return await this.reviewRepository.findOne({
+      where: { review_id: reviewId },
+      relations: ['application', 'application.student'],
+    });
+  }
+
+  async getSubmittedReviews(facultyId?: number): Promise<Review[]> {
+    if (facultyId) {
+      const faculty = await this.facultyRepository.findOneBy({
+        faculty_id: facultyId,
+      });
+      if (!faculty) {
+        throw new NotFoundException(`Faculty not found for id ${facultyId}`);
+      }
+
+      return await this.reviewRepository.find({
+        where: {
+          submitted: true,
+          faculty,
+        },
+        relations: ['application', 'application.student'],
+      });
+    } else {
+      return await this.reviewRepository.find({
+        where: { submitted: true },
+        relations: ['application', 'application.student'],
+      });
+    }
+  }
+
   async submitReview(reviewId: number): Promise<Review> {
-    const review = await this.reviewRepository.findOneBy({
-      review_id: reviewId,
+    const review = await this.reviewRepository.findOne({
+      where: { review_id: reviewId },
+      relations: ['review_metrics', 'application'],
     });
     if (!review) {
       throw new NotFoundException(`Review not found for id ${reviewId}`);
     }
     review.submitted = true;
+    review.application.status = "Reviewed";
     review.overall_score = calculateOverallScore(review);
+    void this.applicationRepository.save(review.application);
     return this.reviewRepository.save(review);
   }
 }
