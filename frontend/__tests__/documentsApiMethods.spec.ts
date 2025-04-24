@@ -1,85 +1,74 @@
-import { apiGETDocument, apiPOSTDocument } from '../api/documentsApiMethods';
+import { apiGETDocument, apiPOSTDocument } from '@/api/documentsApiMethods';
 import axios from 'axios';
 
 jest.mock('axios');
 const mockedAxios = axios as jest.Mocked<typeof axios>;
 
 describe('apiGETDocument', () => {
-    it('should fetch the document and return an object URL', async () => {
-        const fakeBlob = new Blob(['dummy content'], { type: 'application/pdf' });
-        const fakeUrl = 'blob:http://localhost/fake-url';
-        const originalCreateObjectURL = URL.createObjectURL;
-        URL.createObjectURL = jest.fn().mockReturnValue(fakeUrl);
+  const originalCreateObjectURL = URL.createObjectURL;
 
-        mockedAxios.get.mockResolvedValueOnce({ data: fakeBlob });
+  beforeAll(() => {
+    URL.createObjectURL = jest.fn().mockReturnValue('blob://fake-url');
+  });
 
-        const webService = 'http://localhost:5000/api/documents/:id';
-        const documentId = '123';
+  afterAll(() => {
+    URL.createObjectURL = originalCreateObjectURL;
+  });
 
-        const result = await apiGETDocument(webService, documentId);
+  it('formats URL, fetches blob, and returns object URL', async () => {
+    const blob = new Blob(['data'], { type: 'application/pdf' });
+    mockedAxios.get.mockResolvedValueOnce({ data: blob });
 
-        expect(mockedAxios.get).toHaveBeenCalledWith(
-            'http://localhost:5000/api/documents/123',
-            {
-                responseType: 'blob',
-                withCredentials: true,
-            }
-        );
-        expect(URL.createObjectURL).toHaveBeenCalledWith(fakeBlob);
-        expect(result).toBe(fakeUrl);
+    const result = await apiGETDocument('https://api/doc/:id', '123');
 
-        URL.createObjectURL = originalCreateObjectURL;
+    expect(mockedAxios.get).toHaveBeenCalledWith('https://api/doc/123', {
+      responseType: 'blob',
+      withCredentials: true,
     });
+    expect(URL.createObjectURL).toHaveBeenCalledWith(blob);
+    expect(result).toBe('blob://fake-url');
+  });
+
+  it('logs and rethrows on error', async () => {
+    const error = new Error('Network error');
+    mockedAxios.get.mockRejectedValueOnce(error);
+    await expect(apiGETDocument('https://api/doc/:id', '999')).rejects.toThrow('Network error');
+  });
 });
 
 describe('apiPOSTDocument', () => {
-    it.skip('should upload the document and return the response data', async () => {
-        const fakeFile = new File(['dummy content'], 'test.xlsx', {
-            type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-        });
-        const fakeResponseData = {
-            success: true,
-            payload: {
-                document_id: 1,
-                document_type: 'xlsx',
-                file_path: 'uploads/file-123456.xlsx',
-                uploaded_at: '2025-03-15T19:03:55.598Z',
-            },
-        };
+  it('uploads file with formData and returns response data', async () => {
+    const file = new File(['contents'], 'test.png', { type: 'image/png' });
+    const responseData = { success: true };
+    mockedAxios.post.mockResolvedValueOnce({ data: responseData });
 
-        mockedAxios.post.mockResolvedValueOnce({ data: fakeResponseData });
+    const result = await apiPOSTDocument('https://api/upload', file, 'pdf', 42);
 
-        const webService = 'http://localhost:5000/api/documents';
-        const documentType = 'xlsx';
-        const applicationId = 6;
-
-        const result = await apiPOSTDocument(webService, fakeFile, documentType, applicationId);
-
-        expect(mockedAxios.post).toHaveBeenCalled();
-        const callArgs = mockedAxios.post.mock.calls[0];
-        const urlCalled = callArgs[0];
-        const formDataPassed = callArgs[1];
-        const configPassed = callArgs[2];
-
-        expect(urlCalled).toBe(webService);
-        expect(configPassed?.headers?.['Content-Type']).toBe('multipart/form-data');
-        expect(configPassed?.withCredentials).toBe(true);
-        const entries: [string, any][] = [];
-        // @ts-ignore - FormData.forEach is available in browsers, if not available, you can polyfill in tests.
-        formDataPassed.forEach((value: any, key: string) => {
-            entries.push([key, value]);
-        });
-        const expectedEntries: [string, any][] = [
-            ['file', fakeFile],
-            ['document_type', documentType],
-            ['application_id', String(applicationId)],
-        ];
-        expectedEntries.forEach(([key, value]) => {
-            expect(entries).toEqual(
-                expect.arrayContaining([[key, value]])
-            );
-        });
-
-        expect(result).toEqual(fakeResponseData);
+    expect(mockedAxios.post).toHaveBeenCalled();
+    const [url, formData, options] = mockedAxios.post.mock.calls[0];
+    expect(url).toBe('https://api/upload');
+    expect(options).toEqual({
+      headers: { 'Content-Type': 'multipart/form-data' },
+      withCredentials: true,
     });
+
+    // verify formData contents
+    const entries = Array.from((formData as FormData).entries());
+    expect(entries).toEqual(
+      expect.arrayContaining([
+        ['file', file],
+        ['document_type', 'pdf'],
+        ['application_id', '42'],
+      ])
+    );
+    expect(result).toEqual(responseData);
+  });
+
+  it('logs and rethrows on upload error', async () => {
+    const file = new File(['X'], 'x.txt', { type: 'text/plain' });
+    const error = new Error('Upload failed');
+    mockedAxios.post.mockRejectedValueOnce(error);
+
+    await expect(apiPOSTDocument('https://api/upload', file, 'xlsx', 7)).rejects.toThrow('Upload failed');
+  });
 });

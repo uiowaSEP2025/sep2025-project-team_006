@@ -1,8 +1,9 @@
 import Link from "next/link";
 import HomeDashboard from "@/components/HomeDashboard";
 import { Button } from "@/components/ui/button";
+import React from "react";
 
-export default function Home() {
+export default function StudentHome() {
   const GraduateAdmissions = [
     {
       label: "Graduate Form",

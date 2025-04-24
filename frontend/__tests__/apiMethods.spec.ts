@@ -2,9 +2,11 @@ import axios from "axios";
 import MockAdapter from "axios-mock-adapter";
 import { apiDELETE, apiGET, apiPOST, apiPUT } from "../api/apiMethods";
 import WebService from "../api/WebService";
+import { apiDoubleIdGET } from "@/api/methods";
 
 const mock = new MockAdapter(axios);
 const webService = new WebService();
+const mockedAxios = axios as jest.Mocked<typeof axios>;
 
 describe("API Methods", () => {
   afterEach(() => {
@@ -46,13 +48,30 @@ describe("API Methods", () => {
     const result = await apiPUT(webService.TEST_PUT, testId, JSON.stringify(testData));
     expect(result).toEqual(mockResponse);
   });
-
+  
   it("should send a DELETE request", async () => {
+    const mockResponse = { success: true };
+    const webServiceUrl = 'http://localhost:5000/api/faculty/metrics/:id';
+    mock.onDelete(webServiceUrl.replace(":id", "")).reply(200, mockResponse);
+    const result = await apiDELETE(webServiceUrl);
+    expect(result).toEqual(mockResponse);
+  });
+
+  it("should send a DELETE request by ID", async () => {
     const mockResponse = { success: true };
     const id = '1';
     const webServiceUrl = 'http://localhost:5000/api/faculty/metrics/:id';
     mock.onDelete(webServiceUrl.replace(":id", id)).reply(200, mockResponse);
     const result = await apiDELETE(webServiceUrl, id);
     expect(result).toEqual(mockResponse);
+  });
+
+  it("should fetch data by ID with GET", async () => {
+    const mockData = { id: 1, message: "Hello World" };
+    const testId = "1";
+    mock.onGet(webService.TEST_GET_ONE.replace(":id1", testId).replace(":id2", testId)).reply(200, mockData);
+
+    const result = await apiDoubleIdGET(webService.TEST_GET_ONE, testId, testId);
+    expect(result).toEqual(mockData);
   });
 });
