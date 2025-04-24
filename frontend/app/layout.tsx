@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { cookies } from "next/headers";
+import { CookiesProvider } from 'next-client-cookies/server';
 import { unstable_noStore } from "next/cache";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
@@ -10,6 +10,7 @@ import gapOffical from "../public/GAPOfficial.png";
 import iowaBlackLogo from "../public/IOWABlackLogo.png";
 import WebService from "@/api/WebService";
 import UserContextProvider from "@/components/UserContextProvider";
+import LogoutButton from "@/components/LogoutButton";
 
 const webService = new WebService();
 
@@ -28,6 +29,7 @@ export const metadata: Metadata = {
   description: "GAP",
 };
 
+/*
 const getUserInfo = async () => {
   const cookieStore = await cookies();
   const token = cookieStore.get("gap_token")?.value;
@@ -44,6 +46,7 @@ const getUserInfo = async () => {
     }
   }
 };
+*/
 
 export default async function RootLayout({
   children,
@@ -59,6 +62,7 @@ export default async function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
+        <CookiesProvider>
         <header className="bg-black text-[#F1BE48] h-20 text-4xl px-6 sm:px-12 py-4 flex justify-between items-center">
           <Image
             src={gapOffical}
@@ -67,16 +71,12 @@ export default async function RootLayout({
             height={48}
             className="h-12 w-auto"
           />
-
-          <div className="flex items-center space-x-4">
-            Graduate Admission Portal
+          <div className="flex items-center space-x-6">
+            <span>Graduate Admission Portal</span>
+            <LogoutButton />
           </div>
         </header>
-
-        <UserContextProvider user={await getUserInfo()}>
-          {children}
-        </UserContextProvider>
-
+        {children}
         <footer className="bg-black text-[#F1BE48] h-20 text-4xl px-6 sm:px-12 py-4 flex justify-between items-center">
           <Image
             src={iowaBlackLogo}
@@ -95,6 +95,7 @@ export default async function RootLayout({
             />
           </div>
         </footer>
+        </CookiesProvider>
       </body>
     </html>
   );

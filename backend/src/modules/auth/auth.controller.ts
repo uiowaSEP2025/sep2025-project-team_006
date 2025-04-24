@@ -9,6 +9,8 @@ import {
 import { AuthService } from './auth.service';
 import { RegisterDto, LoginDto, RefreshTokenDto, LogoutDto } from 'src/dto/auth.dto';
 import { AuthenticatedRequest, AuthGuard } from './auth.guard';
+import { Response} from 'express';
+import { Res } from '@nestjs/common';
 
 /**
  * Job: These routes are for user authentication.
@@ -35,8 +37,10 @@ export class AuthController {
   }
 
   @Post('student/logout')
-  async postStudentLogout(@Body() logoutDto: LogoutDto) {
-    return this.authService.logout(logoutDto.session); 
+  async postStudentLogout(@Body() logoutDto: LogoutDto, @Res() res: Response) {
+    await this.authService.logout(logoutDto.session);
+    res.clearCookie('gap_token', { path: '/' });
+    return res.status(200).json({ message: 'Logged out successfully' });
   }
 
   // For future reference:
