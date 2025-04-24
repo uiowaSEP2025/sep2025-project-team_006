@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useMemo } from "react";
+import React, { useEffect, useState, useMemo } from "react";
 import ProfileList from "@/components/ProfileList";
 import WebService from "@/api/WebService";
 import { apiGET } from "@/api/apiMethods";
@@ -19,7 +19,7 @@ interface Profile {
   reviewScore: number | null;
 }
 
-export default function Home() {
+export default function StudentList() {
   const router = useRouter();
   const webService = new WebService();
   const [profiles, setProfiles] = useState<Profile[]>([]);
