@@ -1,6 +1,7 @@
 "use client";
 
-import React, { useEffect, useState, useMemo } from "react";
+import React from "react";
+import { useEffect, useState, useMemo } from "react";
 import ProfileList from "@/components/ProfileList";
 import WebService from "@/api/WebService";
 import { apiGET } from "@/api/apiMethods";
@@ -15,9 +16,11 @@ interface Profile {
   department: string;
   degree_program: string;
   image: string;
+  isReview: boolean;
+  reviewScore: number | null;
 }
 
-export default function StudentList() {
+export default function Home() {
   const router = useRouter();
   const webService = new WebService();
   const [profiles, setProfiles] = useState<Profile[]>([]);
@@ -29,8 +32,24 @@ export default function StudentList() {
     const fetchApplicants = async () => {
       try {
         const response = await apiGET(webService.STUDENTS_APPLICANT_LIST);
-        if (response.success) {
-          const fetchedProfiles: Profile[] = response.payload.map(
+        const reviewedResponse = await apiGET(webService.REVIEW_SUBMITTED);
+
+        if (response.success && reviewedResponse.success) {
+          console.log("All Applicants:", response.payload);
+          console.log("Reviewed Applications:", reviewedResponse.payload);
+          const reviewedIds = new Set(
+            reviewedResponse.payload.map(
+              // eslint-disable-next-line @typescript-eslint/no-explicit-any
+              (review: any) => review.application.application_id,
+            ),
+          );
+
+          console.log("Reviewed: ", reviewedIds);
+
+          const fetchedProfiles: Profile[] = response.payload.filter(
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            (applicant: any) => !reviewedIds.has(applicant.application_id))
+            .map(
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
             (applicant: any) => ({
               id: applicant.student_id,
@@ -39,6 +58,8 @@ export default function StudentList() {
               department: applicant.department,
               degree_program: applicant.degree_program,
               image: "/defaultpfp.jpeg",
+              isReview: false,
+              reviewScore: null,
             }),
           );
           setProfiles(fetchedProfiles);
@@ -50,7 +71,7 @@ export default function StudentList() {
       }
     };
     fetchApplicants();
-  }, [webService.STUDENTS_APPLICANT_LIST]);
+  }, [webService.STUDENTS_APPLICANT_LIST, webService.REVIEW_SUBMITTED]);
 
   const handleProfileClick = (profile: Profile) => {
     router.push(`/studentList/application?id=${profile.id}`);

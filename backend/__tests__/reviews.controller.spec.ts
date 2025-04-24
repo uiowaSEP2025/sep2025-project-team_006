@@ -62,6 +62,18 @@ describe('ReviewsController', () => {
                 submitted: true,
                 review_metrics: [],
             }),
+            getSubmittedReviews: jest.fn().mockResolvedValue([
+                { review_id: 5 },
+                { review_id: 6 },
+            ]),
+            getReview: jest.fn().mockResolvedValue({
+                review_id: 7,
+                comments: 'Detail',
+                overall_score: 88,
+                review_metrics: [],
+                submitted: false,
+                template,
+            }),
         };
 
         const module: TestingModule = await Test.createTestingModule({
@@ -74,8 +86,8 @@ describe('ReviewsController', () => {
             ],
         }).compile();
 
-        controller = module.get(ReviewsController);
-        service = module.get(ReviewsService);
+        controller = module.get<ReviewsController>(ReviewsController);
+        service = module.get<ReviewsService>(ReviewsService);
     });
 
     describe('getReviewScores', () => {
@@ -119,6 +131,37 @@ describe('ReviewsController', () => {
             const result = await controller.submitReview(1);
             expect(service.submitReview).toHaveBeenCalledWith(1);
             expect(result).toEqual({ review_id: 1, submitted: true, review_metrics: [] });
+        });
+    });
+
+    describe('getSubmittedReviews', () => {
+        it('should call service.getSubmittedReviews with no args and return the list', async () => {
+            const result = await controller.getSubmittedReviews();
+            expect(service.getSubmittedReviews).toHaveBeenCalledWith();
+            expect(result).toEqual([{ review_id: 5 }, { review_id: 6 }]);
+        });
+    });
+
+    describe('getSubmittedReviewsById', () => {
+        it('should call service.getSubmittedReviews with facultyId and return the list', async () => {
+            const result = await controller.getSubmittedReviewsById(99);
+            expect(service.getSubmittedReviews).toHaveBeenCalledWith(99);
+            expect(result).toEqual([{ review_id: 5 }, { review_id: 6 }]);
+        });
+    });
+
+    describe('getReview', () => {
+        it('should call service.getReview and return the review', async () => {
+            const result = await controller.getReview(7);
+            expect(service.getReview).toHaveBeenCalledWith(7);
+            expect(result).toEqual({
+                review_id: 7,
+                comments: 'Detail',
+                overall_score: 88,
+                review_metrics: [],
+                submitted: false,
+                template,
+            });
         });
     });
 });
