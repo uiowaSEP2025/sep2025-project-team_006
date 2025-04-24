@@ -2,7 +2,7 @@
 
 import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
-import { apiGET, apiPOST, apiPUT } from "@/api/apiMethods";
+import { apiGET } from "@/api/apiMethods";
 import WebService from "@/api/WebService";
 import PdfViewer from "@/components/PdfViewer";
 import { StudentData } from "@/types/StudentData";
@@ -30,9 +30,9 @@ export default function StudentPageContent() {
   const [reviewMetrics, setReviewMetrics] = useState<MetricResponse[]>([]);
   const [comments, setComments] = useState<string>("");
   const [reviewExists, setReviewExists] = useState<boolean>(false);
-  const [reviewSubmitted, setReviewSubmitted] = useState<boolean>(false);
-  const [reviewId, setReviewId] = useState<number>(0);
-  const [department, setDepartment] = useState<string>("");
+  //const [reviewSubmitted, setReviewSubmitted] = useState<boolean>(false);
+  //const [reviewId, setReviewId] = useState<number>(0);
+  //const [department, setDepartment] = useState<string>("");
   const [faculty_id, setFacultyId] = useState<string>("");
   const [reviewScores, setReviewScores] = useState<{
       overall_score: number | null;

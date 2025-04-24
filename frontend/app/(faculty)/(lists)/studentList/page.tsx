@@ -38,6 +38,7 @@ export default function Home() {
           console.log("Reviewed Applications:", reviewedResponse.payload);
           const reviewedIds = new Set(
             reviewedResponse.payload.map(
+              // eslint-disable-next-line @typescript-eslint/no-explicit-any
               (review: any) => review.application.application_id,
             ),
           );
@@ -45,6 +46,7 @@ export default function Home() {
           console.log("Reviewed: ", reviewedIds);
 
           const fetchedProfiles: Profile[] = response.payload.filter(
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
             (applicant: any) => !reviewedIds.has(applicant.application_id))
             .map(
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
