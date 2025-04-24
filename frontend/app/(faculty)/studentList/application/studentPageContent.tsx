@@ -37,6 +37,13 @@ export default function StudentPageContent() {
   const [reviewId, setReviewId] = useState<number>(0);
   const [department, setDepartment] = useState<string>("");
   const [faculty_id, setFacultyId] = useState<string>("");
+  const [reviewScores, setReviewScores] = useState<{
+    overall_score: number | null;
+    faculty_score: number | null;
+  }>({
+    overall_score: null,
+    faculty_score: null,
+  });
 
   const [qsRankings, setQsRankings] = useState<Record<string, string>>({});
 
@@ -143,11 +150,13 @@ export default function StudentPageContent() {
   };
 
   const handleSaveReview = async () => {
+    const EPSILON = 0.001;
+
     const totalWeight = reviewMetrics.reduce(
       (sum, m) => sum + m.selected_weight,
       0,
     );
-    const validWeights = totalWeight === 1.0;
+    const validWeights = Math.abs(totalWeight - 1.0 ) < EPSILON;
     const validScores = reviewMetrics.every(
       (m) => m.value >= 0 && m.value <= 5,
     );
@@ -171,13 +180,42 @@ export default function StudentPageContent() {
     };
 
     try {
-      const res = await apiPUT(webService.REVIEW_UPDATE_PUT, reviewId.toString(), JSON.stringify(payload));
-      if (!res.success) console.error("Save failed:", res.error);
-    } catch (e) {
-      console.error("Error saving:", e);
+      const response = await apiPUT(
+        webService.REVIEW_UPDATE_PUT,
+        reviewId.toString(),
+        data,
+      );
+      if (!response.success) {
+        console.error("Error updating review: ", response.error);
+      } else {
+        console.log("Review saved successfully:", response.payload);
+        await fetchReviewScores();
+      }
+    } catch (error) {
+      console.error("An unexpected error occurred while saving review:", error);
     }
   };
 
+  const fetchReviewScores = async () => {
+    try {
+      const url = webService.REVIEW_GET_SCORES.replace(":id", reviewId.toString());
+      const response = await apiGET(url);
+      if (response.success) {
+        setReviewScores({
+          overall_score: response.payload.overall_score ?? null,
+          faculty_score: response.payload.faculty_score ?? null,
+        });
+      } else {
+        console.error("Failed to fetch scores:", response.error);
+      }
+    } catch (error) {
+      console.error("Unexpected error fetching scores:", error);
+    }
+  };
+
+  /**
+   * Submits a review by marking it as submitted
+   */
   const handleSubmitReview = async () => {
     try {
       await handleSaveReview();
@@ -272,7 +310,10 @@ export default function StudentPageContent() {
             <>
               <ReviewForm
                 metrics={reviewMetrics}
-                onChangeMetric={(m) => setReviewMetrics(m)}
+                isReview={false}
+                onChangeMetric={(updatedMetrics) =>
+                  setReviewMetrics(updatedMetrics)
+                }
               />
               <div className="gap-6 mb-4 mt-4">
                 <h3 className="font-bold">Comments:</h3>
@@ -282,6 +323,27 @@ export default function StudentPageContent() {
                   className="w-full h-32 bg-gray-50"
                 />
               </div>
+
+              <div className="mt-6 mb-4">
+                <h3 className="text-lg font-semibold mb-2">Score Breakdown:</h3>
+                  <div className="p-4 border rounded-lg shadow-sm bg-gray-50">
+                    <p className="font-medium">Overall Score</p>
+                    <p className="text-xl font-bold text-black">
+                      {reviewScores.overall_score !== null
+                      ? reviewScores.overall_score.toFixed(2)
+                      : "—"}
+                    </p>
+                  </div>
+                  <div className="p-4 border rounded-lg shadow-sm bg-gray-50">
+                    <p className="font-medium">Faculty Score</p>
+                    <p className="text-xl font-bold text-red-800">
+                      {reviewScores.faculty_score !== null
+                      ? reviewScores.faculty_score.toFixed(2)
+                      : "—"}
+                    </p>
+                  </div>
+              </div>
+
               <div className="w-48 flex flex-col gap-2 mb-4">
                 <Button onClick={handleSaveReview}>Save Review</Button>
               </div>
