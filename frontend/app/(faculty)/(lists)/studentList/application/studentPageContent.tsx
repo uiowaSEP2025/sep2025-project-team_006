@@ -2,7 +2,7 @@
 
 import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
-import { apiDELETE, apiGET, apiPOST, apiPUT } from "@/api/apiMethods";
+import { apiGET, apiPOST, apiPUT } from "@/api/apiMethods";
 import WebService from "@/api/WebService";
 import PdfViewer from "@/components/PdfViewer";
 import { StudentData } from "@/types/StudentData";
@@ -12,35 +12,8 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import Link from "next/link";
 import { apiDoubleIdGET } from "@/api/methods";
-
-interface Metric {
-  id: number;
-  name: string;
-  description: string;
-  weight: number;
-  score: number;
-}
-
-interface DefaultMetricResponse {
-  metric_name: string;
-  description: string;
-  default_weight: number;
-}
-
-interface FacultyMetricResponse {
-  faculty_metric_id: number;
-  metric_name: string;
-  description: string;
-  default_weight: number;
-}
-
-interface MetricResponse {
-  review_metric_id: number;
-  name: string;
-  description: string;
-  selected_weight: number;
-  value: number;
-}
+import { MetricResponse } from "@/types/MetricData";
+import React from "react";
 
 interface DocumentInfo {
   document_id: string | null;
@@ -51,37 +24,31 @@ export default function StudentPageContent() {
   const searchParams = useSearchParams();
   const studentId = searchParams.get("id"); // will be a string or null
   const webService = new WebService();
-  const [studentData, setStudentData] = useState<StudentData | null>(null); // Currently used just for first_name & last_name
+  const [studentData, setStudentData] = useState<StudentData | null>(null);
   const [currentDocIndex, setCurrentDocIndex] = useState<number>(0);
   const [documentList, setDocumentList] = useState<DocumentInfo[]>([]);
-  const [availableMetrics, setAvailableMetrics] = useState<Metric[]>([]);
-  const [selectedMetricId, setSelectedMetricId] = useState<number | "">("");
   const [reviewMetrics, setReviewMetrics] = useState<MetricResponse[]>([]);
   const [comments, setComments] = useState<string>("");
   const [reviewExists, setReviewExists] = useState<boolean>(false);
   const [reviewSubmitted, setReviewSubmitted] = useState<boolean>(false);
   const [reviewId, setReviewId] = useState<number>(0);
-  const currentDocument = documentList[currentDocIndex] || {};
-  const [faculty_id, setFacultyId] = useState<string>("1"); // Will need to remove at some point
+  const [department, setDepartment] = useState<string>("");
+  const [faculty_id, setFacultyId] = useState<string>("");
+  const [reviewScores, setReviewScores] = useState<{
+    overall_score: number | null;
+    faculty_score: number | null;
+  }>({
+    overall_score: null,
+    faculty_score: null,
+  });
 
-  /**
-   * Validation for weight totals
-   */
-  const totalWeight = reviewMetrics.reduce(
-    (acc, metric) => acc + metric.selected_weight,
-    0,
-  );
-  const validWeights = Math.abs(totalWeight - 1) < 0.01;
-  const validScores = reviewMetrics.every(
-    (metric) => metric.value >= 0 && metric.value <= 5,
-  );
-  const canSubmit = validWeights && validScores;
+  const currentDocument = documentList[currentDocIndex] || {};
 
   /**
    * Calls the student applicant information
    */
   useEffect(() => {
-    const id = localStorage.getItem("id") || "1";
+    const id = window.__USER__?.id + "" || "";
     setFacultyId(id);
 
     if (!studentId) return;
@@ -93,11 +60,14 @@ export default function StudentPageContent() {
         );
         if (response.success) {
           setStudentData(response.payload);
-          const docs = response.payload.applications?.[0]?.documents || [];
+          const applications = response.payload.applications;
+          const department = applications?.[0]?.department || "";
+          const docs = applications?.[0]?.documents || [];
           const formattedDocs = docs.map((doc: DocumentInfo) => ({
             document_id: String(doc.document_id),
             document_type: String(doc.document_type),
           }));
+          setDepartment(department);
           setDocumentList([...formattedDocs]);
         } else {
           console.error("STUDENTS_APPLICANT_INFO error:", response.error);
@@ -109,53 +79,6 @@ export default function StudentPageContent() {
 
     fetchStudentInfo(studentId);
   }, [studentId, webService.STUDENTS_APPLICANT_INFO]);
-
-  /**
-   * Gets the default faculty metrics and the list of the faculty-specific metrics
-   */
-  useEffect(() => {
-    const fetchMetrics = async () => {
-      try {
-        const [defaults, response] = await Promise.all([
-          apiGET(webService.FACULTY_METRIC_DEFAULTS),
-          apiGET(webService.FACULTY_METRIC_ID, faculty_id),
-        ]);
-        if (defaults.success && response.success) {
-          const combinedMetrics = [
-            ...defaults.payload.map(
-              (metric: DefaultMetricResponse, index: number) => ({
-                id: 1000 + index, // generate a unique id for default metrics
-                name: metric.metric_name,
-                description: metric.description,
-                weight: metric.default_weight,
-                score: 0,
-                isDefault: true,
-              }),
-            ),
-            ...response.payload.map((metric: FacultyMetricResponse) => ({
-              id: metric.faculty_metric_id,
-              name: metric.metric_name,
-              description: metric.description,
-              weight: metric.default_weight,
-              score: 0,
-              isDefault: false,
-            })),
-          ];
-          setAvailableMetrics(combinedMetrics);
-        } else {
-          console.error("FACULTY_METRIC_DEFAULTS error:", defaults.error);
-          console.error("FACULTY_METRIC_ID error:", response.error);
-        }
-      } catch (error) {
-        console.log("An unexpected error occurred: ", error);
-      }
-    };
-    fetchMetrics();
-  }, [
-    webService.FACULTY_METRIC_DEFAULTS,
-    webService.FACULTY_METRIC_ID,
-    faculty_id,
-  ]);
 
   /**
    * Fetches any of the reviews the faculty has left previously (if any)
@@ -170,9 +93,7 @@ export default function StudentPageContent() {
           applicationId.toString(),
           faculty_id,
         );
-        console.log("Review", response);
         if (response.success) {
-          // will need to add check on UI for this part
           if (!response.payload.review_exists) {
             setReviewExists(false);
             setReviewSubmitted(false);
@@ -204,6 +125,7 @@ export default function StudentPageContent() {
       const reviewPayload = {
         application_id: applicationId,
         faculty_id: faculty_id,
+        department,
       };
       const data = JSON.stringify(reviewPayload);
       const response = await apiPOST(webService.REVIEW_CREATE_POST, data);
@@ -225,113 +147,78 @@ export default function StudentPageContent() {
    */
   const handleCommentChange = async (newComment: string) => {
     setComments(newComment);
-    try {
-      // overall_score will eventually be tied into this, but for now we keep it null
-      const data = JSON.stringify({
-        comments: newComment,
-        overall_score: null,
-      });
-      const id = reviewId.toString();
-      const response = await apiPUT(webService.REVIEW_UPDATE_PUT, id, data);
-      if (!response.success) {
-        console.error("Error updating comment: ", response.error);
-      }
-    } catch (error) {
-      console.error("An unexpected error occurred: ", error);
-    }
   };
 
   /**
-   * Adds a review metric to for the specific review
+   * Save all review updates by sending the current comments and metrics back to the server.
+   * This function acts as our overall save call.
    */
-  const handleAddReviewMetric = async () => {
-    try {
-      const metricToAdd = availableMetrics.find(
-        (m) => m.id === selectedMetricId,
-      );
-      if (!metricToAdd) return;
-      const data = JSON.stringify({
-        review_id: reviewId,
-        name: metricToAdd.name,
-        description: metricToAdd.description,
-        selected_weight: metricToAdd.weight,
-        value: 0,
-      });
-      const response = await apiPOST(webService.REVIEW_METRIC_POST, data);
-      if (response.success) {
-        setReviewMetrics((prev) => [...prev, response.payload]);
-      } else {
-        console.error("Error creating review metric: ", response.error);
-      }
-    } catch (error) {
-      console.error("An unexpected error occurred: ", error);
-    }
-  };
+  const handleSaveReview = async () => {
+    const EPSILON = 0.001;
 
-  // Handler to update a review metric (PUT)
-  /**
-   * Updates the parameters of the review metric
-   * @param metric
-   */
-  const handleUpdateReviewMetric = async (metric: MetricResponse) => {
-    try {
-      const id = metric.review_metric_id;
-      const data = JSON.stringify({
-        name: metric.name,
-        description: metric.description,
+    const totalWeight = reviewMetrics.reduce(
+      (sum, metric) => sum + metric.selected_weight,
+      0,
+    );
+    const validWeights = Math.abs(totalWeight - 1.0 ) < EPSILON;
+    const validScores = reviewMetrics.every(
+      (metric) => metric.value >= 0 && metric.value <= 5,
+    );
+
+    if (!validWeights || !validScores) {
+      let errorMessage = "Please fix the following before saving:";
+      if (!validWeights) {
+        errorMessage += "\n- Total selected weights must equal 1.00.";
+      }
+      if (!validScores) {
+        errorMessage += "\n- Each metric score must be between 0 and 5.";
+      }
+      alert(errorMessage);
+      return;
+    }
+    const payload = {
+      comments,
+      review_metrics: reviewMetrics.map((metric) => ({
+        review_metric_id: metric.review_metric_id,
         selected_weight: metric.selected_weight,
         value: metric.value,
-      });
-      console.log(data);
+      })),
+      // overall_score can be computed on the backend based on weights & values.
+      overall_score: null,
+    };
+    const data = JSON.stringify(payload);
+    try {
       const response = await apiPUT(
-        webService.REVIEW_METRIC_UPDATE,
-        id.toString(),
+        webService.REVIEW_UPDATE_PUT,
+        reviewId.toString(),
         data,
       );
-      if (response.success) {
-        const updatedMetric = response.payload;
-        setReviewMetrics((prevMetrics) =>
-          prevMetrics.map((m) =>
-            m.review_metric_id === id ? updatedMetric : m,
-          ),
-        );
+      if (!response.success) {
+        console.error("Error updating review: ", response.error);
       } else {
-        console.error("Error updating review metric: ", response.error);
+        console.log("Review saved successfully:", response.payload);
+        await fetchReviewScores();
       }
     } catch (error) {
-      console.error("An unexpected error occurred: ", error);
+      console.error("An unexpected error occurred while saving review:", error);
     }
   };
 
-  /**
-   * Deleted a review metric from the button click
-   */
-  const handleDeleteReviewMetric = async (id: number) => {
+  const fetchReviewScores = async () => {
     try {
-      const response = await apiDELETE(
-        webService.REVIEW_METRIC_UPDATE,
-        id.toString(),
-      );
+      const url = webService.REVIEW_GET_SCORES.replace(":id", reviewId.toString());
+      const response = await apiGET(url);
       if (response.success) {
-        setReviewMetrics((prev) =>
-          prev.filter((metric) => metric.review_metric_id !== id),
-        );
+        setReviewScores({
+          overall_score: response.payload.overall_score ?? null,
+          faculty_score: response.payload.faculty_score ?? null,
+        });
       } else {
-        console.error("Error deleting review metric: ", response.error);
+        console.error("Failed to fetch scores:", response.error);
       }
     } catch (error) {
-      console.error("An unexpected error occurred: ", error);
+      console.error("Unexpected error fetching scores:", error);
     }
-  };
-
-  /**
-   * NEW: Saves all review metrics by iterating over them and calling the update handler.
-   */
-  const saveAllMetrics = async () => {
-    // Update all metrics concurrently
-    await Promise.all(
-      reviewMetrics.map((metric) => handleUpdateReviewMetric(metric)),
-    );
   };
 
   /**
@@ -339,7 +226,7 @@ export default function StudentPageContent() {
    */
   const handleSubmitReview = async () => {
     try {
-      await saveAllMetrics();
+      await handleSaveReview();
 
       const response = await apiPUT(
         webService.REVIEW_SUBMIT,
@@ -407,30 +294,12 @@ export default function StudentPageContent() {
             </div>
           ) : (
             <>
-              {/* Metric Dropdown and Add Button */}
-              <div className="mb-4 flex gap-4 items-center">
-                <select
-                  value={selectedMetricId}
-                  onChange={(e) => setSelectedMetricId(Number(e.target.value))}
-                  className="p-2 border border-gray-300 rounded"
-                >
-                  <option value="">Select a template to add...</option>
-                  {availableMetrics.map((metric) => (
-                    <option key={metric.id} value={metric.id}>
-                      {metric.name}
-                    </option>
-                  ))}
-                </select>
-                <Button onClick={handleAddReviewMetric}>Add Template</Button>
-                <Button asChild>
-                  <Link href="/informationPage">Review Info</Link>
-                </Button>
-              </div>
-
               <ReviewForm
                 metrics={reviewMetrics}
-                onDeleteMetric={handleDeleteReviewMetric}
-                onChangeMetric={handleUpdateReviewMetric}
+                isReview={false}
+                onChangeMetric={(updatedMetrics) =>
+                  setReviewMetrics(updatedMetrics)
+                }
               />
               <div className="gap-6 mb-4 mt-4">
                 <h3 className="font-bold">Comments:</h3>
@@ -441,23 +310,40 @@ export default function StudentPageContent() {
                   className="w-full h-32 bg-gray-50"
                 />
               </div>
+
+              <div className="mt-6 mb-4">
+                <h3 className="text-lg font-semibold mb-2">Score Breakdown:</h3>
+                  <div className="p-4 border rounded-lg shadow-sm bg-gray-50">
+                    <p className="font-medium">Overall Score</p>
+                    <p className="text-xl font-bold text-black">
+                      {reviewScores.overall_score !== null
+                      ? reviewScores.overall_score.toFixed(2)
+                      : "—"}
+                    </p>
+                  </div>
+                  <div className="p-4 border rounded-lg shadow-sm bg-gray-50">
+                    <p className="font-medium">Faculty Score</p>
+                    <p className="text-xl font-bold text-red-800">
+                      {reviewScores.faculty_score !== null
+                      ? reviewScores.faculty_score.toFixed(2)
+                      : "—"}
+                    </p>
+                  </div>
+              </div>
+
+              <div className="w-48 flex flex-col gap-2 mb-4">
+                <Button onClick={handleSaveReview}>Save Review</Button>
+              </div>
             </>
           )}
           <div className="w-48 flex flex-col gap-2">
             <Button
-              disabled={!canSubmit}
+              disabled={!reviewExists || reviewSubmitted}
               className="bg-black hover:bg-green-700 text-white"
               onClick={handleSubmitReview}
             >
               Submit Review
             </Button>
-            {!canSubmit && (
-              <p className="text-sm text-red-600">
-                Please ensure total weights equal 1.00 and scores are between 0
-                and 5.
-              </p>
-            )}
-
             <Button asChild>
               <Link href="/studentList">Return to Student List</Link>
             </Button>

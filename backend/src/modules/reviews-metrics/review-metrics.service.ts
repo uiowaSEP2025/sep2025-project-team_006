@@ -1,10 +1,8 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Review } from 'src/entity/review.entity';
 import { ReviewMetric } from 'src/entity/review_metric.entity';
-import { UpdateReviewMetricDto } from 'src/dto/update-review-metric.dto';
-import { CreateReviewMetricDto } from 'src/dto/create-review-metric.dto';
 
 @Injectable()
 export class ReviewMetricsService {
@@ -44,52 +42,5 @@ export class ReviewMetricsService {
       comments: review.comments,
       overall_score: review.overall_score,
     };
-  }
-
-  async createReviewMetric(
-    createDto: CreateReviewMetricDto,
-  ): Promise<ReviewMetric> {
-    const review = await this.reviewRepo.findOneBy({
-      review_id: createDto.review_id,
-    });
-    if (!review) {
-      throw new NotFoundException(
-        `Review with id ${createDto.review_id} not found`,
-      );
-    }
-
-    const newMetric = this.reviewMetricRepo.create({
-      name: createDto.name,
-      description: createDto.description,
-      selected_weight: createDto.selected_weight,
-      value: createDto.value,
-      review: review,
-    });
-    return await this.reviewMetricRepo.save(newMetric);
-  }
-
-  async updateReviewMetric(
-    id: number,
-    updateDto: UpdateReviewMetricDto,
-  ): Promise<ReviewMetric> {
-    const metric = await this.reviewMetricRepo.findOne({
-      where: { review_metric_id: id },
-    });
-    if (!metric) {
-      throw new NotFoundException(`ReviewMetric with id ${id} not found`);
-    }
-    Object.assign(metric, updateDto);
-    return await this.reviewMetricRepo.save(metric);
-  }
-
-  async deleteReviewMetric(id: number): Promise<{ message: string }> {
-    const metric = await this.reviewMetricRepo.findOne({
-      where: { review_metric_id: id },
-    });
-    if (!metric) {
-      throw new NotFoundException(`ReviewMetric with id ${id} not found`);
-    }
-    await this.reviewMetricRepo.remove(metric);
-    return { message: `Review metric ID: ${id}, has been deleted.` };
   }
 }

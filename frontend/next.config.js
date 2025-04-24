@@ -3,8 +3,11 @@
 const isDev = process.env.NODE_ENV === 'development';
 
 const nextConfig = {
-    output: "export",
-    // distDir: "out",
+    // UNCOMMENT THESE FOR A STATIC SITE EXPORT!
+    // This would allow us to host on GitHub Pages again, but is largely incompatible with current frontend structure.
+    // HEED THY WARNING
+    //output: "export",
+    //distDir: "out",
     basePath: isDev ? "" : "/sep2025-project-team_006",
     // assetPrefix: "/sep2025-project-team_006/",
     images: {

@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import WebService from "@/api/WebService";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import {
@@ -13,8 +12,8 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { apiPOST } from "@/api/apiMethods";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import React from "react";
 
 type LoginFormProps = React.ComponentPropsWithoutRef<"div"> & {
@@ -30,38 +29,33 @@ export function LoginForm({
 }: LoginFormProps) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+  const router = useRouter();
 
-  const handleSubmit = async (event: React.FormEvent) => {
-    const webService = new WebService();
-    event.preventDefault(); // Prevent page reload
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setError("");
 
     // Simulate login request (replace with API call)
     // this is a terribly ugly hack.
-    let url, role, nnnext;
-    if (location.pathname == "/students") {
-      url = webService.AUTH_STUDENT_LOGIN;
-      role = "student";
-      nnnext = "/sep2025-project-team_006/studentHome"; // KEEP FOR PRODUCTION
-    } else {
-      url = webService.AUTH_STUDENT_LOGIN; // no faculty endpoint... but student login endpoint will "Just Work"
-      role = "faculty";
-      nnnext = "/sep2025-project-team_006/facultyHome"; // KEEP FOR PRODUCTION
-    }
+    const res = await fetch("/api/login", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ email, password }),
+    });
 
-    let resp;
-    try {
-      resp = await apiPOST(url, JSON.stringify({ email, password }));
-      if (resp.success) {
-        localStorage.setItem("token", resp.payload["token"]);
-        localStorage.setItem("session", resp.payload["session"]);
-        localStorage.setItem("role", role);
-        window.location.replace(nnnext);
+    // still a bit of an ugly hack... but its better now atleast
+    if (res.ok) {
+      if (location.pathname == "/students") {
+        router.push("/studentHome");
       } else {
-        console.error("Login failed");
+        router.push("/facultyHome");
       }
-    } catch (e) {
-      // (axios issues... i cant attach a catch to this call directly so i need to try/catch)
-      console.error(e);
+    } else {
+      const data = await res.text();
+      setError(data || "Login failed");
     }
   };
 
@@ -124,6 +118,7 @@ export function LoginForm({
                 </Link>
               </div>
             )}
+            {error && <p className="text-red-500">{error}</p>}
           </form>
         </CardContent>
       </Card>

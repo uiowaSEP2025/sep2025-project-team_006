@@ -9,6 +9,7 @@ import {
 import { Application } from './application.entity';
 import { Faculty } from './faculty.entity';
 import { ReviewMetric } from './review_metric.entity';
+import { Template } from './template.entity';
 
 @Entity('reviews')
 export class Review {
@@ -37,4 +38,7 @@ export class Review {
     cascade: true,
   })
   review_metrics: ReviewMetric[];
+
+  @ManyToOne(() => Template, { nullable: false })
+  template: Template;
 }

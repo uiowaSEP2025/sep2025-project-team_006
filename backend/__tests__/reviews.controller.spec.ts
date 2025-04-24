@@ -1,28 +1,87 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { ReviewsController } from 'src/modules/reviews/reviews.controller';
 import { ReviewsService } from 'src/modules/reviews/reviews.service';
+import { Departments } from 'src/modules/templates/departments.enum';
+import { CreateReviewDto } from 'src/dto/create-review.dto';
+import { UpdateReviewDto } from 'src/dto/update-review.dto';
 
 describe('ReviewsController', () => {
     let controller: ReviewsController;
     let service: ReviewsService;
 
-    const createReviewDto = { faculty_id: 1, application_id: 2 };
-    const review = {
-        review_id: 6,
-        review_metrics: [],
+    const createDto: CreateReviewDto = {
+        faculty_id: 1,
+        application_id: 8,
+        department: Departments.ECE,
     };
 
+    const template = {
+        template_id: '123',
+        department: 'ECE',
+        name: 'Electrical and Computer Engineering Template',
+    };
+
+    const baseReview = {
+        review_id: 1,
+        review_metrics: [],
+        comments: '',
+        overall_score: null,
+        submitted: false,
+        template,
+    };
+
+    const scoresResult = { overallScore: 12.5, facultyScore: 9.0 };
+
     beforeEach(async () => {
+        const mockService = {
+            getReviewScores: jest.fn().mockResolvedValue(scoresResult),
+            createReview: jest.fn().mockResolvedValue(baseReview),
+            updateReview: jest.fn().mockResolvedValue({
+                ...baseReview,
+                comments: 'Updated comments',
+                overall_score: 95,
+                review_metrics: [
+                    {
+                        review_metric_id: 2,
+                        name: 'Communication',
+                        selected_weight: 0.5,
+                        template_weight: 0.5,
+                        value: 4,
+                    },
+                    {
+                        review_metric_id: 3,
+                        name: 'Expertise',
+                        selected_weight: 0.3,
+                        template_weight: 0.3,
+                        value: 4,
+                    },
+                ],
+            }),
+            submitReview: jest.fn().mockResolvedValue({
+                review_id: 1,
+                submitted: true,
+                review_metrics: [],
+            }),
+            getSubmittedReviews: jest.fn().mockResolvedValue([
+                { review_id: 5 },
+                { review_id: 6 },
+            ]),
+            getReview: jest.fn().mockResolvedValue({
+                review_id: 7,
+                comments: 'Detail',
+                overall_score: 88,
+                review_metrics: [],
+                submitted: false,
+                template,
+            }),
+        };
+
         const module: TestingModule = await Test.createTestingModule({
             controllers: [ReviewsController],
             providers: [
                 {
                     provide: ReviewsService,
-                    useValue: {
-                        createReview: jest.fn().mockResolvedValue(review),
-                        updateReviewComments: jest.fn(),
-                        submitReview: jest.fn(),
-                    },
+                    useValue: mockService,
                 },
             ],
         }).compile();
@@ -31,36 +90,78 @@ describe('ReviewsController', () => {
         service = module.get<ReviewsService>(ReviewsService);
     });
 
-    describe('createReview', () => {
-        it('should return a review', async () => {
-            const result = await controller.createReview(createReviewDto);
-            expect(result).toEqual(review);
-            expect(service.createReview).toHaveBeenCalledWith(createReviewDto);
+    describe('getReviewScores', () => {
+        it('should call service.getReviewScores and return its result', async () => {
+            const result = await controller.getReviewScores(1);
+            expect(service.getReviewScores).toHaveBeenCalledWith(1);
+            expect(result).toEqual(scoresResult);
         });
     });
 
-    describe('updateReviewComments', () => {
-        it('should update review comments and overall_score and return the updated review', async () => {
-            const reviewId = 1;
-            const updateDto = { comments: "Updated comments", overall_score: 95 };
-            const updatedReview = { review_id: reviewId, comments: "Updated comments", overall_score: 95, review_metrics: [] };
-            (service.updateReviewComments as jest.Mock).mockResolvedValue(updatedReview);
+    describe('createReview', () => {
+        it('should call service.createReview and return a review', async () => {
+            const result = await controller.createReview(createDto);
+            expect(service.createReview).toHaveBeenCalledWith(createDto);
+            expect(result).toEqual(baseReview);
+        });
+    });
 
-            const result = await controller.updateReviewComments(reviewId, updateDto);
-            expect(result).toEqual(updatedReview);
-            expect(service.updateReviewComments).toHaveBeenCalledWith(reviewId, updateDto);
+    describe('updateReview', () => {
+        it('should call service.updateReview and return the updated review', async () => {
+            const updateDto: UpdateReviewDto = {
+                comments: 'Updated comments',
+                overall_score: 95,
+                review_metrics: [
+                    { review_metric_id: 2, selected_weight: 0.5, value: 4 },
+                    { review_metric_id: 3, selected_weight: 0.3, value: 4 },
+                ],
+            };
+
+            const result = await controller.updateReview(1, updateDto);
+            expect(service.updateReview).toHaveBeenCalledWith(1, updateDto);
+            expect(result.comments).toBe('Updated comments');
+            expect(result.overall_score).toBe(95);
+            expect(Array.isArray(result.review_metrics)).toBe(true);
+            expect(result.review_metrics).toHaveLength(2);
         });
     });
 
     describe('submitReview', () => {
-        it('should mark review as submitted and return the updated review', async () => {
-            const reviewId = 1;
-            const submittedReview = { review_id: reviewId, submitted: true, review_metrics: [] };
-            (service.submitReview as jest.Mock).mockResolvedValue(submittedReview);
+        it('should call service.submitReview and return the submitted review', async () => {
+            const result = await controller.submitReview(1);
+            expect(service.submitReview).toHaveBeenCalledWith(1);
+            expect(result).toEqual({ review_id: 1, submitted: true, review_metrics: [] });
+        });
+    });
 
-            const result = await controller.submitReview(reviewId);
-            expect(result).toEqual(submittedReview);
-            expect(service.submitReview).toHaveBeenCalledWith(reviewId);
+    describe('getSubmittedReviews', () => {
+        it('should call service.getSubmittedReviews with no args and return the list', async () => {
+            const result = await controller.getSubmittedReviews();
+            expect(service.getSubmittedReviews).toHaveBeenCalledWith();
+            expect(result).toEqual([{ review_id: 5 }, { review_id: 6 }]);
+        });
+    });
+
+    describe('getSubmittedReviewsById', () => {
+        it('should call service.getSubmittedReviews with facultyId and return the list', async () => {
+            const result = await controller.getSubmittedReviewsById(99);
+            expect(service.getSubmittedReviews).toHaveBeenCalledWith(99);
+            expect(result).toEqual([{ review_id: 5 }, { review_id: 6 }]);
+        });
+    });
+
+    describe('getReview', () => {
+        it('should call service.getReview and return the review', async () => {
+            const result = await controller.getReview(7);
+            expect(service.getReview).toHaveBeenCalledWith(7);
+            expect(result).toEqual({
+                review_id: 7,
+                comments: 'Detail',
+                overall_score: 88,
+                review_metrics: [],
+                submitted: false,
+                template,
+            });
         });
     });
 });

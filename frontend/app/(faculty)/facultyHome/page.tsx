@@ -12,7 +12,7 @@ export default function Home() {
     },
     {
       label: "Template Settings",
-      href: "/metricSetting",
+      href: "/templateSetting",
       image: "./templateSettings.png",
     },
     {

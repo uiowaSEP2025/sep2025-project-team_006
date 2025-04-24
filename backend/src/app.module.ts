@@ -8,6 +8,7 @@ import { LoggerService } from './common/logger/logger.service';
 import { DocumentsModule } from './modules/documents/documents.module';
 import { ReviewMetricsModule } from './modules/reviews-metrics/review-metrics.module';
 import { ReviewsModule } from './modules/reviews/reviews.module';
+import { TemplateModule } from './modules/templates/templates.module';
 
 @Module({
   imports: [
@@ -17,6 +18,7 @@ import { ReviewsModule } from './modules/reviews/reviews.module';
     FacultyMetricsModule,
     ReviewMetricsModule,
     ReviewsModule,
+    TemplateModule,
     StudentsModule,
     AuthModule,
   ],

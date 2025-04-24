@@ -6,6 +6,7 @@ import { apiGET, apiPOST, apiDELETE, apiPUT } from "@/api/apiMethods";
 import MetricForm from "@/components/MetricForm";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import React from "react";
 
 interface Metric {
   id: number;
@@ -23,13 +24,13 @@ interface MetricResponse {
   default_weight: number;
 }
 
-export default function Home() {
+export default function MetricSetting() {
   const webService = new WebService();
   const [metrics, setMetrics] = useState<Metric[]>([]);
   const [faculty_id, setFacultyId] = useState<string>("1");
 
   useEffect(() => {
-    const id = localStorage.getItem("id") || "1";
+    const id = window.__USER__?.id + "" || "";
     setFacultyId(id);
     const fetchMetrics = async () => {
       try {

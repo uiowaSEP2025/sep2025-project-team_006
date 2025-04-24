@@ -24,8 +24,10 @@
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "cmdk": "^1.1.1",
+    "cookie": "^1.0.2",
     "lucide-react": "^0.483.0",
     "next": "15.1.6",
+    "next-auth": "^4.24.11",
     "prettier": "^3.5.3",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
@@ -97,7 +99,9 @@
       "frontend/__tests__/",
       "frontend/out/",
       "/frontend/.next",
-      "frontend/public/"
+      "frontend/public/",
+      "next.config.js",
+      "next.config.ts"
     ],
     "coverageDirectory": "../frontend/coverage"
   }
