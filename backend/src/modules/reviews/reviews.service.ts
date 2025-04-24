@@ -1,6 +1,5 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { application } from 'express';
 import { CreateReviewDto } from 'src/dto/create-review.dto';
 import { UpdateReviewDto } from 'src/dto/update-review.dto';
 import { Application } from 'src/entity/application.entity';
@@ -135,7 +134,7 @@ export class ReviewsService {
         return metric;
       });
     }
-    this.applicationRepository.save(review.application);
+    void this.applicationRepository.save(review.application);
     return this.reviewRepository.save(review);
   }
 
@@ -181,7 +180,7 @@ export class ReviewsService {
     review.submitted = true;
     review.application.status = "Reviewed";
     review.overall_score = calculateOverallScore(review);
-    this.applicationRepository.save(review.application);
+    void this.applicationRepository.save(review.application);
     return this.reviewRepository.save(review);
   }
 }
