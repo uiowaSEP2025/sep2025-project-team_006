@@ -294,6 +294,7 @@ export default function StudentPageContent() {
             <>
               <ReviewForm
                 metrics={reviewMetrics}
+                isReview={false}
                 onChangeMetric={(updatedMetrics) =>
                   setReviewMetrics(updatedMetrics)
                 }

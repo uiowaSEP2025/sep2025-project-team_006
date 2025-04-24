@@ -6,6 +6,7 @@ import WebService from "@/api/WebService";
 import { apiGET } from "@/api/apiMethods";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 interface Profile {
   id: number; //corresponds to student_id
@@ -19,6 +20,7 @@ interface Profile {
 }
 
 export default function Home() {
+  const router = useRouter();
   const webService = new WebService();
   const [profiles, setProfiles] = useState<Profile[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
@@ -30,12 +32,14 @@ export default function Home() {
       try {
         const response = await apiGET(webService.REVIEW_SUBMITTED);
         if (response.success) {
+          console.log("Reviewed Applications:", response.payload);
           const fetchedProfiles: Profile[] = response.payload.map(
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
             (review: any) => {
               const applicant = review.application;
               return {
-                id: applicant.application_id,
+                //id: applicant.application_id,
+                id: applicant.student.student_id,
                 name: `${applicant.student.first_name} ${applicant.student.last_name}`,
                 status: applicant.status,
                 department: applicant.department,
@@ -57,7 +61,9 @@ export default function Home() {
     fetchApplicants();
   }, [webService.REVIEW_SUBMITTED]);
 
-  const handleProfileClick = () => {};
+  const handleProfileClick = (profile: Profile) => {
+    router.push(`/reviewedApplicants/application?id=${profile.id}`);
+  };
 
   // Filtered and paginated profiles
   const filteredProfiles = useMemo(() => {
