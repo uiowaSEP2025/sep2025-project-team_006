@@ -18,6 +18,9 @@ export class Student {
   @Column({ nullable: true })
   address: string;
 
+  @Column({ nullable: true })
+  school: string;
+
   // 🆕 Original GPA value (e.g., 8.5)
   @Column({ type: 'float', nullable: true })
   original_gpa: number;
