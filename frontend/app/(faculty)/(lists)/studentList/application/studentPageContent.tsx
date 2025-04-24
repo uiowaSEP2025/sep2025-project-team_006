@@ -154,11 +154,13 @@ export default function StudentPageContent() {
    * This function acts as our overall save call.
    */
   const handleSaveReview = async () => {
+    const EPSILON = 0.001;
+
     const totalWeight = reviewMetrics.reduce(
       (sum, metric) => sum + metric.selected_weight,
       0,
     );
-    const validWeights = totalWeight === 1.0;
+    const validWeights = Math.abs(totalWeight - 1.0 ) < EPSILON;
     const validScores = reviewMetrics.every(
       (metric) => metric.value >= 0 && metric.value <= 5,
     );
