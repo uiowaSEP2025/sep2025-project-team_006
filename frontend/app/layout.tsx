@@ -94,7 +94,7 @@ export default async function RootLayout({
             />
           </div>
         </footer>
-        <script src="/sep2025-project-team_006/client_auth.js" defer></script>
+        {/*<script src="/sep2025-project-team_006/client_auth.js" defer></script>*/}
       </body>
     </html>
   );
