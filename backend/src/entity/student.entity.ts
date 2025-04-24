@@ -18,6 +18,18 @@ export class Student {
   @Column({ nullable: true })
   address: string;
 
+  // 🆕 Original GPA value (e.g., 8.5)
+  @Column({ type: 'float', nullable: true })
+  original_gpa: number;
+
+  // 🆕 Scale type (e.g., '10', '100', '5')
+  @Column({ type: 'varchar', length: 10, nullable: true })
+  original_scale: string;
+
+  // 🆕 Standardized GPA on a 4.0 scale
+  @Column({ type: 'float', nullable: true })
+  standardized_gpa: number | null;
+
   @OneToMany(() => Application, (application) => application.student)
   applications: Application[];
 }
