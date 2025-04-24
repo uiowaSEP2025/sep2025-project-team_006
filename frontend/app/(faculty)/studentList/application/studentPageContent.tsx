@@ -253,6 +253,16 @@ export default function StudentPageContent() {
           <h1 className="text-2xl font-bold mb-4">
             Review for {studentData?.first_name} {studentData?.last_name}
           </h1>
+          {(studentData?.original_gpa !== undefined || studentData?.standardized_gpa !== undefined) && (
+            <div className="mb-4">
+              {studentData.original_gpa !== undefined && (
+                <p><span className="font-semibold">Original GPA:</span> {studentData.original_gpa}</p>
+              )}
+              {studentData.standardized_gpa !== undefined && (
+                <p><span className="font-semibold">Standardized GPA:</span> {studentData.standardized_gpa.toFixed(2)} / 4.00</p>
+              )}
+            </div>
+          )}
 
           {!reviewExists ? (
             // Center the "Start Review" button when no review exists
