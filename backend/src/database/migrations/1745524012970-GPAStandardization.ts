@@ -1,7 +1,7 @@
 import { MigrationInterface, QueryRunner } from "typeorm";
 
-export class SepMigration1745524012970 implements MigrationInterface {
-    name = 'SepMigration1745524012970'
+export class GPAStandardization1745524012970 implements MigrationInterface {
+    name = 'GPAStandardization1745524012970'
 
     public async up(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.query(`ALTER TABLE "students" ADD "school" character varying`);
