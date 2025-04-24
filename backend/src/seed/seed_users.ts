@@ -92,6 +92,7 @@ export async function seedUserDatabase(logger: LoggerService) {
       last_name: studentData.last_name,
       phone_number: studentData.phone_number,
       address: studentData.address,
+      school: studentData.school,
       original_gpa: studentData.original_gpa,
       original_scale: studentData.original_scale,
       standardized_gpa: studentData.standardized_gpa,
