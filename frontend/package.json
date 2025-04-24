@@ -99,7 +99,9 @@
       "frontend/__tests__/",
       "frontend/out/",
       "/frontend/.next",
-      "frontend/public/"
+      "frontend/public/",
+      "next.config.js",
+      "next.config.ts"
     ],
     "coverageDirectory": "../frontend/coverage"
   }

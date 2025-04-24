@@ -1,12 +1,12 @@
 "use client";
 
-import { useEffect, useState, useMemo } from "react";
+import React, { useEffect, useState, useMemo } from "react";
 import ProfileList from "@/components/ProfileList";
 import WebService from "@/api/WebService";
 import { apiGET } from "@/api/apiMethods";
-import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 interface Profile {
   id: number; //corresponds to student_id
@@ -15,9 +15,11 @@ interface Profile {
   department: string;
   degree_program: string;
   image: string;
+  isReview: boolean;
+  reviewScore: number | null;
 }
 
-export default function Home() {
+export default function StudentList() {
   const router = useRouter();
   const webService = new WebService();
   const [profiles, setProfiles] = useState<Profile[]>([]);
@@ -28,18 +30,25 @@ export default function Home() {
   useEffect(() => {
     const fetchApplicants = async () => {
       try {
-        const response = await apiGET(webService.STUDENTS_APPLICANT_LIST);
+        const response = await apiGET(webService.REVIEW_SUBMITTED);
         if (response.success) {
+          console.log("Reviewed Applications:", response.payload);
           const fetchedProfiles: Profile[] = response.payload.map(
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            (applicant: any) => ({
-              id: applicant.student_id,
-              name: applicant.full_name,
-              status: applicant.status,
-              department: applicant.department,
-              degree_program: applicant.degree_program,
-              image: "/defaultpfp.jpeg",
-            }),
+            (review: any) => {
+              const applicant = review.application;
+              return {
+                //id: applicant.application_id,
+                id: applicant.student.student_id,
+                name: `${applicant.student.first_name} ${applicant.student.last_name}`,
+                status: applicant.status,
+                department: applicant.department,
+                degree_program: applicant.degree_program,
+                image: "/defaultpfp.jpeg",
+                isReview: true,
+                reviewScore: review.overall_score,
+              };
+            },
           );
           setProfiles(fetchedProfiles);
         } else {
@@ -50,10 +59,10 @@ export default function Home() {
       }
     };
     fetchApplicants();
-  }, [webService.STUDENTS_APPLICANT_LIST]);
+  }, [webService.REVIEW_SUBMITTED]);
 
   const handleProfileClick = (profile: Profile) => {
-    router.push(`/studentList/application?id=${profile.id}`);
+    router.push(`/reviewedApplicants/application?id=${profile.id}`);
   };
 
   // Filtered and paginated profiles

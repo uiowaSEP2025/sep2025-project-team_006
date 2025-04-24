@@ -10,5 +10,6 @@ export const calculateOverallScore = (review: Review): number => {
   for (const metric of metrics) {
     overall_score += metric.template_weight * metric.value;
   }
-  return overall_score;
+  overall_score = (overall_score / 5) * 100;
+  return Math.trunc(overall_score);
 };

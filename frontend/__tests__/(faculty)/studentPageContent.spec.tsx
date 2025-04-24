@@ -3,7 +3,7 @@ import { render, screen, waitFor, act, fireEvent } from '@testing-library/react'
 import * as apiMethods from '@/api/apiMethods';
 import * as apiDoubleIdGETModule from '@/api/methods';
 import '@testing-library/jest-dom';
-import StudentPageContent from '@/app/(faculty)/studentList/application/studentPageContent';
+import StudentPageContent from '@/app/(faculty)//(lists)/studentList/application/studentPageContent';
 
 // --- Mock localStorage ---
 const localStorageMock = (() => {

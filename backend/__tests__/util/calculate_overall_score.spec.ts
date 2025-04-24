@@ -17,7 +17,7 @@ describe('calculateOverallScore', () => {
         } as unknown as Review;
 
         // 1*2 + 0.5*4 + 2*1.5 = 2 + 2 + 3 = 7
-        expect(calculateOverallScore(review)).toBeCloseTo(7);
+        expect(calculateOverallScore(review)).toBeCloseTo(140);
     });
 
     it('should handle zero and negative values correctly', () => {
@@ -29,6 +29,6 @@ describe('calculateOverallScore', () => {
         } as unknown as Review;
 
         // 1*0 + (-1)*5 = -5
-        expect(calculateOverallScore(review)).toBe(-5);
+        expect(calculateOverallScore(review)).toBe(-100);
     });
 });
