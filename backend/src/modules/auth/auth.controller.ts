@@ -7,7 +7,7 @@ import {
   Request,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { RegisterDto, LoginDto, RefreshTokenDto } from 'src/dto/auth.dto';
+import { RegisterDto, LoginDto, RefreshTokenDto, LogoutDto } from 'src/dto/auth.dto';
 import { AuthenticatedRequest, AuthGuard } from './auth.guard';
 
 /**
@@ -32,6 +32,11 @@ export class AuthController {
   @Post('student/login') // .*/api/auth/student/login
   async postStudentLogin(@Body() createUserDto: LoginDto) {
     return this.authService.login(createUserDto.email, createUserDto.password);
+  }
+
+  @Post('student/logout')
+  async postStudentLogout(@Body() logoutDto: LogoutDto) {
+    return this.authService.logout(logoutDto.session); 
   }
 
   // For future reference:
