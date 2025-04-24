@@ -67,7 +67,7 @@ export default function StudentPageContent() {
             document_id: String(doc.document_id),
             document_type: String(doc.document_type),
           }));
-          setDepartment(department);
+          //setDepartment(department);
           setDocumentList([...formattedDocs]);
         } else {
           console.error("STUDENTS_APPLICANT_INFO error:", response.error);
@@ -96,13 +96,13 @@ export default function StudentPageContent() {
         if (response.success) {
           if (!response.payload.review_exists) {
             setReviewExists(false);
-            setReviewSubmitted(false);
+            //setReviewSubmitted(false);
             return;
           }
 
-          setReviewId(response.payload.review_id);
+          //setReviewId(response.payload.review_id);
           setReviewExists(true);
-          setReviewSubmitted(response.payload.submitted);
+          //setReviewSubmitted(response.payload.submitted);
           setReviewMetrics(response.payload.review_metrics);
           setComments(response.payload.comments || "");
 
