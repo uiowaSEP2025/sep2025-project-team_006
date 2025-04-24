@@ -178,7 +178,7 @@ export default function StudentPageContent() {
       })),
       overall_score: null,
     };
-
+    const data = JSON.stringify(payload);
     try {
       const response = await apiPUT(
         webService.REVIEW_UPDATE_PUT,
