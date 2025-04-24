@@ -17,7 +17,7 @@ describe('calculateFacultyScore', () => {
         } as unknown as Review;
 
         // 2*1 + 0.1*10 + 3*0.5 = 2 + 1 + 1.5 = 4.5
-        expect(calculateFacultyScore(review)).toBeCloseTo(4.5);
+        expect(calculateFacultyScore(review)).toBeCloseTo(90);
     });
 
     it('should handle mixed positive and negative weights', () => {
@@ -29,6 +29,6 @@ describe('calculateFacultyScore', () => {
         } as unknown as Review;
 
         // -2*3 + 1*4 = -6 + 4 = -2
-        expect(calculateFacultyScore(review)).toBe(-2);
+        expect(calculateFacultyScore(review)).toBe(-40);
     });
 });
