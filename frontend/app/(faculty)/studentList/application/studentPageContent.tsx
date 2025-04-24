@@ -42,7 +42,6 @@ export default function StudentPageContent() {
 
   const currentDocument = documentList[currentDocIndex] || {};
 
-  // 🟡 Load QS Rankings from public CSV
   useEffect(() => {
     fetch("/qs_rankings.csv")
       .then((res) => res.text())
