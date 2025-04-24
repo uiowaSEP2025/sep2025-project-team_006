@@ -61,7 +61,7 @@ export default function StudentPageContent() {
         if (response.success) {
           setStudentData(response.payload);
           const applications = response.payload.applications;
-          const department = applications?.[0]?.department || "";
+          //const department = applications?.[0]?.department || "";
           const docs = applications?.[0]?.documents || [];
           const formattedDocs = docs.map((doc: DocumentInfo) => ({
             document_id: String(doc.document_id),
