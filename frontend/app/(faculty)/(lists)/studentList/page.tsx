@@ -1,5 +1,6 @@
 "use client";
 
+import React from "react";
 import { useEffect, useState, useMemo } from "react";
 import ProfileList from "@/components/ProfileList";
 import WebService from "@/api/WebService";
