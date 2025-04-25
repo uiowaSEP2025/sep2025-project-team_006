@@ -31,4 +31,7 @@ class RefreshTokenDto {
   session: string;
 }
 
-export { RegisterDto, LoginDto, RefreshTokenDto };
+// this may be stupid
+class LogoutDto extends RefreshTokenDto {}
+
+export { RegisterDto, LoginDto, RefreshTokenDto, LogoutDto };

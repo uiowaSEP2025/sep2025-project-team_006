@@ -1,142 +1,223 @@
 [
     {
-        "first_name": "Bob",
-        "last_name": "Student",
-        "email": "student1@example.edu",
-        "phone_number": "3191234567",
-        "address": "123 Main St, Iowa City, IA 52242"
+      "first_name": "Bob",
+      "last_name": "Student",
+      "email": "student1@example.edu",
+      "phone_number": "3191234567",
+      "address": "123 Main St, Iowa City, IA 52242",
+      "school": "University of Cambridge",
+      "original_gpa": 8.7,
+      "original_scale": "10",
+      "standardized_gpa": 3.48
     },
     {
-        "first_name": "Alice",
-        "last_name": "Scholar",
-        "email": "student2@example.edu",
-        "phone_number": "3192345678",
-        "address": "456 College Ave, Iowa City, IA 52242"
+      "first_name": "Alice",
+      "last_name": "Scholar",
+      "email": "student2@example.edu",
+      "phone_number": "3192345678",
+      "address": "456 College Ave, Iowa City, IA 52242",
+      "school": "University of Oxford",
+      "original_gpa": 85,
+      "original_scale": "100",
+      "standardized_gpa": 3.4
     },
     {
-        "first_name": "Charlie",
-        "last_name": "Learner",
-        "email": "student3@example.edu",
-        "phone_number": "3193456789",
-        "address": "789 University Blvd, Iowa City, IA 52242"
+      "first_name": "Charlie",
+      "last_name": "Learner",
+      "email": "student3@example.edu",
+      "phone_number": "3193456789",
+      "address": "789 University Blvd, Iowa City, IA 52242",
+      "school": "Stanford University",
+      "original_gpa": 4.2,
+      "original_scale": "5",
+      "standardized_gpa": 3.36
     },
     {
-        "first_name": "Dana",
-        "last_name": "Researcher",
-        "email": "student4@example.edu",
-        "phone_number": "3194567890",
-        "address": "101 Science Rd, Iowa City, IA 52242"
+      "first_name": "Dana",
+      "last_name": "Researcher",
+      "email": "student4@example.edu",
+      "phone_number": "3194567890",
+      "address": "101 Science Rd, Iowa City, IA 52242",
+      "school": "Harvard University",
+      "original_gpa": 2.7,
+      "original_scale": "4",
+      "standardized_gpa": 2.7
     },
     {
-        "first_name": "Ethan",
-        "last_name": "Undergrad",
-        "email": "student5@example.edu",
-        "phone_number": "3195678901",
-        "address": "202 Dorm Ln, Iowa City, IA 52242"
+      "first_name": "Ethan",
+      "last_name": "Undergrad",
+      "email": "student5@example.edu",
+      "phone_number": "3195678901",
+      "address": "202 Dorm Ln, Iowa City, IA 52242",
+      "school": "University of Earth",
+      "original_gpa": 4.2,
+      "original_scale": "5",
+      "standardized_gpa": 3.36
     },
     {
-        "first_name": "Fiona",
-        "last_name": "Academia",
-        "email": "student6@example.edu",
-        "phone_number": "3196789012",
-        "address": "303 Study Ct, Iowa City, IA 52242"
+      "first_name": "Fiona",
+      "last_name": "Academia",
+      "email": "student6@example.edu",
+      "phone_number": "3196789012",
+      "address": "303 Study Ct, Iowa City, IA 52242",
+      "school": "UCL",
+      "original_gpa": 4.2,
+      "original_scale": "5",
+      "standardized_gpa": 3.36
     },
     {
-        "first_name": "George",
-        "last_name": "Scholarship",
-        "email": "student7@example.edu",
-        "phone_number": "3197890123",
-        "address": "404 Research Blvd, Iowa City, IA 52242"
+      "first_name": "George",
+      "last_name": "Scholarship",
+      "email": "student7@example.edu",
+      "phone_number": "3197890123",
+      "address": "404 Research Blvd, Iowa City, IA 52242",
+      "school": "University of Chicago",
+      "original_gpa": 4.2,
+      "original_scale": "5",
+      "standardized_gpa": 3.36
     },
     {
-        "first_name": "Hannah",
-        "last_name": "Genius",
-        "email": "student8@example.edu",
-        "phone_number": "3198901234",
-        "address": "505 Library St, Iowa City, IA 52242"
+      "first_name": "Hannah",
+      "last_name": "Genius",
+      "email": "student8@example.edu",
+      "phone_number": "3198901234",
+      "address": "505 Library St, Iowa City, IA 52242",
+      "school": "University of Oxford",
+      "original_gpa": 4.2,
+      "original_scale": "5",
+      "standardized_gpa": 3.36
     },
     {
-        "first_name": "Ian",
-        "last_name": "Curious",
-        "email": "student9@example.edu",
-        "phone_number": "3199012345",
-        "address": "606 Experiment Dr, Iowa City, IA 52242"
+      "first_name": "Ian",
+      "last_name": "Curious",
+      "email": "student9@example.edu",
+      "phone_number": "3199012345",
+      "address": "606 Experiment Dr, Iowa City, IA 52242",
+      "school": "University of Oxford",
+      "original_gpa": 4.2,
+      "original_scale": "5",
+      "standardized_gpa": 3.36
     },
     {
-        "first_name": "Julia",
-        "last_name": "Bookworm",
-        "email": "student10@example.edu",
-        "phone_number": "3190123456",
-        "address": "707 Lecture Hall Rd, Iowa City, IA 52242"
+      "first_name": "Julia",
+      "last_name": "Bookworm",
+      "email": "student10@example.edu",
+      "phone_number": "3190123456",
+      "address": "707 Lecture Hall Rd, Iowa City, IA 52242",
+      "school": "University of Oxford",
+      "original_gpa": 4.2,
+      "original_scale": "5",
+      "standardized_gpa": 3.36
     },
     {
-        "first_name": "Kyle",
-        "last_name": "Thesis",
-        "email": "student11@example.edu",
-        "phone_number": "3191234568",
-        "address": "808 Graduate Ln, Iowa City, IA 52242"
+      "first_name": "Kyle",
+      "last_name": "Thesis",
+      "email": "student11@example.edu",
+      "phone_number": "3191234568",
+      "address": "808 Graduate Ln, Iowa City, IA 52242",
+      "school": "University of Oxford",
+      "original_gpa": 4.2,
+      "original_scale": "5",
+      "standardized_gpa": 3.36
     },
     {
-        "first_name": "Laura",
-        "last_name": "Analyst",
-        "email": "student12@example.edu",
-        "phone_number": "3192345679",
-        "address": "909 Statistics Rd, Iowa City, IA 52242"
+      "first_name": "Laura",
+      "last_name": "Analyst",
+      "email": "student12@example.edu",
+      "phone_number": "3192345679",
+      "address": "909 Statistics Rd, Iowa City, IA 52242",
+      "school": "University of Oxford",
+      "original_gpa": 4.2,
+      "original_scale": "5",
+      "standardized_gpa": 3.36
     },
     {
-        "first_name": "Mike",
-        "last_name": "Innovator",
-        "email": "student13@example.edu",
-        "phone_number": "3193456780",
-        "address": "1010 Tech Blvd, Iowa City, IA 52242"
+      "first_name": "Mike",
+      "last_name": "Innovator",
+      "email": "student13@example.edu",
+      "phone_number": "3193456780",
+      "address": "1010 Tech Blvd, Iowa City, IA 52242",
+      "school": "University of Oxford",
+      "original_gpa": 4.2,
+      "original_scale": "5",
+      "standardized_gpa": 3.36
     },
     {
-        "first_name": "Nina",
-        "last_name": "Inventor",
-        "email": "student14@example.edu",
-        "phone_number": "3194567891",
-        "address": "1111 Creativity St, Iowa City, IA 52242"
+      "first_name": "Nina",
+      "last_name": "Inventor",
+      "email": "student14@example.edu",
+      "phone_number": "3194567891",
+      "address": "1111 Creativity St, Iowa City, IA 52242",
+      "school": "University of Oxford",
+      "original_gpa": 4.2,
+      "original_scale": "5",
+      "standardized_gpa": 3.36
     },
     {
-        "first_name": "Oscar",
-        "last_name": "Explorer",
-        "email": "student15@example.edu",
-        "phone_number": "3195678902",
-        "address": "1212 Discovery Ln, Iowa City, IA 52242"
+      "first_name": "Oscar",
+      "last_name": "Explorer",
+      "email": "student15@example.edu",
+      "phone_number": "3195678902",
+      "address": "1212 Discovery Ln, Iowa City, IA 52242",
+      "school": "University of Oxford",
+      "original_gpa": 4.2,
+      "original_scale": "5",
+      "standardized_gpa": 3.36
     },
     {
-        "first_name": "Paula",
-        "last_name": "Thinker",
-        "email": "student16@example.edu",
-        "phone_number": "3196789013",
-        "address": "1313 Philosophy Rd, Iowa City, IA 52242"
+      "first_name": "Paula",
+      "last_name": "Thinker",
+      "email": "student16@example.edu",
+      "phone_number": "3196789013",
+      "address": "1313 Philosophy Rd, Iowa City, IA 52242",
+      "school": "University of Oxford",
+      "original_gpa": 4.2,
+      "original_scale": "5",
+      "standardized_gpa": 3.36
     },
     {
-        "first_name": "Quinn",
-        "last_name": "Observer",
-        "email": "student17@example.edu",
-        "phone_number": "3197890124",
-        "address": "1414 Psychology St, Iowa City, IA 52242"
+      "first_name": "Quinn",
+      "last_name": "Observer",
+      "email": "student17@example.edu",
+      "phone_number": "3197890124",
+      "address": "1414 Psychology St, Iowa City, IA 52242",
+      "school": "University of Oxford",
+      "original_gpa": 4.2,
+      "original_scale": "5",
+      "standardized_gpa": 3.36
     },
     {
-        "first_name": "Rachel",
-        "last_name": "Mathematician",
-        "email": "student18@example.edu",
-        "phone_number": "3198901235",
-        "address": "1515 Algebra Ave, Iowa City, IA 52242"
+      "first_name": "Rachel",
+      "last_name": "Mathematician",
+      "email": "student18@example.edu",
+      "phone_number": "3198901235",
+      "address": "1515 Algebra Ave, Iowa City, IA 52242",
+      "school": "University of Oxford",
+      "original_gpa": 4.2,
+      "original_scale": "5",
+      "standardized_gpa": 3.36
     },
     {
-        "first_name": "Sam",
-        "last_name": "Programmer",
-        "email": "student19@example.edu",
-        "phone_number": "3199012346",
-        "address": "1616 Code St, Iowa City, IA 52242"
+      "first_name": "Sam",
+      "last_name": "Programmer",
+      "email": "student19@example.edu",
+      "phone_number": "3199012346",
+      "address": "1616 Code St, Iowa City, IA 52242",
+      "school": "University of Oxford",
+      "original_gpa": 4.2,
+      "original_scale": "5",
+      "standardized_gpa": 3.36
     },
     {
-        "first_name": "Tina",
-        "last_name": "Designer",
-        "email": "student20@example.edu",
-        "phone_number": "3190123457",
-        "address": "1717 UX Rd, Iowa City, IA 52242"
+      "first_name": "Tina",
+      "last_name": "Designer",
+      "email": "student20@example.edu",
+      "phone_number": "3190123457",
+      "address": "1717 UX Rd, Iowa City, IA 52242",
+      "school": "University of Oxford",
+      "original_gpa": 4.2,
+      "original_scale": "5",
+      "standardized_gpa": 3.36
     }
-]
+  ]
+  
