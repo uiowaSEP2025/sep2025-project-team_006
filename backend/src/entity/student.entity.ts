@@ -18,6 +18,18 @@ export class Student {
   @Column({ nullable: true })
   address: string;
 
+  @Column({ nullable: true })
+  school: string;
+
+  @Column({ type: 'float', nullable: true })
+  original_gpa: number;
+
+  @Column({ type: 'varchar', length: 10, nullable: true })
+  original_scale: string;
+
+  @Column({ type: 'float', nullable: true })
+  standardized_gpa: number | null;
+
   @OneToMany(() => Application, (application) => application.student)
   applications: Application[];
 }

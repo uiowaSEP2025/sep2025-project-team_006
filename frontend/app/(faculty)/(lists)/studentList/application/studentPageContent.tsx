@@ -14,6 +14,7 @@ import Link from "next/link";
 import { apiDoubleIdGET } from "@/api/methods";
 import { MetricResponse } from "@/types/MetricData";
 import React from "react";
+import { loadQsRankings } from "@/utils/qsRanking";
 
 interface DocumentInfo {
   document_id: string | null;
@@ -22,11 +23,13 @@ interface DocumentInfo {
 
 export default function StudentPageContent() {
   const searchParams = useSearchParams();
-  const studentId = searchParams.get("id"); // will be a string or null
+  const studentId = searchParams.get("id");
   const webService = new WebService();
+
   const [studentData, setStudentData] = useState<StudentData | null>(null);
-  const [currentDocIndex, setCurrentDocIndex] = useState<number>(0);
   const [documentList, setDocumentList] = useState<DocumentInfo[]>([]);
+  const [currentDocIndex, setCurrentDocIndex] = useState<number>(0);
+
   const [reviewMetrics, setReviewMetrics] = useState<MetricResponse[]>([]);
   const [comments, setComments] = useState<string>("");
   const [reviewExists, setReviewExists] = useState<boolean>(false);
@@ -42,32 +45,39 @@ export default function StudentPageContent() {
     faculty_score: null,
   });
 
+  const [qsRankings, setQsRankings] = useState<Record<string, string>>({});
+
   const currentDocument = documentList[currentDocIndex] || {};
 
-  /**
-   * Calls the student applicant information
-   */
+  useEffect(() => {
+    loadQsRankings()
+      .then(setQsRankings)
+      .catch((err) => {
+        console.error("Failed to load QS rankings:", err);
+      });
+  }, []);
+
   useEffect(() => {
     const id = window.__USER__?.id + "" || "";
     setFacultyId(id);
 
     if (!studentId) return;
-    const fetchStudentInfo = async (student_id: string) => {
+    const fetchStudentInfo = async () => {
       try {
         const response = await apiGET(
           webService.STUDENTS_APPLICANT_INFO,
-          student_id,
+          studentId,
         );
         if (response.success) {
           setStudentData(response.payload);
-          const applications = response.payload.applications;
-          const department = applications?.[0]?.department || "";
-          const docs = applications?.[0]?.documents || [];
+          const apps = response.payload.applications || [];
+          setDepartment(apps[0]?.department || "");
+
+          const docs = apps[0]?.documents || [];
           const formattedDocs = docs.map((doc: DocumentInfo) => ({
             document_id: String(doc.document_id),
             document_type: String(doc.document_type),
           }));
-          setDepartment(department);
           setDocumentList([...formattedDocs]);
         } else {
           console.error("STUDENTS_APPLICANT_INFO error:", response.error);
@@ -77,14 +87,12 @@ export default function StudentPageContent() {
       }
     };
 
-    fetchStudentInfo(studentId);
-  }, [studentId, webService.STUDENTS_APPLICANT_INFO]);
+    fetchStudentInfo();
+  }, [studentId]);
 
-  /**
-   * Fetches any of the reviews the faculty has left previously (if any)
-   */
   useEffect(() => {
     if (!studentData || !studentData.applications?.length) return;
+
     const applicationId = studentData.applications[0].application_id;
     const fetchReviewMetrics = async () => {
       try {
@@ -113,77 +121,61 @@ export default function StudentPageContent() {
       }
     };
     fetchReviewMetrics();
-  }, [studentData, webService.REVIEW_METRICS_FOR_FACULTY, faculty_id]);
+  }, [studentData, faculty_id]);
 
-  /**
-   * Creates a new review from the button press
-   */
   const handleStartReview = async () => {
     if (!studentData || !studentData.applications?.length) return;
     const applicationId = studentData.applications[0].application_id;
     try {
       const reviewPayload = {
         application_id: applicationId,
-        faculty_id: faculty_id,
+        faculty_id,
         department,
       };
-      const data = JSON.stringify(reviewPayload);
-      const response = await apiPOST(webService.REVIEW_CREATE_POST, data);
+      const response = await apiPOST(
+        webService.REVIEW_CREATE_POST,
+        JSON.stringify(reviewPayload),
+      );
       if (response.success) {
         setReviewId(response.payload.review_id);
         setReviewMetrics(response.payload.review_metrics || []);
         setComments(response.payload.comments || "");
         setReviewExists(true);
       } else {
-        console.error("Error creating review: ", response.error);
+        console.error("Error creating review:", response.error);
       }
     } catch (error) {
       console.error("An unexpected error occurred:", error);
     }
   };
 
-  /**
-   * Updates the comment fromt the text area
-   */
-  const handleCommentChange = async (newComment: string) => {
-    setComments(newComment);
-  };
-
-  /**
-   * Save all review updates by sending the current comments and metrics back to the server.
-   * This function acts as our overall save call.
-   */
   const handleSaveReview = async () => {
     const EPSILON = 0.001;
 
     const totalWeight = reviewMetrics.reduce(
-      (sum, metric) => sum + metric.selected_weight,
+      (sum, m) => sum + m.selected_weight,
       0,
     );
     const validWeights = Math.abs(totalWeight - 1.0 ) < EPSILON;
     const validScores = reviewMetrics.every(
-      (metric) => metric.value >= 0 && metric.value <= 5,
+      (m) => m.value >= 0 && m.value <= 5,
     );
 
     if (!validWeights || !validScores) {
-      let errorMessage = "Please fix the following before saving:";
-      if (!validWeights) {
-        errorMessage += "\n- Total selected weights must equal 1.00.";
-      }
-      if (!validScores) {
-        errorMessage += "\n- Each metric score must be between 0 and 5.";
-      }
-      alert(errorMessage);
+      let msg = "Fix the following before saving:\n";
+      if (!validWeights) msg += "- Total weights must equal 1.00\n";
+      if (!validScores) msg += "- Scores must be 0–5";
+      alert(msg);
       return;
     }
+
     const payload = {
       comments,
-      review_metrics: reviewMetrics.map((metric) => ({
-        review_metric_id: metric.review_metric_id,
-        selected_weight: metric.selected_weight,
-        value: metric.value,
+      review_metrics: reviewMetrics.map((m) => ({
+        review_metric_id: m.review_metric_id,
+        selected_weight: m.selected_weight,
+        value: m.value,
       })),
-      // overall_score can be computed on the backend based on weights & values.
       overall_score: null,
     };
     const data = JSON.stringify(payload);
@@ -227,25 +219,15 @@ export default function StudentPageContent() {
   const handleSubmitReview = async () => {
     try {
       await handleSaveReview();
-
-      const response = await apiPUT(
-        webService.REVIEW_SUBMIT,
-        reviewId.toString(),
-        "{}",
-      );
-      if (response.success) {
-        setReviewSubmitted(true);
-      } else {
-        console.error("Error submitting review: ", response.error);
-      }
-    } catch (error) {
-      console.error("An unexpected error occurred: ", error);
+      const res = await apiPUT(webService.REVIEW_SUBMIT, reviewId.toString(), "{}");
+      if (res.success) setReviewSubmitted(true);
+    } catch (e) {
+      console.error("Submit failed:", e);
     }
   };
 
   return (
     <div className="flex w-full h-screen">
-      {/* Left half: File Viewer */}
       <div className="w-1/2 h-full border-r border-gray-300 p-6">
         {currentDocument.document_id &&
         currentDocument.document_type === "pdf" ? (
@@ -254,26 +236,24 @@ export default function StudentPageContent() {
           currentDocument.document_type === "xlsx" ? (
           <ExcelViewer document_id={currentDocument.document_id} />
         ) : (
-          <p className="h-full flex items-center justify-center text-center text-gray-600">
+          <p className="h-full flex items-center justify-center text-gray-600">
             {currentDocument.document_type === "placeholder"
               ? "There will be a document here."
               : "No document available."}
           </p>
         )}
         <div className="mt-4 flex gap-2 justify-center">
-          {documentList.map((_, index) => (
+          {documentList.map((_, i) => (
             <Button
-              key={index}
-              onClick={() => setCurrentDocIndex(index)}
-              variant={index === currentDocIndex ? "default" : "outline"}
+              key={i}
+              onClick={() => setCurrentDocIndex(i)}
+              variant={i === currentDocIndex ? "default" : "outline"}
             >
-              {index + 1}
+              {i + 1}
             </Button>
           ))}
         </div>
       </div>
-
-      {/* Right half: Other Content - This is where the review UI should be */}
 
       <div className="w-1/2 h-full p-6 overflow-auto">
         <div className="p-6">
@@ -281,12 +261,46 @@ export default function StudentPageContent() {
             Review for {studentData?.first_name} {studentData?.last_name}
           </h1>
 
+          {(studentData?.original_gpa !== undefined ||
+            studentData?.standardized_gpa !== undefined ||
+            studentData?.school) && (
+            <div className="mb-4">
+              {studentData.original_gpa !== undefined && (
+                <p>
+                  <span className="font-semibold">Original GPA:</span>{" "}
+                  {studentData.original_gpa}
+                </p>
+              )}
+              {studentData.standardized_gpa !== undefined && (
+                <p>
+                  <span className="font-semibold">Standardized GPA:</span>{" "}
+                  {studentData.standardized_gpa.toFixed(2)} / 4.00
+                </p>
+              )}
+              {studentData.school && (
+                <>
+                  <p>
+                    <span className="font-semibold">School Attended:</span>{" "}
+                    {studentData.school}
+                  </p>
+                  <p>
+                    <span className="font-semibold">QS World Ranking:</span>{" "}
+                    {qsRankings[studentData.school.toLowerCase()] ? (
+                      <>#{qsRankings[studentData.school.toLowerCase()]}</>
+                    ) : (
+                      <>Not Ranked</>
+                    )}
+                  </p>
+                </>
+              )}
+            </div>
+          )}
+
           {!reviewExists ? (
-            // Center the "Start Review" button when no review exists
             <div className="flex items-center justify-center h-96">
               <Button onClick={handleStartReview}>Start Review</Button>
             </div>
-          ) : reviewSubmitted ? ( // NEW: If review is submitted, show message
+          ) : reviewSubmitted ? (
             <div className="flex items-center justify-center h-96">
               <p className="text-xl text-green-700">
                 You have already submitted a review for this applicant.
@@ -304,9 +318,8 @@ export default function StudentPageContent() {
               <div className="gap-6 mb-4 mt-4">
                 <h3 className="font-bold">Comments:</h3>
                 <Textarea
-                  placeholder="Comments"
                   value={comments}
-                  onChange={(e) => handleCommentChange(e.target.value)}
+                  onChange={(e) => setComments(e.target.value)}
                   className="w-full h-32 bg-gray-50"
                 />
               </div>
@@ -336,6 +349,7 @@ export default function StudentPageContent() {
               </div>
             </>
           )}
+
           <div className="w-48 flex flex-col gap-2">
             <Button
               disabled={!reviewExists || reviewSubmitted}

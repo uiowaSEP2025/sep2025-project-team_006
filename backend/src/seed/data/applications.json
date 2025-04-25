@@ -60,37 +60,37 @@
       "degree_program": "M.S."
     },
     {
-      "status": "completed",
+      "status": "submitted",
       "submission_date": "2025-03-11T10:00:00.000Z",
       "department": "ECE",
       "degree_program": "M.S. without thesis"
     },
     {
-      "status": "completed",
+      "status": "submitted",
       "submission_date": "2025-03-12T10:00:00.000Z",
       "department": "ECE",
       "degree_program": "M.S. without thesis"
     },
     {
-      "status": "completed",
+      "status": "submitted",
       "submission_date": "2025-03-13T10:00:00.000Z",
       "department": "ECE",
       "degree_program": "M.S. without thesis"
     },
     {
-      "status": "completed",
+      "status": "submitted",
       "submission_date": "2025-03-14T10:00:00.000Z",
       "department": "ECE",
       "degree_program": "M.S. without thesis"
     },
     {
-      "status": "in progress",
+      "status": "submitted",
       "submission_date": "2025-03-15T10:00:00.000Z",
       "department": "BME",
       "degree_program": "Ph.D"
     },
     {
-      "status": "in progress",
+      "status": "submitted",
       "submission_date": "2025-03-16T10:00:00.000Z",
       "department": "BME",
       "degree_program": "Ph.D"

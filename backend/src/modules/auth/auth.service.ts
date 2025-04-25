@@ -98,6 +98,23 @@ export class AuthService {
     }
   }
 
+  async logout(session_token: string) {
+    const session = await this.sessionRepository.findOne({
+      where: { session_token },
+      relations: ["user", "user.sessions"],
+    });
+    if (!session) {
+      throw new NotFoundException("Session not found");
+    }
+
+    // delete the session and remove it from the user
+    session.user.sessions = session.user.sessions.filter(x => x.session_token !== session_token);
+    await this.userRepository.save(session.user);
+    await this.sessionRepository.remove(session);
+
+    return;
+  }
+
   async getAuthInfo(req: AuthenticatedRequest) {
     const user = await this.userRepository.findOne({
       where: { email: req.user.email },

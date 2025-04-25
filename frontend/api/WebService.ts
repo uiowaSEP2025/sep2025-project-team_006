@@ -15,6 +15,7 @@ export default class WebService {
   // Authentication routes
   AUTH_STUDENT_REGISTER = `${this.serverUrl}/api/auth/student/register`; // POST
   AUTH_STUDENT_LOGIN = `${this.serverUrl}/api/auth/student/login`; // POST
+  AUTH_STUDENT_LOGOUT = `${this.serverUrl}/api/auth/student/logout`; // POST
   AUTH_INFO = `${this.serverUrl}/api/auth`; // GET
   AUTH_REFRESH = `${this.serverUrl}/api/auth`; // POST
   // API calls
