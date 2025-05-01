@@ -6,7 +6,7 @@ export default class WebService {
   private isDev = process.env.NODE_ENV === "development";
   private serverUrl = this.isDev
     ? "http://localhost:5000"
-    : `https://gradappsite.tech`; // @TODO process.env does not appear to be in scope here.
+    : `https://gradappsite.tech`;
   // Test API calls - these do not exist anymore, but are used for unit testing
   TEST_GET = `${this.serverUrl}/api/test`;
   TEST_GET_ONE = `${this.serverUrl}/api/test/:id`;

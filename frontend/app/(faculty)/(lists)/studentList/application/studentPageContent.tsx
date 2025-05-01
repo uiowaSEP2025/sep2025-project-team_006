@@ -88,7 +88,7 @@ export default function StudentPageContent() {
     };
 
     fetchStudentInfo();
-  }, [studentId]);
+  }, [studentId, webService.STUDENTS_APPLICANT_INFO]);
 
   useEffect(() => {
     if (!studentData || !studentData.applications?.length) return;
@@ -121,7 +121,7 @@ export default function StudentPageContent() {
       }
     };
     fetchReviewMetrics();
-  }, [studentData, faculty_id]);
+  }, [studentData, faculty_id, webService.REVIEW_METRICS_FOR_FACULTY]);
 
   const handleStartReview = async () => {
     if (!studentData || !studentData.applications?.length) return;
