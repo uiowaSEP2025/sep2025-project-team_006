@@ -15,7 +15,6 @@ export default function HomePage() {
           Your one-stop solution for graduate student management.
         </p>
         <div className="flex gap-6">
-          c
           <Button asChild>
             <Link href="/faculty">Faculty</Link>
           </Button>
