@@ -7,9 +7,14 @@ import {
   Request,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { RegisterDto, LoginDto, RefreshTokenDto, LogoutDto } from 'src/dto/auth.dto';
+import {
+  RegisterDto,
+  LoginDto,
+  RefreshTokenDto,
+  LogoutDto,
+} from 'src/dto/auth.dto';
 import { AuthenticatedRequest, AuthGuard } from './auth.guard';
-import { Response} from 'express';
+import { Response } from 'express';
 import { Res } from '@nestjs/common';
 
 /**

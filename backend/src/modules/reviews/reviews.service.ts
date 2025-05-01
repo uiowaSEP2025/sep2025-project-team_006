@@ -107,7 +107,7 @@ export class ReviewsService {
     if (!review) {
       throw new NotFoundException(`Review not found for id ${reviewId}`);
     }
-    review.application.status = "In Progress";
+    review.application.status = 'In Progress';
     // Update review properties if present in the DTO
     if (typeof updateReviewDto.comments !== 'undefined') {
       review.comments = updateReviewDto.comments;
@@ -178,7 +178,7 @@ export class ReviewsService {
       throw new NotFoundException(`Review not found for id ${reviewId}`);
     }
     review.submitted = true;
-    review.application.status = "Reviewed";
+    review.application.status = 'Reviewed';
     review.overall_score = calculateOverallScore(review);
     void this.applicationRepository.save(review.application);
     return this.reviewRepository.save(review);
