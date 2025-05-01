@@ -75,7 +75,7 @@ describe('StudentsService', () => {
         phone_number: '1234567890',
         address: '123 Main St',
         applications: [],
-      } as Student;
+      } as unknown as Student;
 
       (studentRepo.findOne as jest.Mock).mockResolvedValue(studentData);
 

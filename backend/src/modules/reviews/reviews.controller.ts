@@ -38,7 +38,7 @@ export class ReviewsController {
     return this.reviewService.submitReview(reviewId);
   }
 
-  @Get('submitted')
+  @Get('submitted') // .*/api/reviews/submited
   async getSubmittedReviews() {
     return this.reviewService.getSubmittedReviews();
   }
