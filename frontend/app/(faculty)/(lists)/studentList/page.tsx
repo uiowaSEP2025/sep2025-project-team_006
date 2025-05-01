@@ -22,7 +22,6 @@ import {
   PaginationLink,
   PaginationPrevious,
   PaginationNext,
-  PaginationEllipsis,
 } from "@/components/ui/pagination";
 import { Check, ChevronUp, ChevronDown } from "lucide-react";
 
