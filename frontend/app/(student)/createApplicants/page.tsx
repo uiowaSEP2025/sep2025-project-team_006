@@ -74,9 +74,9 @@ export default function CreateApplication() {
             <SelectValue placeholder="Select Degree Program" />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="M.S.">MS</SelectItem>
-            <SelectItem value="M.S. without thesis">MS w/o Thesis</SelectItem>
-            <SelectItem value="Ph.D">PhD</SelectItem>
+            <SelectItem value="MS">M.S.</SelectItem>
+            <SelectItem value="MSMT">M.S. without Thesis</SelectItem>
+            <SelectItem value="PHD">Ph.D</SelectItem>
           </SelectContent>
         </Select>
 
