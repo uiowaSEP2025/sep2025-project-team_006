@@ -1,5 +1,8 @@
-import { IsEnum, IsNotEmpty, IsNumber, IsString, } from 'class-validator';
-import { ApplicationDepartmentType, ApplicationDegreeProgramType } from "../modules/applications/applications.enum";
+import { IsEnum, IsNotEmpty, IsNumber, IsString } from 'class-validator';
+import {
+  ApplicationDepartmentType,
+  ApplicationDegreeProgramType,
+} from '../modules/applications/applications.enum';
 
 export class CreateApplicationDto {
   @IsNumber()
