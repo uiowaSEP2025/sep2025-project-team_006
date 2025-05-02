@@ -18,6 +18,11 @@ export class StudentsController {
     return this.studentsService.getApplicants();
   }
 
+  @Get('applications/:id')
+  async getApplications(@Param('id', ParseIntPipe) id: number) {
+    return this.studentsService.getApplications(id);
+  }
+
   //@UseGuards(AuthGuard)
   @Get(':id') // .*/api/students/:id
   async getStudentInfo(@Param('id', ParseIntPipe) id: number) {

@@ -1,7 +1,13 @@
-import { IsEnum, IsNotEmpty, IsString, } from 'class-validator';
-import { ApplicationDepartmentType, ApplicationDegreeProgramType } from "../modules/applications/applications.enum";
+import { IsEnum, IsNotEmpty, IsNumber, IsString } from 'class-validator';
+import {
+  ApplicationDepartmentType,
+  ApplicationDegreeProgramType,
+} from '../modules/applications/applications.enum';
 
 export class CreateApplicationDto {
+  @IsNumber()
+  student_id: number; // the id of the faculty this metric belongs to
+
   @IsString()
   @IsNotEmpty()
   @IsEnum(ApplicationDepartmentType, {
