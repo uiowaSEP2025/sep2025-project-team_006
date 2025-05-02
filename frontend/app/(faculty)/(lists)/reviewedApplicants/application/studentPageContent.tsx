@@ -14,6 +14,8 @@ import Link from "next/link";
 import { apiDoubleIdGET } from "@/api/methods";
 import { MetricResponse } from "@/types/MetricData";
 import React from "react";
+import { loadQsRankings } from "@/utils/qsRanking";
+import LikeButton from "@/components/LikeButton";
 
 interface DocumentInfo {
   document_id: string | null;
@@ -31,7 +33,8 @@ export default function StudentPageContent() {
   const [comments, setComments] = useState<string>("");
   const [reviewExists, setReviewExists] = useState<boolean>(false);
   //const [reviewSubmitted, setReviewSubmitted] = useState<boolean>(false);
-  //const [reviewId, setReviewId] = useState<number>(0);
+  const [reviewId, setReviewId] = useState<number>(0);
+  const [liked, setLiked] = useState<boolean>(false);
   //const [department, setDepartment] = useState<string>("");
   const [faculty_id, setFacultyId] = useState<string>("");
   const [reviewScores, setReviewScores] = useState<{
@@ -42,7 +45,17 @@ export default function StudentPageContent() {
       faculty_score: null,
     });
 
+  const [qsRankings, setQsRankings] = useState<Record<string, string>>({});
+
   const currentDocument = documentList[currentDocIndex] || {};
+
+  useEffect(() => {
+    loadQsRankings()
+      .then(setQsRankings)
+      .catch((err) => {
+        console.error("Failed to load QS rankings:", err);
+      });
+  }, []);
 
   /**
    * Calls the student applicant information
@@ -60,6 +73,7 @@ export default function StudentPageContent() {
         );
         if (response.success) {
           setStudentData(response.payload);
+          console.log("Showing review with payload:", response.payload);
           const applications = response.payload.applications;
           //const department = applications?.[0]?.department || "";
           const docs = applications?.[0]?.documents || [];
@@ -105,6 +119,8 @@ export default function StudentPageContent() {
           //setReviewSubmitted(response.payload.submitted);
           setReviewMetrics(response.payload.review_metrics);
           setComments(response.payload.comments || "");
+          setLiked(response.payload.liked ?? false);
+          setReviewId(response.payload.review_id);
 
           const facultyScore = calculateFacultyScore(response.payload.review_metrics);
           setReviewScores({
@@ -178,6 +194,41 @@ export default function StudentPageContent() {
             Reviewed Application for {studentData?.first_name} {studentData?.last_name}
           </h1>
 
+          {(studentData?.original_gpa !== undefined ||
+            studentData?.standardized_gpa !== undefined ||
+            studentData?.school) && (
+            <div className="mb-4">
+              {studentData.original_gpa !== undefined && (
+                <p>
+                  <span className="font-semibold">Original GPA:</span>{" "}
+                  {studentData.original_gpa}
+                </p>
+              )}
+              {studentData.standardized_gpa !== undefined && (
+                <p>
+                  <span className="font-semibold">Standardized GPA:</span>{" "}
+                  {studentData.standardized_gpa.toFixed(2)} / 4.00
+                </p>
+              )}
+              {studentData.school && (
+                <>
+                  <p>
+                    <span className="font-semibold">School Attended:</span>{" "}
+                    {studentData.school}
+                  </p>
+                  <p>
+                    <span className="font-semibold">QS World Ranking:</span>{" "}
+                    {qsRankings[studentData.school.toLowerCase()] ? (
+                      <>#{qsRankings[studentData.school.toLowerCase()]}</>
+                    ) : (
+                      <>Not Ranked</>
+                    )}
+                  </p>
+                </>
+              )}
+            </div>
+          )}
+
           {!reviewExists ? (
             <div className="flex items-center justify-center h-96"></div>
           ) : (
@@ -218,6 +269,17 @@ export default function StudentPageContent() {
                   className="w-full h-32 bg-gray-50"
                 />
               </div>
+
+              <div className="flex items-center mb-4">
+                <LikeButton
+                  reviewId={reviewId}
+                  initialLiked={liked}
+                  updateUrl={webService.REVIEW_LIKE_TOGGLE}
+                  onToggle={(newLiked) => setLiked(newLiked)}
+                />
+                <span className="ml-2 text-sm text-gray-600">Mark as Liked</span>
+              </div>
+
             </>
           )}
           <div className="w-48 flex flex-col gap-2">
