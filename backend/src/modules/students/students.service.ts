@@ -1,6 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Application } from 'src/entity/application.entity';
+import { Review } from 'src/entity/review.entity';
 import { Student } from 'src/entity/student.entity';
 import { Repository } from 'typeorm';
 
@@ -41,9 +42,9 @@ export class StudentsService {
       relations: ['student', 'reviews'],
     });
 
-    const cleanApplications: object[] = [];
+    const cleanApplications: CleanApplication[] = [];
     for (let i = 0; i < applications.length; i++) {
-      const clean: object = {
+      const clean: CleanApplication = {
         ...applications[i],
         isReviewed: (applications[i].reviews.length || 0) > 0,
       };
@@ -69,4 +70,12 @@ export class StudentsService {
     }
     return student;
   }
+}
+
+/**
+ * Helper interface so that eslint stops yelling at me
+ */
+interface CleanApplication extends Omit<Application, 'reviews'> {
+  reviews?: Review[] | null;
+  isReviewed: boolean;
 }
