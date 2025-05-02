@@ -1,5 +1,7 @@
 "use client";
 
+import WebService from "@/api/WebService";
+import { apiPOST } from "@/api/apiMethods";
 import Link from "next/link";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -15,21 +17,40 @@ import {
     CardHeader,
     CardTitle,
     CardContent,
-    CardFooter,
   } from "@/components/ui/card";
 import React, { useRef } from "react";
 import { useState } from "react";
 
 export default function CreateApplication() {
+    const[isSubmitted, setSubmit] = useState<boolean>(false);
+    const [successMessage, setSuccessMessage] = useState<string | null>(null);
     const [department, setDepartment] = useState("");
     const [degreeProgram, setDegreeProgram] = useState("");
+    const webService = new WebService();
 
     const fileInputRef = useRef<HTMLInputElement>(null);
 
-    const handleSubmit = () => {
-        console.log("Submitted:", { department, degreeProgram });
-        // Send to backend or form handler here
-      };    
+    const handleSubmit = async () => {
+            try {
+              const applicationPayload = {
+                department,
+                degree_program: degreeProgram
+              };
+              const response = await apiPOST(
+                webService.CREATE_APPLICATION,
+                JSON.stringify(applicationPayload),
+              );
+              if (response.success) {
+                console.log("Submitted:", { department, degreeProgram });
+                setSubmit(true);
+                setSuccessMessage("Application submitted successfully! You may now upload documents.");
+              } else {
+                console.error("Error creating review:", response.error);
+              }
+            } catch (error) {
+              console.error("An unexpected error occurred:", error);
+            }
+          };
 
     const handleUploadClick = () => {
         fileInputRef.current?.click();
@@ -53,6 +74,8 @@ export default function CreateApplication() {
       </CardHeader>
 
       <CardContent className="flex flex-col gap-4">
+        {!isSubmitted ? (
+          <>
         <label className="font-medium mt-4">Department</label>
         <Select onValueChange={setDepartment}>
           <SelectTrigger className="w-full">
@@ -80,22 +103,29 @@ export default function CreateApplication() {
           </SelectContent>
         </Select>
 
+        <Button className="bg-black hover:bg-green-700 text-white" onClick={handleSubmit}>
+          Submit Application
+        </Button>
+        </>
+        ) : (
+          <>
+          {successMessage && (
+            <div className="text-green-600 font-semibold">{successMessage}</div>
+          )}
+
         <Input
           type="file"
           ref={fileInputRef}
           onChange={handleFileChange}
           className="hidden"
         />
-
         <Button className="bg-red-500 hover:bg-red-700" onClick={handleUploadClick}>
           Upload Document
         </Button>
-        <Button className="bg-black hover:bg-green-700 text-white" onClick={handleSubmit}>
-          Submit Application
-        </Button>
-        </CardContent>
+        </>
+        )}
+          </CardContent>
         </Card>
-
         <Button asChild>
           <Link href="/studentHome">Return to Home</Link>
         </Button>
