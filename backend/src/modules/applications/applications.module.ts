@@ -15,4 +15,4 @@ import { Review } from 'src/entity/review.entity';
   controllers: [ApplicationsController],
   providers: [ApplicationsService],
 })
-export class ReviewsModule {}
+export class ApplicationModule {}
