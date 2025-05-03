@@ -26,7 +26,7 @@ export class ApplicationsService {
 
     const student = await this.studentRepository.findOne({
       where: { student_id },
-      relations: ['application'],
+      relations: ['applications'],
     });
     if (!student) {
       throw new NotFoundException('Student not found');
