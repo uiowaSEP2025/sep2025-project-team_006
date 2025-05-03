@@ -20,28 +20,37 @@ import {
   } from "@/components/ui/card";
 import React, { useRef } from "react";
 import { useState } from "react";
+import { useEffect } from "react";
 
 export default function CreateApplication() {
     const[isSubmitted, setSubmit] = useState<boolean>(false);
     const [successMessage, setSuccessMessage] = useState<string | null>(null);
     const [department, setDepartment] = useState("");
     const [degreeProgram, setDegreeProgram] = useState("");
+    const [studentID, setStudentId] = useState("");
     const webService = new WebService();
 
     const fileInputRef = useRef<HTMLInputElement>(null);
+
+    useEffect(() => {
+      const id = window.__USER__?.id?.toString() ?? "";
+      setStudentId(id);
+      console.log("Student ID:", id);
+    }, []);
 
     const handleSubmit = async () => {
             try {
               const applicationPayload = {
                 department,
-                degree_program: degreeProgram
+                degree_program: degreeProgram,
+                student_id: studentID
               };
               const response = await apiPOST(
                 webService.CREATE_APPLICATION,
                 JSON.stringify(applicationPayload),
               );
               if (response.success) {
-                console.log("Submitted:", { department, degreeProgram });
+                console.log("Submitted:", { department, degreeProgram, studentID });
                 setSubmit(true);
                 setSuccessMessage("Application submitted successfully! You may now upload documents.");
               } else {
