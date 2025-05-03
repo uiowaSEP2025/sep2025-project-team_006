@@ -18,12 +18,6 @@ export class ApplicationsService {
     createApplicationDto: CreateApplicationDto,
   ): Promise<Application> {
     const { department, degree_program, student_id } = createApplicationDto;
-
-    const app = this.applicationRepository.create({
-      department,
-      degree_program,
-    });
-
     const student = await this.studentRepository.findOne({
       where: { student_id },
       relations: ['applications'],
@@ -31,6 +25,15 @@ export class ApplicationsService {
     if (!student) {
       throw new NotFoundException('Student not found');
     }
+
+    const app = this.applicationRepository.create({
+      department,
+      degree_program,
+      student,
+      status: 'submitted'
+    });
+
+
     student.applications.push(app);
     return await this.applicationRepository.save(app);
   }
