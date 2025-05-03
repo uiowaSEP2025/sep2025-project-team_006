@@ -7,6 +7,7 @@ import { apiGET } from "@/api/apiMethods";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { Heart } from "lucide-react";
 import {
   Select,
   SelectTrigger,
@@ -33,6 +34,7 @@ interface Profile {
   image: string;
   isReview: boolean;
   reviewScore: number | null;
+  liked: boolean;
 }
 
 export default function StudentList() {
@@ -41,7 +43,7 @@ export default function StudentList() {
   const [profiles, setProfiles] = useState<Profile[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [filterType, setFilterType] = useState<
-    "name" | "status" | "department" | "degree"
+    "name" | "status" | "department" | "degree" | "liked"
   >("name");
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 5;
@@ -66,6 +68,7 @@ export default function StudentList() {
                 image: "/defaultpfp.jpeg",
                 isReview: true,
                 reviewScore: review.overall_score,
+                liked: review.liked ?? false,
               };
             },
           );
@@ -97,6 +100,8 @@ export default function StudentList() {
           return p.department.toLowerCase().includes(query);
         case "degree":
           return p.degree_program.toLowerCase().includes(query);
+        case "liked":
+          return p.liked === true;
         default:
           return true;
       }
@@ -151,6 +156,11 @@ export default function StudentList() {
               <SelectItem value="degree">
                 <span className="flex items-center gap-2">
                   <ChevronDown className="w-4 h-4 rotate-90" /> Program
+                </span>
+              </SelectItem>
+              <SelectItem value="liked">
+                <span className="flex items-center gap-2">
+                  <Heart className="w-4 h-4" /> Liked
                 </span>
               </SelectItem>
             </SelectContent>
