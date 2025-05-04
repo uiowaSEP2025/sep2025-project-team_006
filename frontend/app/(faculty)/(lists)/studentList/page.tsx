@@ -48,10 +48,11 @@ export default function Home() {
   const itemsPerPage = 5;
 
   useEffect(() => {
+    const id = (window.__USER__?.id + "") || "";
     const fetchApplicants = async () => {
       try {
         const response = await apiGET(webService.STUDENTS_APPLICANT_LIST);
-        const reviewedResponse = await apiGET(webService.REVIEW_SUBMITTED);
+        const reviewedResponse = await apiGET(webService.REVIEW_SUBMITTED, id);
 
         if (response.success && reviewedResponse.success) {
           console.log("All Applicants:", response.payload);
