@@ -128,7 +128,7 @@ describe("StudentList", () => {
 
     render(<StudentList />);
     await screen.findByText("Eve");
-    fireEvent.change(screen.getByPlaceholderText(/Search by name/i), { target: { value: 'fra' } });
+    fireEvent.change(screen.getByPlaceholderText(/Search by/i), { target: { value: 'fra' } });
     expect(screen.queryByText("Eve")).toBeNull();
     expect(screen.getByText("Frank")).toBeInTheDocument();
   });
