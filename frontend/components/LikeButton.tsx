@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { Heart } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { apiPUT } from "@/api/apiMethods";
+import React from "react";
 
 interface LikeButtonProps {
   reviewId: number;
