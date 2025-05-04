@@ -27,28 +27,33 @@ export function SignUpForm({
   const [phone_number, setPhoneNumber] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
 
   // Simulate login request (replace with API call)
   // Similar to Login component, but hardcoded routes.
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault(); // Prevent page reload
 
-    let resp;
     try {
-      resp = await apiPOST(
-        "/api/register",
-        JSON.stringify({
+      const res = await fetch("/api/register", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
           first_name,
           last_name,
           phone_number,
           email,
           password,
         }),
-      );
-      if (resp.success) {
-        router.push("/studentHome");
+      });
+
+      if (res.ok) {
+        router.refresh();
       } else {
-        console.error("Login failed");
+        const data = await res.text();
+        setError(data || "Registration failed");
       }
     } catch (e) {
       // (axios issues... i cant attach a catch to this call directly so i need to try/catch)
@@ -144,6 +149,7 @@ export function SignUpForm({
               <Button type="submit" className="w-full">
                 Sign-Up
               </Button>
+              {error && <p className="text-red-500">{error}</p>}
             </div>
           </form>
         </CardContent>

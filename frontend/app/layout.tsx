@@ -54,9 +54,11 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
   // this supposedly forces rerendering of the page, which is required
-  // as we want to inject the user info on every load
+  // as we want to inject the user info on every load.
+  // that said, i do not think it does anything. frustrating. 
   unstable_noStore();
 
+  const cookieStore = await cookies();
   return (
     <html lang="en">
       <body
@@ -77,7 +79,9 @@ export default async function RootLayout({
           </Link>
           <div className="flex items-center space-x-6">
             <span>Graduate Admission Portal</span>
-            <LogoutButton />
+            {(cookieStore.get("gap_token") || cookieStore.get("gap_session")) && (
+              <LogoutButton />
+            )}
           </div>
         </header>
 

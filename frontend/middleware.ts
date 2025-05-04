@@ -9,6 +9,7 @@ type AccountType = "student" | "faculty" | "out";
 export const redirects: Record<string, { out: string | null, student: string | null, faculty: string | null }> = {
     "/faculty": { out: null, student: null, faculty: "/facultyHome" },
     "/students": { out: null, student: "/studentHome", faculty: null },
+    "/createAccount": { out: null, student: "/studentHome", faculty: "/facultyHome" },
     "/facultyHome": { out: "/faculty", student: "/faculty", faculty: null },
     "/studentHome": { out: "/students", student: null, faculty: "/students" },
     "/metricSetting": { out: "/", student: "/faculty", faculty: null },
