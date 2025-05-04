@@ -18,7 +18,7 @@ export const redirects: Record<string, { out: string | null, student: string | n
 
 export async function middleware(req: NextRequest) {
     const url = req.nextUrl.clone();
-    if (url.pathname in redirects && redirects[url.pathname]["out"] != null) {
+    if (url.pathname in redirects) {
         const token = req.cookies.get('gap_token')?.value;
         const session = req.cookies.get("gap_session")?.value;
         if (!token || !session) {
