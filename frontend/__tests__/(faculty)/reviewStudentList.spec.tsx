@@ -136,7 +136,7 @@ describe("ReviewedApplicantsList", () => {
 
     render(<ReviewedList />);
     await screen.findByText("Alice Wonder");
-    fireEvent.change(screen.getByPlaceholderText(/Search by name/i), {
+    fireEvent.change(screen.getByPlaceholderText(/Search by/i), {
       target: { value: 'bob' },
     });
     expect(screen.queryByText("Alice Wonder")).toBeNull();
