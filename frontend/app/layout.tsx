@@ -12,6 +12,7 @@ import iowaBlackLogo from "../public/IOWABlackLogo.png";
 import WebService from "@/api/WebService";
 import UserContextProvider from "@/components/UserContextProvider";
 import LogoutButton from "@/components/LogoutButton";
+import Link from "next/link";
 
 const webService = new WebService();
 
@@ -65,6 +66,7 @@ export default async function RootLayout({
         <CookiesProvider>
 
         <header className="bg-black text-[#F1BE48] h-20 text-4xl px-6 sm:px-12 py-4 flex justify-between items-center">
+          <Link href={"/"}>
           <Image
             src={gapOffical}
             alt="GAP Official logo"
@@ -72,6 +74,7 @@ export default async function RootLayout({
             height={48}
             className="h-12 w-auto"
           />
+          </Link>
           <div className="flex items-center space-x-6">
             <span>Graduate Admission Portal</span>
             <LogoutButton />

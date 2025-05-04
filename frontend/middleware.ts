@@ -8,7 +8,7 @@ type AccountType = "student" | "faculty" | "out";
 
 export const redirects: Record<string, { out: string | null, student: string | null, faculty: string | null }> = {
     "/faculty": { out: null, student: null, faculty: "/facultyHome" },
-    "/students": { out: null, student: "/studentHome", faculty: null }, 
+    "/students": { out: null, student: "/studentHome", faculty: null },
     "/facultyHome": { out: "/faculty", student: "/faculty", faculty: null },
     "/studentHome": { out: "/students", student: null, faculty: "/students" },
     "/metricSetting": { out: "/", student: "/faculty", faculty: null },
@@ -22,8 +22,12 @@ export async function middleware(req: NextRequest) {
         const token = req.cookies.get('gap_token')?.value;
         const session = req.cookies.get("gap_session")?.value;
         if (!token || !session) {
-            url.pathname = redirects[url.pathname]["out"] as string;
-            return NextResponse.redirect(url);
+            if (redirects[url.pathname]["out"]) {
+                url.pathname = redirects[url.pathname]["out"] as string;
+                return NextResponse.redirect(url);
+            } else {
+                return NextResponse.next();
+            }
         }
 
         let res;
