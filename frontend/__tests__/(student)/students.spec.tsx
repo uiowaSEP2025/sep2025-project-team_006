@@ -31,13 +31,4 @@ describe('StudentLogin Component', () => {
     render(<StudentLogin />);
     expect(screen.getByTestId('login-form')).toBeInTheDocument();
   });
-
-  it('renders navigation links', () => {
-    render(<StudentLogin />);
-    const lastPageLink = screen.getByRole('link', { name: /Move to Last Page/i });
-    expect(lastPageLink).toHaveAttribute('href', '/');
-
-    const nextPageLink = screen.getByRole('link', { name: /Move to Next Page/i });
-    expect(nextPageLink).toHaveAttribute('href', '/studentHome');
-  });
 });

@@ -85,6 +85,7 @@ notes.txt
 /frontend/.pnpm-debug.log*
 # Env files (can opt-in for committing if needed)
 /frontend/.env*
+!/frontend/.env.example
 # Vercel
 /frontend/.vercel
 # TypeScript

@@ -46,11 +46,15 @@ export function LoginForm({
 
     // still a bit of an ugly hack... but its better now atleast
     if (res.ok) {
+      /*
       if (location.pathname == "/students") {
         router.push("/studentHome");
       } else {
         router.push("/facultyHome");
       }
+      */
+      // this is still hacky
+      router.refresh();
     } else {
       const data = await res.text();
       setError(data || "Login failed");
@@ -100,9 +104,6 @@ export function LoginForm({
               </div>
               <Button type="submit" className="w-full">
                 Login
-              </Button>
-              <Button variant="outline" className="w-full">
-                Login with Microsoft
               </Button>
             </div>
             {showSignUpLink && (

@@ -20,10 +20,7 @@ export default function Home() {
 
         <div className="flex gap-4 items-center flex-col sm:flex-row">
           <Button asChild>
-            <Link href="/">Move to Last Page</Link>
-          </Button>
-          <Button asChild>
-            <Link href="/facultyHome">Move to Next Page</Link>
+            <Link href="/">Back</Link>
           </Button>
         </div>
       </main>

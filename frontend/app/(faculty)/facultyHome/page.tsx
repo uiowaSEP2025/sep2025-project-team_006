@@ -1,6 +1,4 @@
-import Link from "next/link";
 import HomeDashboard from "@/components/HomeDashboard";
-import { Button } from "@/components/ui/button";
 import React from "react";
 
 export default function Home() {
@@ -90,9 +88,6 @@ export default function Home() {
         <HomeDashboard title="Faculty Review" items={Develompent} />
         <HomeDashboard title="Information" items={AdmissionsInformation} />
         <HomeDashboard title="Assistance" items={Assistance} />
-        <Button asChild>
-          <Link href="/faculty">Move back to Login</Link>
-        </Button>
       </main>
     </div>
   );

@@ -41,13 +41,6 @@ describe('FacultyHome Page', () => {
     expect(screen.getAllByTestId('home-dashboard')).toHaveLength(3);
   });
 
-  it('renders the back to login link', () => {
-    render(<FacultyHome />);
-    const link = screen.getByRole('link', { name: /move back to login/i });
-    expect(link).toBeInTheDocument();
-    expect(link).toHaveAttribute('href', '/faculty');
-  });
-
   it('renders specific dashboard items', () => {
     render(<FacultyHome />);
     expect(screen.getByText(/Student List/i)).toBeInTheDocument();

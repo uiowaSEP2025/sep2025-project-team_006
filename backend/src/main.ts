@@ -16,7 +16,7 @@ async function bootstrap() {
     logger,
   });
   app.enableCors({
-    origin: ['http://localhost:3000', 'https://uiowasep2025.github.io'],
+    origin: ['http://localhost:3000', 'https://uiowasep2025.github.io', 'https://gap.of.rocks'],
     methods: ['GET', 'PUT', 'POST', 'DELETE'],
     allowedHeaders: ['Content-Type', 'Authorization'],
     credentials: true,
