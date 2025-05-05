@@ -12,6 +12,16 @@ jest.mock('next/link', () => {
   return ({ href, children }: any) => <a href={href}>{children}</a>;
 });
 
+// required to avoid mysterious "invariant expected app router to be mounted" error
+jest.mock('next/navigation', () => ({
+  useRouter: () => ({
+    push: jest.fn(),
+    replace: jest.fn(),
+    refresh: jest.fn(),
+    prefetch: jest.fn(),
+  }),
+}));
+
 // Mock localStorage and window.location.replace
 const mockReplace = jest.fn();
 const mockSetItem = jest.fn();

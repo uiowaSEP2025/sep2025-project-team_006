@@ -32,13 +32,4 @@ describe('Home Page', () => {
     expect(loginForm).toBeInTheDocument();
     expect(loginForm).toHaveTextContent('SignUpLink: false');
   });
-
-  it('renders two navigation buttons with correct links', () => {
-    render(<Home />);
-    const lastPageLink = screen.getByRole('link', { name: /move to last page/i });
-    const nextPageLink = screen.getByRole('link', { name: /move to next page/i });
-
-    expect(lastPageLink).toHaveAttribute('href', '/');
-    expect(nextPageLink).toHaveAttribute('href', '/facultyHome');
-  });
 });

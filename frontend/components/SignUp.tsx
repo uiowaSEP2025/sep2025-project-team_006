@@ -12,7 +12,6 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useState } from "react";
-import { apiPOST } from "@/api/apiMethods";
 import Link from "next/link";
 import { useRouter } from 'next/navigation'
 import React from "react";
@@ -21,13 +20,13 @@ export function SignUpForm({
   className,
   ...props
 }: React.ComponentPropsWithoutRef<"div">) {
-  const router = useRouter();
   const [first_name, setFirstName] = useState("");
   const [last_name, setLastName] = useState("");
   const [phone_number, setPhoneNumber] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const router = useRouter();
 
   // Simulate login request (replace with API call)
   // Similar to Login component, but hardcoded routes.
