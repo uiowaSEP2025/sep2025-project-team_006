@@ -15,6 +15,7 @@ import { apiDoubleIdGET } from "@/api/methods";
 import { MetricResponse } from "@/types/MetricData";
 import React from "react";
 import { loadQsRankings } from "@/utils/qsRanking";
+import LikeButton from "@/components/LikeButton";
 
 interface DocumentInfo {
   document_id: string | null;
@@ -34,6 +35,7 @@ export default function StudentPageContent() {
   const [comments, setComments] = useState<string>("");
   const [reviewExists, setReviewExists] = useState<boolean>(false);
   const [reviewSubmitted, setReviewSubmitted] = useState<boolean>(false);
+  const [liked, setLiked] = useState<boolean>(false);
   const [reviewId, setReviewId] = useState<number>(0);
   const [department, setDepartment] = useState<string>("");
   const [faculty_id, setFacultyId] = useState<string>("");
@@ -58,7 +60,7 @@ export default function StudentPageContent() {
   }, []);
 
   useEffect(() => {
-    const id = window.__USER__?.id + "" || "";
+    const id = typeof window !== "undefined" ? window.__USER__?.id + "" : "";
     setFacultyId(id);
 
     if (!studentId) return;
@@ -113,6 +115,9 @@ export default function StudentPageContent() {
           setReviewSubmitted(response.payload.submitted);
           setReviewMetrics(response.payload.review_metrics);
           setComments(response.payload.comments || "");
+          console.log("Fetched review payload:", response.payload);
+          console.log("Setting liked to:", response.payload.liked ?? false);
+          setLiked(response.payload.liked ?? false);
         } else {
           console.error("Error fetching review metrics: ", response.error);
         }
@@ -171,6 +176,7 @@ export default function StudentPageContent() {
 
     const payload = {
       comments,
+      liked,
       review_metrics: reviewMetrics.map((m) => ({
         review_metric_id: m.review_metric_id,
         selected_weight: m.selected_weight,
@@ -178,6 +184,7 @@ export default function StudentPageContent() {
       })),
       overall_score: null,
     };
+    console.log("Saving review with payload:", payload);
     const data = JSON.stringify(payload);
     try {
       const response = await apiPUT(
@@ -189,6 +196,9 @@ export default function StudentPageContent() {
         console.error("Error updating review: ", response.error);
       } else {
         console.log("Review saved successfully:", response.payload);
+        if (typeof response.payload.liked === "boolean") {
+          setLiked(response.payload.liked);
+        }
         await fetchReviewScores();
       }
     } catch (error) {
@@ -322,6 +332,18 @@ export default function StudentPageContent() {
                   onChange={(e) => setComments(e.target.value)}
                   className="w-full h-32 bg-gray-50"
                 />
+              </div>
+
+              <div className="flex items-center mb-4">
+              {reviewId > 0 && (
+                <LikeButton
+                  reviewId={reviewId}
+                  initialLiked={liked}
+                  updateUrl={webService.REVIEW_LIKE_TOGGLE}
+                  onToggle={(newLiked) => setLiked(newLiked)}
+                />
+              )}
+                <span className="ml-2 text-sm text-gray-600">Mark as Liked</span>
               </div>
 
               <div className="mt-6 mb-4">

@@ -7,6 +7,23 @@ import { apiGET } from "@/api/apiMethods";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { Heart } from "lucide-react";
+import {
+  Select,
+  SelectTrigger,
+  SelectValue,
+  SelectContent,
+  SelectItem,
+} from "@/components/ui/select";
+import {
+  Pagination,
+  PaginationContent,
+  PaginationItem,
+  PaginationLink,
+  PaginationPrevious,
+  PaginationNext,
+} from "@/components/ui/pagination";
+import { Check, ChevronUp, ChevronDown } from "lucide-react";
 
 interface Profile {
   id: number; //corresponds to student_id
@@ -17,6 +34,7 @@ interface Profile {
   image: string;
   isReview: boolean;
   reviewScore: number | null;
+  liked: boolean;
 }
 
 export default function StudentList() {
@@ -24,6 +42,9 @@ export default function StudentList() {
   const webService = new WebService();
   const [profiles, setProfiles] = useState<Profile[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
+  const [filterType, setFilterType] = useState<
+    "name" | "status" | "department" | "degree" | "liked"
+  >("name");
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 5;
 
@@ -47,6 +68,7 @@ export default function StudentList() {
                 image: "/defaultpfp.jpeg",
                 isReview: true,
                 reviewScore: review.overall_score,
+                liked: review.liked ?? false,
               };
             },
           );
@@ -67,10 +89,24 @@ export default function StudentList() {
 
   // Filtered and paginated profiles
   const filteredProfiles = useMemo(() => {
-    return profiles.filter((p) =>
-      p.name.toLowerCase().includes(searchQuery.toLowerCase()),
-    );
-  }, [profiles, searchQuery]);
+    return profiles.filter((p) => {
+      const query = searchQuery.toLowerCase();
+      switch (filterType) {
+        case "name":
+          return p.name.toLowerCase().includes(query);
+        case "status":
+          return p.status.toLowerCase().includes(query);
+        case "department":
+          return p.department.toLowerCase().includes(query);
+        case "degree":
+          return p.degree_program.toLowerCase().includes(query);
+        case "liked":
+          return p.liked === true;
+        default:
+          return true;
+      }
+    });
+  }, [profiles, searchQuery, filterType]);
 
   const totalPages = Math.ceil(filteredProfiles.length / itemsPerPage);
   const paginatedProfiles = useMemo(() => {
@@ -82,16 +118,55 @@ export default function StudentList() {
     <div className="min-h-screen flex flex-col items-center bg-gray-100 p-6">
       <h1 className="text-2xl font-bold mb-4">Select a Profile</h1>
 
-      <input
-        type="text"
-        value={searchQuery}
-        onChange={(e) => {
-          setSearchQuery(e.target.value);
-          setCurrentPage(1); // reset page on new search
-        }}
-        placeholder="Search by name..."
-        className="mb-4 p-2 border border-gray-300 rounded w-full max-w-md"
-      />
+      {/* Sticky search + filter bar */}
+      <div className="sticky top-0 z-10 bg-gray-100 w-full py-4">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:space-x-4 px-4 w-full max-w-3xl mx-auto">
+          <input
+            type="text"
+            value={searchQuery}
+            onChange={(e) => {
+              setSearchQuery(e.target.value);
+              setCurrentPage(1);
+            }}
+            placeholder="Search by..."
+            className="p-2 border border-gray-300 rounded flex-grow mb-2 sm:mb-0"
+          />
+
+          {/*eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+          <Select onValueChange={(value) => setFilterType(value as any)}>
+            <SelectTrigger className="w-full sm:w-[180px]">
+              <SelectValue placeholder="Filter by..." />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="name">
+                <span className="flex items-center gap-2">
+                  <Check className="w-4 h-4" /> Name
+                </span>
+              </SelectItem>
+              <SelectItem value="status">
+                <span className="flex items-center gap-2">
+                  <ChevronUp className="w-4 h-4" /> Status
+                </span>
+              </SelectItem>
+              <SelectItem value="department">
+                <span className="flex items-center gap-2">
+                  <ChevronDown className="w-4 h-4" /> Department
+                </span>
+              </SelectItem>
+              <SelectItem value="degree">
+                <span className="flex items-center gap-2">
+                  <ChevronDown className="w-4 h-4 rotate-90" /> Program
+                </span>
+              </SelectItem>
+              <SelectItem value="liked">
+                <span className="flex items-center gap-2">
+                  <Heart className="w-4 h-4" /> Liked
+                </span>
+              </SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
+      </div>
 
       <ProfileList
         profiles={paginatedProfiles}
@@ -99,21 +174,44 @@ export default function StudentList() {
       />
 
       {/* Pagination buttons */}
-      <div className="flex space-x-2 my-4">
-        {Array.from({ length: totalPages }, (_, i) => (
-          <button
-            key={i}
-            onClick={() => setCurrentPage(i + 1)}
-            className={`px-3 py-1 rounded ${
-              currentPage === i + 1
-                ? "bg-yellow-500 text-black"
-                : "bg-gray-300 text-black"
-            }`}
-          >
-            {i + 1}
-          </button>
-        ))}
-      </div>
+      <Pagination className="my-4">
+        <PaginationContent>
+          <PaginationItem>
+            <PaginationPrevious
+              onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+              className={currentPage === 1 ? "pointer-events-none opacity-50" : ""}
+            />
+          </PaginationItem>
+
+          {/* Page numbers */}
+          {Array.from({ length: totalPages }, (_, i) => (
+            <PaginationItem key={i}>
+              <PaginationLink
+                href="#"
+                isActive={currentPage === i + 1}
+                onClick={(e) => {
+                  e.preventDefault();
+                  setCurrentPage(i + 1);
+                }}
+              >
+                {i + 1}
+              </PaginationLink>
+            </PaginationItem>
+          ))}
+
+          <PaginationItem>
+            <PaginationNext
+              onClick={() =>
+                setCurrentPage((prev) => Math.min(prev + 1, totalPages))
+              }
+              className={
+                currentPage === totalPages ? "pointer-events-none opacity-50" : ""
+              }
+            />
+          </PaginationItem>
+        </PaginationContent>
+      </Pagination>
+
 
       <Button asChild>
         <Link href="/facultyHome">Return to Home</Link>
