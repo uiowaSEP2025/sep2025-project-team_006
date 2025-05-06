@@ -49,9 +49,10 @@ export default function StudentList() {
   const itemsPerPage = 5;
 
   useEffect(() => {
+    const id = (window.__USER__?.id + "") || "";
     const fetchApplicants = async () => {
       try {
-        const response = await apiGET(webService.REVIEW_SUBMITTED);
+        const response = await apiGET(webService.REVIEW_SUBMITTED, id);
         if (response.success) {
           console.log("Reviewed Applications:", response.payload);
           const fetchedProfiles: Profile[] = response.payload.map(

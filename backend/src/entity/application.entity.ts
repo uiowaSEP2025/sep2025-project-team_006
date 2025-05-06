@@ -18,7 +18,7 @@ export class Application {
   @Column()
   status: string;
 
-  @CreateDateColumn()
+  @CreateDateColumn({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   submission_date: Date;
 
   @Column()

@@ -1,5 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { Application } from 'src/entity/application.entity';
+import { Review } from 'src/entity/review.entity';
 import { Student } from 'src/entity/student.entity';
 import { Repository } from 'typeorm';
 
@@ -8,6 +10,8 @@ export class StudentsService {
   constructor(
     @InjectRepository(Student)
     private readonly studentRepo: Repository<Student>,
+    @InjectRepository(Application)
+    private readonly applicationRepo: Repository<Application>,
   ) {}
 
   async getApplicants(): Promise<any[]> {
@@ -32,6 +36,26 @@ export class StudentsService {
     return rawApplicants;
   }
 
+  async getApplications(id: number): Promise<object> {
+    const applications = await this.applicationRepo.find({
+      where: { student: { student_id: id } },
+      relations: ['student', 'reviews'],
+    });
+
+    const cleanApplications: CleanApplication[] = [];
+    for (let i = 0; i < applications.length; i++) {
+      const clean: CleanApplication = {
+        ...applications[i],
+        isReviewed: (applications[i].reviews.length || 0) > 0,
+      };
+
+      delete clean.reviews;
+      cleanApplications.push(clean);
+    }
+
+    return cleanApplications;
+  }
+
   async getStudentInfo(id: number): Promise<Student> {
     const student = await this.studentRepo.findOne({
       where: { student_id: id },
@@ -46,4 +70,12 @@ export class StudentsService {
     }
     return student;
   }
+}
+
+/**
+ * Helper interface so that eslint stops yelling at me
+ */
+interface CleanApplication extends Omit<Application, 'reviews'> {
+  reviews?: Review[] | null;
+  isReviewed: boolean;
 }

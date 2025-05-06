@@ -9,6 +9,7 @@ import { DocumentsModule } from './modules/documents/documents.module';
 import { ReviewMetricsModule } from './modules/reviews-metrics/review-metrics.module';
 import { ReviewsModule } from './modules/reviews/reviews.module';
 import { TemplateModule } from './modules/templates/templates.module';
+import { ApplicationModule } from './modules/applications/applications.module';
 
 @Module({
   imports: [
@@ -21,6 +22,7 @@ import { TemplateModule } from './modules/templates/templates.module';
     TemplateModule,
     StudentsModule,
     AuthModule,
+    ApplicationModule
   ],
   providers: [LoggerService],
 })

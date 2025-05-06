@@ -4,9 +4,14 @@ import React from "react";
 export default function StudentHome() {
   const GraduateAdmissions = [
     {
+      label: "Create Application",
+      href: "/createApplicants",
+      image: "./uploadIOWA.png",
+    },
+    {
       label: "Graduate Form",
       href: " https://docs.google.com/forms/d/e/1FAIpQLSe3Vkjd09Fw_irsg62TQhr8_Z47ctYp0HMzhIMANFjNDYKXlw/viewform?usp=header",
-      image: "./uploadIOWA.png",
+      image: "./createApplication.png",
       isExternal: true,
     },
     {
