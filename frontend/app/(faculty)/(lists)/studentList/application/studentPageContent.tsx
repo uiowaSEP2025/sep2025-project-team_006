@@ -16,6 +16,7 @@ import { MetricResponse } from "@/types/MetricData";
 import React from "react";
 import { loadQsRankings } from "@/utils/qsRanking";
 import LikeButton from "@/components/LikeButton";
+import { ApplicationData } from "@/types/ApplicationData";
 
 interface DocumentInfo {
   document_id: string | null;
@@ -24,10 +25,11 @@ interface DocumentInfo {
 
 export default function StudentPageContent() {
   const searchParams = useSearchParams();
-  const studentId = searchParams.get("id");
+  const applicationId = searchParams.get("id");
   const webService = new WebService();
 
   const [studentData, setStudentData] = useState<StudentData | null>(null);
+  const [applicationData, setApplicationData] = useState<ApplicationData | null>();
   const [documentList, setDocumentList] = useState<DocumentInfo[]>([]);
   const [currentDocIndex, setCurrentDocIndex] = useState<number>(0);
 
@@ -62,40 +64,46 @@ export default function StudentPageContent() {
   useEffect(() => {
     const id = typeof window !== "undefined" ? window.__USER__?.id + "" : "";
     setFacultyId(id);
+    if (!applicationId) return;
 
-    if (!studentId) return;
-    const fetchStudentInfo = async () => {
+    const fetchApplicationInfo = async () => {
       try {
-        const response = await apiGET(
-          webService.STUDENTS_APPLICANT_INFO,
-          studentId,
+        const appResponse = await apiGET(
+          webService.APPLICATION_GET,
+          applicationId,
         );
-        if (response.success) {
-          setStudentData(response.payload);
-          const apps = response.payload.applications || [];
-          setDepartment(apps[0]?.department || "");
+        if (!appResponse.success) return console.error("APPLICATION_GET error:", appResponse.error);
 
-          const docs = apps[0]?.documents || [];
-          const formattedDocs = docs.map((doc: DocumentInfo) => ({
-            document_id: String(doc.document_id),
-            document_type: String(doc.document_type),
-          }));
-          setDocumentList([...formattedDocs]);
-        } else {
-          console.error("STUDENTS_APPLICANT_INFO error:", response.error);
-        }
+        const reviewResponse = await apiGET(
+          webService.REVIEW_GET_FOR,
+          applicationId,
+        );
+        if (!reviewResponse.success) return console.error("REVIEW_GET_FOR error:", reviewResponse.error);
+
+        const app = appResponse.payload;
+        setApplicationData(app);
+        setStudentData(app.student);
+        //const apps = response.payload.applications || [];
+        setDepartment(app.department || "");
+
+        const docs = app.documents || [];
+        const formattedDocs = docs.map((doc: DocumentInfo) => ({
+          document_id: String(doc.document_id),
+          document_type: String(doc.document_type),
+        }));
+        setDocumentList([...formattedDocs]);
       } catch (error) {
         console.error("An unexpected error occurred:", error);
       }
     };
 
-    fetchStudentInfo();
-  }, [studentId, webService.STUDENTS_APPLICANT_INFO]);
+    fetchApplicationInfo();
+  }, [applicationId, webService.APPLICATION_GET, webService.REVIEW_GET_FOR]);
 
   useEffect(() => {
-    if (!studentData || !studentData.applications?.length) return;
+    if (!applicationData) return;
+    const applicationId = applicationData.application_id;
 
-    const applicationId = studentData.applications[0].application_id;
     const fetchReviewMetrics = async () => {
       try {
         const response = await apiDoubleIdGET(
@@ -126,11 +134,12 @@ export default function StudentPageContent() {
       }
     };
     fetchReviewMetrics();
-  }, [studentData, faculty_id, webService.REVIEW_METRICS_FOR_FACULTY]);
+  }, [applicationData, faculty_id, webService.REVIEW_METRICS_FOR_FACULTY]);
 
   const handleStartReview = async () => {
-    if (!studentData || !studentData.applications?.length) return;
-    const applicationId = studentData.applications[0].application_id;
+    if (!applicationData) return;
+    const applicationId = applicationData.application_id;
+
     try {
       const reviewPayload = {
         application_id: applicationId,

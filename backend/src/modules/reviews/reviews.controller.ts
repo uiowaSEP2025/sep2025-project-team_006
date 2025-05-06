@@ -56,6 +56,11 @@ export class ReviewsController {
     return this.reviewService.getSubmittedReviews(facultyId);
   }
 
+  @Get('for/:id')
+  async getReviewFor(@Param('id', ParseIntPipe) application_id: number) {
+    return this.reviewService.getReviewFor(application_id);
+  }
+
   // this needs to be put below the rest of them due to its generic nature
   @Get(':id') // .*/api/reviews/:id
   async getReview(@Param('id', ParseIntPipe) reviewId: number) {

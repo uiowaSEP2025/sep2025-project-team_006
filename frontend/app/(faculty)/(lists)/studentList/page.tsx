@@ -2,7 +2,7 @@
 
 import React from "react";
 import { useEffect, useState, useMemo } from "react";
-import ProfileList from "@/components/ProfileList";
+import ProfileList, { Profile } from "@/components/ProfileList";
 import WebService from "@/api/WebService";
 import { apiGET } from "@/api/apiMethods";
 import { useRouter } from "next/navigation";
@@ -25,18 +25,6 @@ import {
   PaginationNext,
 } from "@/components/ui/pagination";
 import { Check, ChevronUp, ChevronDown } from "lucide-react";
-
-interface Profile {
-  id: number; //corresponds to student_id
-  name: string; //corresponds to full_name
-  status: string;
-  department: string;
-  degree_program: string;
-  image: string;
-  isReview: boolean;
-  reviewScore: number | null;
-  liked: boolean;
-}
 
 export default function Home() {
   const router = useRouter();
@@ -75,6 +63,7 @@ export default function Home() {
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
             (applicant: any) => ({
               id: applicant.student_id,
+              app_id: applicant.application_id,
               name: applicant.full_name,
               status: applicant.status,
               department: applicant.department,
@@ -100,7 +89,7 @@ export default function Home() {
   }, [webService.STUDENTS_APPLICANT_LIST, webService.REVIEW_SUBMITTED]);
 
   const handleProfileClick = (profile: Profile) => {
-    router.push(`/studentList/application?id=${profile.id}`);
+    router.push(`/studentList/application?id=${profile.app_id}`);
   };
 
   // Filtered and paginated profiles

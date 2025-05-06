@@ -37,4 +37,15 @@ export class ApplicationsService {
     student.applications.push(app);
     return await this.applicationRepository.save(app);
   }
+
+  async getApplication(id: number): Promise<Application> {
+    const application = await this.applicationRepository.findOne({
+      where: { application_id: id },
+      relations: ["student", "documents"]
+    });
+    if (!application) {
+      throw new NotFoundException("Application not found");
+    }
+    return application;
+  }
 }

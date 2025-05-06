@@ -195,4 +195,11 @@ export class ReviewsService {
     return await this.reviewRepository.save(review);
   }
   
+  async getReviewFor(application_id: number) {
+    const reviews = await this.reviewRepository.find({
+      where: { application: { application_id }},
+      relations: ["application"]
+    });
+    return reviews;
+  }
 }

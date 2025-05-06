@@ -28,6 +28,7 @@ export default class WebService {
   GET_STUDENT_APPLICATIONS = `${this.serverUrl}/api/students/applications/:id` //GET
   APPLICATION_DOCUMENT_GET = `${this.serverUrl}/api/documents/:id`; // GET
   APPLICATION_DOCUMENT_POST = `${this.serverUrl}/api/documents`; // POST
+  APPLICATION_GET = `${this.serverUrl}/api/applications/:id`;
   // These might have to change slightly for the template migration
   REVIEW_CREATE_POST = `${this.serverUrl}/api/reviews`; // POST
   REVIEW_UPDATE_PUT = `${this.serverUrl}/api/reviews/:id`; // PUT
@@ -36,6 +37,7 @@ export default class WebService {
   REVIEW_SUBMITTED = `${this.serverUrl}/api/reviews/submitted/:id`; // GET
   REVIEW_GET_SCORES = `${this.serverUrl}/api/reviews/:id/scores`
   REVIEW_LIKE_TOGGLE = `${this.serverUrl}/api/reviews/:id/like`; // PUT
+  REVIEW_GET_FOR = `${this.serverUrl}/api/reviews/for/:id`;
   TEMPLATE = `${this.serverUrl}/api/templates`; // POST, GET
   TEMPLATE_GET_BY_DEPARTMENT = `${this.serverUrl}/api/templates/department/:id`; // GET, unused
   TEMPLATE_BY_ID = `${this.serverUrl}/api/templates/:id`; // GET, PUT, DELETE
