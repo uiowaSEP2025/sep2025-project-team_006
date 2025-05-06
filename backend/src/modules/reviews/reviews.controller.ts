@@ -38,6 +38,14 @@ export class ReviewsController {
     return this.reviewService.submitReview(reviewId);
   }
 
+  @Put(':id/like') // .*/api/reviews/:id/like
+  async updateLikeStatus(
+    @Param('id', ParseIntPipe) reviewId: number,
+    @Body() body: { liked: boolean },
+  ) {
+    return this.reviewService.updateLikeStatus(reviewId, body.liked);
+  }
+
   @Get('submitted') // .*/api/reviews/submited
   async getSubmittedReviews() {
     return this.reviewService.getSubmittedReviews();

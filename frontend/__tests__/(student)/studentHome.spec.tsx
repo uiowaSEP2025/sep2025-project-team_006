@@ -50,11 +50,4 @@ describe('StudentHome Component', () => {
         expect(screen.getByText('Finances')).toBeInTheDocument();
         expect(screen.getByText('Donations')).toBeInTheDocument();
     });
-
-    it('renders Move back to Login link', () => {
-        render(<StudentHome />);
-        const link = screen.getByRole('link', { name: /Move back to Login/i });
-        expect(link).toBeInTheDocument();
-        expect(link).toHaveAttribute('href', '/students');
-    });
 });

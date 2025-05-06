@@ -3,6 +3,7 @@ import {
   IsString,
   IsNumber,
   IsArray,
+  IsBoolean,
   ValidateNested,
 } from 'class-validator';
 import { Type } from 'class-transformer';
@@ -26,6 +27,10 @@ export class UpdateReviewDto {
   @IsOptional()
   @IsNumber()
   overall_score?: number;
+
+  @IsOptional()
+  @IsBoolean()
+  liked?: boolean;
 
   @IsOptional()
   @IsArray()

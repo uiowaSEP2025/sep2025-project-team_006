@@ -28,6 +28,9 @@ export class Review {
   @Column({ default: false })
   submitted: boolean;
 
+  @Column({ default: false })
+  liked: boolean;
+
   @ManyToOne(() => Application, (application) => application.reviews)
   application: Application;
 

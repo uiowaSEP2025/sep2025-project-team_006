@@ -41,6 +41,7 @@ export class ReviewMetricsService {
       submitted: review.submitted,
       comments: review.comments,
       overall_score: review.overall_score,
+      liked: review.liked,
     };
   }
 }

@@ -12,6 +12,7 @@ import iowaBlackLogo from "../public/IOWABlackLogo.png";
 import WebService from "@/api/WebService";
 import UserContextProvider from "@/components/UserContextProvider";
 import LogoutButton from "@/components/LogoutButton";
+import Link from "next/link";
 
 const webService = new WebService();
 
@@ -53,9 +54,11 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
   // this supposedly forces rerendering of the page, which is required
-  // as we want to inject the user info on every load
+  // as we want to inject the user info on every load.
+  // that said, i do not think it does anything. frustrating. 
   unstable_noStore();
 
+  const cookieStore = await cookies();
   return (
     <html lang="en">
       <body
@@ -65,6 +68,7 @@ export default async function RootLayout({
         <CookiesProvider>
 
         <header className="bg-black text-[#F1BE48] h-20 text-4xl px-6 sm:px-12 py-4 flex justify-between items-center">
+          <Link href={"/"}>
           <Image
             src={gapOffical}
             alt="GAP Official logo"
@@ -72,9 +76,12 @@ export default async function RootLayout({
             height={48}
             className="h-12 w-auto"
           />
+          </Link>
           <div className="flex items-center space-x-6">
             <span>Graduate Admission Portal</span>
-            <LogoutButton />
+            {(cookieStore.get("gap_token") || cookieStore.get("gap_session")) && (
+              <LogoutButton />
+            )}
           </div>
         </header>
 

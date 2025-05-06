@@ -10,6 +10,7 @@ interface Profile {
   image: string;
   isReview: boolean;
   reviewScore: number | null;
+  liked: boolean;
 }
 
 interface ProfileListProps {

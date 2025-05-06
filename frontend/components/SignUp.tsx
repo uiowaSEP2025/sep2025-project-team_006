@@ -11,10 +11,9 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import WebService from "@/api/WebService";
 import { useState } from "react";
-import { apiPOST } from "@/api/apiMethods";
 import Link from "next/link";
+import { useRouter } from 'next/navigation'
 import React from "react";
 
 export function SignUpForm({
@@ -26,32 +25,34 @@ export function SignUpForm({
   const [phone_number, setPhoneNumber] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+  const router = useRouter();
 
+  // Simulate login request (replace with API call)
+  // Similar to Login component, but hardcoded routes.
   const handleSubmit = async (event: React.FormEvent) => {
-    const webService = new WebService();
     event.preventDefault(); // Prevent page reload
 
-    // Simulate login request (replace with API call)
-    // Similar to Login component, but hardcoded routes.
-    const url = webService.AUTH_STUDENT_REGISTER;
-    const nnnext = "/studentHome";
-
-    let resp;
     try {
-      resp = await apiPOST(
-        url,
-        JSON.stringify({
+      const res = await fetch("/api/register", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
           first_name,
           last_name,
           phone_number,
           email,
           password,
         }),
-      );
-      if (resp.success) {
-        window.location.replace(nnnext);
+      });
+
+      if (res.ok) {
+        router.refresh();
       } else {
-        console.error("Login failed");
+        const data = await res.text();
+        setError(data || "Registration failed");
       }
     } catch (e) {
       // (axios issues... i cant attach a catch to this call directly so i need to try/catch)
@@ -147,6 +148,7 @@ export function SignUpForm({
               <Button type="submit" className="w-full">
                 Sign-Up
               </Button>
+              {error && <p className="text-red-500">{error}</p>}
             </div>
           </form>
         </CardContent>

@@ -115,6 +115,9 @@ export class ReviewsService {
     if (typeof updateReviewDto.overall_score !== 'undefined') {
       review.overall_score = updateReviewDto.overall_score;
     }
+    if (typeof updateReviewDto.liked !== 'undefined') {
+      review.liked = updateReviewDto.liked;
+    }
 
     if (
       updateReviewDto.review_metrics &&
@@ -183,4 +186,13 @@ export class ReviewsService {
     void this.applicationRepository.save(review.application);
     return this.reviewRepository.save(review);
   }
+
+  async updateLikeStatus(reviewId: number, liked: boolean) {
+    const review = await this.reviewRepository.findOneBy({ review_id: reviewId });
+    if (!review) throw new NotFoundException('Review not found');
+  
+    review.liked = liked;
+    return await this.reviewRepository.save(review);
+  }
+  
 }
