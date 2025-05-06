@@ -1,34 +1,21 @@
-// __tests__/(student)/createApplication.spec.tsx
+// __tests__/(student)/createApplicants.spec.tsx
 
 import React from 'react';
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { render, screen, waitFor, fireEvent } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import CreateApplication from '@/app/(student)/createApplicants/page';
 import { apiGET, apiPOST } from '@/api/apiMethods';
 import WebService from '@/api/WebService';
 
-// Stub ApplicationCard to inspect props and drive callbacks
+let capturedOnSubmit: (() => void) | null = null;
+let capturedOnUpload: ((file: File, applicationId?: number) => void) | null = null;
+
 jest.mock('@/components/ApplicationCard', () => {
-  return (props: React.ComponentProps<typeof import('@/components/ApplicationCard').default>) => (
-    <div data-testid="card" data-props={JSON.stringify(props)}>
-      {props.isSubmitted ? 'SUBMITTED' : 'CREATE'}
-      {props.successMessage && <p>{props.successMessage}</p>}
-      <button data-testid="submit" onClick={props.onSubmit}>
-        Submit
-      </button>
-      <button
-        data-testid="upload"
-        onClick={() =>
-          props.onUpload?.(
-            new File([], 'report.pdf', { type: 'application/pdf' }),
-            props.applicationId
-          )
-        }
-      >
-        Upload
-      </button>
-    </div>
-  );
+  return (props: any) => {
+    capturedOnSubmit = props.onSubmit;
+    capturedOnUpload = props.onUpload;
+    return <div data-testid="card" data-props={JSON.stringify(props)} />;
+  };
 });
 
 jest.mock('@/api/apiMethods', () => ({
@@ -47,7 +34,7 @@ describe('CreateApplication page', () => {
     jest.spyOn(window, 'alert').mockImplementation();
   });
 
-  it('fetchApplications success & renders cards', async () => {
+  it('fetchApplications success & renders 2 cards', async () => {
     (apiGET as jest.Mock).mockResolvedValue({
       success: true,
       payload: [
@@ -56,27 +43,24 @@ describe('CreateApplication page', () => {
     });
 
     render(<CreateApplication />);
-    await waitFor(() =>
-      expect(apiGET).toHaveBeenCalledWith(GET_URL, '42')
-    );
+    await waitFor(() => expect(apiGET).toHaveBeenCalledWith(GET_URL, '42'));
 
     const cards = await screen.findAllByTestId('card');
     expect(cards).toHaveLength(2);
+
     const props = JSON.parse(cards[1].getAttribute('data-props')!);
     expect(props.successMessage).toBe('Application to ECE - PhD');
   });
 
   it('fetchApplications failure logs error & shows only create card', async () => {
-    const err = jest.spyOn(console, 'error').mockImplementation();
+    const errSpy = jest.spyOn(console, 'error').mockImplementation();
     (apiGET as jest.Mock).mockResolvedValue({ success: false, error: 'nope' });
 
     render(<CreateApplication />);
     await waitFor(() =>
-      expect(err).toHaveBeenCalledWith(
-        'GET_STUDENT_APPLICATIONS error:',
-        'nope'
-      )
+      expect(errSpy).toHaveBeenCalledWith('GET_STUDENT_APPLICATIONS error:', 'nope')
     );
+
     expect(screen.getAllByTestId('card')).toHaveLength(1);
   });
 
@@ -92,7 +76,8 @@ describe('CreateApplication page', () => {
     (apiPOST as jest.Mock).mockResolvedValue({ success: true, payload: { application_id: 99 } });
 
     render(<CreateApplication />);
-    fireEvent.click(await screen.findByTestId('submit'));
+    expect(capturedOnSubmit).toBeDefined();
+    capturedOnSubmit!();
 
     expect(apiPOST).toHaveBeenCalledWith(
       CREATE_URL,
@@ -100,33 +85,32 @@ describe('CreateApplication page', () => {
     );
 
     await waitFor(() => expect(screen.getAllByTestId('card')).toHaveLength(2));
-    expect(
-      screen.getByText(
-        'Application submitted successfully! You may now upload documents.'
-      )
-    ).toBeVisible();
+    const cards = screen.getAllByTestId('card');
+    const successProps = JSON.parse(cards[0].getAttribute('data-props')!);
+    expect(successProps.successMessage).toBe(
+      'Application submitted successfully! You may now upload documents.'
+    );
   });
 
-  it('handleSubmit failure logs error and does not add card', async () => {
+  it('handleSubmit failure logs error only', async () => {
     (apiGET as jest.Mock).mockResolvedValue({ success: true, payload: [] });
     (apiPOST as jest.Mock).mockResolvedValue({ success: false, error: 'fail!' });
-    const err = jest.spyOn(console, 'error').mockImplementation();
+    const errSpy = jest.spyOn(console, 'error').mockImplementation();
 
     render(<CreateApplication />);
-    fireEvent.click(await screen.findByTestId('submit'));
+    expect(capturedOnSubmit).toBeDefined();
+    capturedOnSubmit!();
 
     await waitFor(() =>
-      expect(err).toHaveBeenCalledWith(
-        'Error creating review:',
-        'fail!'
-      )
+      expect(errSpy).toHaveBeenCalledWith('Error creating review:', 'fail!')
     );
     expect(screen.getAllByTestId('card')).toHaveLength(1);
   });
 
   describe('handleFileUpload paths', () => {
     beforeEach(() => {
-      (global.fetch as jest.Mock) = jest.fn();
+      jest.spyOn(window, 'alert').mockImplementation();
+      (global.fetch as any) = jest.fn();
     });
 
     it('uploads PDF successfully after submit', async () => {
@@ -142,14 +126,18 @@ describe('CreateApplication page', () => {
       (global.fetch as jest.Mock).mockResolvedValue({ ok: true, json: async () => ({}) });
 
       render(<CreateApplication />);
-      fireEvent.click(await screen.findByTestId('submit'));
+      expect(capturedOnSubmit).toBeDefined();
+      capturedOnSubmit!();
+
       await waitFor(() => expect(screen.getAllByTestId('card')).toHaveLength(2));
 
-      const uploadBtn = screen.getAllByTestId('upload')[1];
-      fireEvent.click(uploadBtn);
+      const file = new File([], 'doc.pdf', { type: 'application/pdf' });
+      expect(capturedOnUpload).toBeDefined();
+      capturedOnUpload!(file, 5);
+
       expect(global.fetch).toHaveBeenCalledWith(
         DOC_URL,
-        expect.objectContaining({ method: 'POST', body: expect.any(FormData) })
+        expect.objectContaining({ body: expect.any(FormData), method: 'POST' })
       );
       await waitFor(() =>
         expect(window.alert).toHaveBeenCalledWith('Document uploaded successfully!')
@@ -166,14 +154,21 @@ describe('CreateApplication page', () => {
           ],
         });
       (apiPOST as jest.Mock).mockResolvedValue({ success: true, payload: { application_id: 5 } });
-      (global.fetch as jest.Mock).mockResolvedValue({ ok: false, json: async () => ({ message: 'oops' }) });
+      (global.fetch as jest.Mock).mockResolvedValue({
+        ok: false,
+        json: async () => ({ message: 'oops' }),
+      });
 
       render(<CreateApplication />);
-      fireEvent.click(await screen.findByTestId('submit'));
+      expect(capturedOnSubmit).toBeDefined();
+      capturedOnSubmit!();
+
       await waitFor(() => expect(screen.getAllByTestId('card')).toHaveLength(2));
 
-      const uploadBtn = screen.getAllByTestId('upload')[1];
-      fireEvent.click(uploadBtn);
+      const file = new File([], 'doc.pdf', { type: 'application/pdf' });
+      expect(capturedOnUpload).toBeDefined();
+      capturedOnUpload!(file, 5);
+
       await waitFor(() =>
         expect(window.alert).toHaveBeenCalledWith('Upload failed: oops')
       );
@@ -192,15 +187,17 @@ describe('CreateApplication page', () => {
       (global.fetch as jest.Mock).mockRejectedValue(new Error('network'));
 
       render(<CreateApplication />);
-      fireEvent.click(await screen.findByTestId('submit'));
+      expect(capturedOnSubmit).toBeDefined();
+      capturedOnSubmit!();
+
       await waitFor(() => expect(screen.getAllByTestId('card')).toHaveLength(2));
 
-      const uploadBtn = screen.getAllByTestId('upload')[1];
-      fireEvent.click(uploadBtn);
+      const file = new File([], 'doc.pdf', { type: 'application/pdf' });
+      expect(capturedOnUpload).toBeDefined();
+      capturedOnUpload!(file, 7);
+
       await waitFor(() =>
-        expect(window.alert).toHaveBeenCalledWith(
-          'Unexpected error occurred during upload.'
-        )
+        expect(window.alert).toHaveBeenCalledWith('Unexpected error occurred during upload.')
       );
     });
   });
