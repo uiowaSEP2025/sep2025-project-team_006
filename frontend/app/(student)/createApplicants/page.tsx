@@ -5,7 +5,7 @@ import { apiGET, apiPOST } from "@/api/apiMethods";
 import Link from "next/link";
 import ApplicationCard from "@/components/ApplicationCard";
 import { Button } from "@/components/ui/button";
-import React, { useRef } from "react";
+import React from "react";
 import { useState } from "react";
 import { useEffect } from "react";
 
