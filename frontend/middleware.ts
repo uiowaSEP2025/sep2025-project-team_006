@@ -15,6 +15,9 @@ export const redirects: Record<string, { out: string | null, student: string | n
     "/metricSetting": { out: "/", student: "/faculty", faculty: null },
     "/studentList": { out: "/", student: "/faculty", faculty: null },
     "/studentList/application": { out: "/", student: "/faculty", faculty: null },
+    "/reviewedApplicants": { out: "/", student: "/faculty", faculty: null },
+    "/reviewedApplicants/application": { out: "/", student: "/faculty", faculty: null },
+    "/createApplicants": { out: "/", student: null, faculty: "/students" },
 };
 
 export async function middleware(req: NextRequest) {

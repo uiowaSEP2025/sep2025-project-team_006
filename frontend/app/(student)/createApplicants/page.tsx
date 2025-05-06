@@ -5,9 +5,17 @@ import { apiGET, apiPOST } from "@/api/apiMethods";
 import Link from "next/link";
 import ApplicationCard from "@/components/ApplicationCard";
 import { Button } from "@/components/ui/button";
-import React, { useRef } from "react";
+import React from "react";
 import { useState } from "react";
 import { useEffect } from "react";
+
+interface Application {
+  application_id: number;
+  department: string;
+  degree_program: string;
+  submission_date: string;
+}
+
 
 export default function CreateApplication() {
     const[isSubmitted, setSubmit] = useState<boolean>(false);
@@ -16,7 +24,7 @@ export default function CreateApplication() {
     const [degreeProgram, setDegreeProgram] = useState("");
     const [studentID, setStudentId] = useState("");
     const [appId, setAppId] = useState<number | null>(null);
-    const [applications, setApplications] = useState<any[]>([]);
+    const [applications, setApplications] = useState<Application[]>([]);
     const webService = new WebService();
 
     useEffect(() => {
