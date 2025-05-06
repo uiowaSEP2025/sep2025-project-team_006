@@ -16,6 +16,7 @@ import { MetricResponse } from "@/types/MetricData";
 import React from "react";
 import { loadQsRankings } from "@/utils/qsRanking";
 import LikeButton from "@/components/LikeButton";
+import { ApplicationData } from "@/types/ApplicationData";
 
 interface DocumentInfo {
   document_id: string | null;
@@ -24,9 +25,11 @@ interface DocumentInfo {
 
 export default function StudentPageContent() {
   const searchParams = useSearchParams();
-  const studentId = searchParams.get("id"); // will be a string or null
+  const applicationId = searchParams.get("id"); // will be a string or null
   const webService = new WebService();
+
   const [studentData, setStudentData] = useState<StudentData | null>(null);
+  const [applicationData, setApplicationData] = useState<ApplicationData | null>();
   const [currentDocIndex, setCurrentDocIndex] = useState<number>(0);
   const [documentList, setDocumentList] = useState<DocumentInfo[]>([]);
   const [reviewMetrics, setReviewMetrics] = useState<MetricResponse[]>([]);
@@ -63,43 +66,46 @@ export default function StudentPageContent() {
   useEffect(() => {
     const id = (window.__USER__?.id + "") || "";
     setFacultyId(id);
+    if (!applicationId) return;
 
-    if (!studentId) return;
     const fetchStudentInfo = async (student_id: string) => {
       try {
-        const response = await apiGET(
-          webService.STUDENTS_APPLICANT_INFO,
-          student_id,
+        const appResponse = await apiGET(
+          webService.APPLICATION_GET,
+          applicationId,
         );
-        if (response.success) {
-          setStudentData(response.payload);
-          console.log("Showing review with payload:", response.payload);
-          const applications = response.payload.applications;
-          //const department = applications?.[0]?.department || "";
-          const docs = applications?.[0]?.documents || [];
-          const formattedDocs = docs.map((doc: DocumentInfo) => ({
-            document_id: String(doc.document_id),
-            document_type: String(doc.document_type),
-          }));
-          //setDepartment(department);
-          setDocumentList([...formattedDocs]);
-        } else {
-          console.error("STUDENTS_APPLICANT_INFO error:", response.error);
-        }
+        if (!appResponse.success) return console.error("APPLICATION_GET error:", appResponse.error);
+
+        const app = appResponse.payload;
+        setApplicationData(app);
+        setStudentData(app.student);
+        //const apps = response.payload.applications || [];
+        //setDepartment(app.department || "");
+        //setStudentData(app.student);
+        console.log("Showing review with payload:", appResponse.payload);
+        
+        const docs = app.documents || [];
+        const formattedDocs = docs.map((doc: DocumentInfo) => ({
+          document_id: String(doc.document_id),
+          document_type: String(doc.document_type),
+        }));
+        //setDepartment(department);
+        setDocumentList([...formattedDocs]);
       } catch (error) {
         console.error("An unexpected error occurred:", error);
       }
     };
 
-    fetchStudentInfo(studentId);
-  }, [studentId, webService.STUDENTS_APPLICANT_INFO]);
+    fetchStudentInfo(applicationId);
+  }, [applicationId, webService.APPLICATION_GET]);
 
   /**
    * Fetches any of the reviews the faculty has left previously (if any)
    */
   useEffect(() => {
-    if (!studentData || !studentData.applications?.length) return;
-    const applicationId = studentData.applications[0].application_id;
+    if (!applicationData) return;
+    const applicationId = applicationData.application_id;
+
     const fetchReviewMetrics = async () => {
       try {
         const response = await apiDoubleIdGET(
