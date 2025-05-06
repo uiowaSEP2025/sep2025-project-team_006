@@ -26,17 +26,20 @@ export default function LikeButton({
 
   useEffect(() => {
     setLiked(initialLiked);
-  }, [initialLiked]);  
+  }, [initialLiked]);
 
   const toggleLike = async () => {
     console.log("Toggling like...");
     setLoading(true);
     try {
-    console.log("Final PUT URL:", updateUrl.replace(":id", reviewId.toString()));
+      console.log(
+        "Final PUT URL:",
+        updateUrl.replace(":id", reviewId.toString()),
+      );
       const res = await apiPUT(
         updateUrl,
         reviewId.toString(),
-        JSON.stringify({ liked: !liked })
+        JSON.stringify({ liked: !liked }),
       );
       if (res.success) {
         const newLiked = !liked;
@@ -59,7 +62,7 @@ export default function LikeButton({
       className={cn(
         "p-2 rounded-full transition-colors",
         liked ? "text-red-500" : "text-gray-400",
-        className
+        className,
       )}
       title={liked ? "Unlike" : "Like"}
     >

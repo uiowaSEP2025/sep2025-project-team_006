@@ -25,7 +25,6 @@ import {
 } from "@/components/ui/pagination";
 import { Check, ChevronUp, ChevronDown } from "lucide-react";
 
-
 export default function StudentList() {
   const router = useRouter();
   const webService = new WebService();
@@ -38,7 +37,7 @@ export default function StudentList() {
   const itemsPerPage = 5;
 
   useEffect(() => {
-    const id = (window.__USER__?.id + "") || "";
+    const id = window.__USER__?.id + "" || "";
     const fetchApplicants = async () => {
       try {
         const response = await apiGET(webService.REVIEW_SUBMITTED, id);
@@ -170,7 +169,9 @@ export default function StudentList() {
           <PaginationItem>
             <PaginationPrevious
               onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
-              className={currentPage === 1 ? "pointer-events-none opacity-50" : ""}
+              className={
+                currentPage === 1 ? "pointer-events-none opacity-50" : ""
+              }
             />
           </PaginationItem>
 
@@ -196,13 +197,14 @@ export default function StudentList() {
                 setCurrentPage((prev) => Math.min(prev + 1, totalPages))
               }
               className={
-                currentPage === totalPages ? "pointer-events-none opacity-50" : ""
+                currentPage === totalPages
+                  ? "pointer-events-none opacity-50"
+                  : ""
               }
             />
           </PaginationItem>
         </PaginationContent>
       </Pagination>
-
 
       <Button asChild>
         <Link href="/facultyHome">Return to Home</Link>
