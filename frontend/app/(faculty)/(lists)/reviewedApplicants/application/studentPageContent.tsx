@@ -80,6 +80,7 @@ export default function StudentPageContent() {
 
         const app = appResponse.payload;
         setApplicationData(app);
+        app.student.standardized_gpa ??= 0;
         setStudentData(app.student);
         //const apps = response.payload.applications || [];
         //setDepartment(app.department || "");
