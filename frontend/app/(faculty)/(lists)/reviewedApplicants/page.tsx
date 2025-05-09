@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useState, useMemo } from "react";
-import ProfileList from "@/components/ProfileList";
+import ProfileList, { Profile } from "@/components/ProfileList";
 import WebService from "@/api/WebService";
 import { apiGET } from "@/api/apiMethods";
 import { Button } from "@/components/ui/button";
@@ -25,18 +25,6 @@ import {
 } from "@/components/ui/pagination";
 import { Check, ChevronUp, ChevronDown } from "lucide-react";
 
-interface Profile {
-  id: number; //corresponds to student_id
-  name: string; //corresponds to full_name
-  status: string;
-  department: string;
-  degree_program: string;
-  image: string;
-  isReview: boolean;
-  reviewScore: number | null;
-  liked: boolean;
-}
-
 export default function StudentList() {
   const router = useRouter();
   const webService = new WebService();
@@ -49,7 +37,7 @@ export default function StudentList() {
   const itemsPerPage = 5;
 
   useEffect(() => {
-    const id = (window.__USER__?.id + "") || "";
+    const id = window.__USER__?.id + "" || "";
     const fetchApplicants = async () => {
       try {
         const response = await apiGET(webService.REVIEW_SUBMITTED, id);
@@ -62,6 +50,7 @@ export default function StudentList() {
               return {
                 //id: applicant.application_id,
                 id: applicant.student.student_id,
+                app_id: applicant.application_id,
                 name: `${applicant.student.first_name} ${applicant.student.last_name}`,
                 status: applicant.status,
                 department: applicant.department,
@@ -85,7 +74,7 @@ export default function StudentList() {
   }, [webService.REVIEW_SUBMITTED]);
 
   const handleProfileClick = (profile: Profile) => {
-    router.push(`/reviewedApplicants/application?id=${profile.id}`);
+    router.push(`/reviewedApplicants/application?id=${profile.app_id}`);
   };
 
   // Filtered and paginated profiles
@@ -180,7 +169,9 @@ export default function StudentList() {
           <PaginationItem>
             <PaginationPrevious
               onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
-              className={currentPage === 1 ? "pointer-events-none opacity-50" : ""}
+              className={
+                currentPage === 1 ? "pointer-events-none opacity-50" : ""
+              }
             />
           </PaginationItem>
 
@@ -206,13 +197,14 @@ export default function StudentList() {
                 setCurrentPage((prev) => Math.min(prev + 1, totalPages))
               }
               className={
-                currentPage === totalPages ? "pointer-events-none opacity-50" : ""
+                currentPage === totalPages
+                  ? "pointer-events-none opacity-50"
+                  : ""
               }
             />
           </PaginationItem>
         </PaginationContent>
       </Pagination>
-
 
       <Button asChild>
         <Link href="/facultyHome">Return to Home</Link>

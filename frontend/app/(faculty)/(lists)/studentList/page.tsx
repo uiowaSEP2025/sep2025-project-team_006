@@ -2,7 +2,7 @@
 
 import React from "react";
 import { useEffect, useState, useMemo } from "react";
-import ProfileList from "@/components/ProfileList";
+import ProfileList, { Profile } from "@/components/ProfileList";
 import WebService from "@/api/WebService";
 import { apiGET } from "@/api/apiMethods";
 import { useRouter } from "next/navigation";
@@ -26,18 +26,6 @@ import {
 } from "@/components/ui/pagination";
 import { Check, ChevronUp, ChevronDown } from "lucide-react";
 
-interface Profile {
-  id: number; //corresponds to student_id
-  name: string; //corresponds to full_name
-  status: string;
-  department: string;
-  degree_program: string;
-  image: string;
-  isReview: boolean;
-  reviewScore: number | null;
-  liked: boolean;
-}
-
 export default function Home() {
   const router = useRouter();
   const webService = new WebService();
@@ -50,7 +38,7 @@ export default function Home() {
   const itemsPerPage = 5;
 
   useEffect(() => {
-    const id = (window.__USER__?.id + "") || "";
+    const id = window.__USER__?.id + "" || "";
     const fetchApplicants = async () => {
       try {
         const response = await apiGET(webService.STUDENTS_APPLICANT_LIST);
@@ -68,26 +56,31 @@ export default function Home() {
 
           console.log("Reviewed: ", reviewedIds);
 
-          const fetchedProfiles: Profile[] = response.payload.filter(
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            (applicant: any) => !reviewedIds.has(applicant.application_id))
+          const fetchedProfiles: Profile[] = response.payload
+            .filter(
+              // eslint-disable-next-line @typescript-eslint/no-explicit-any
+              (applicant: any) => !reviewedIds.has(applicant.application_id),
+            )
             .map(
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            (applicant: any) => ({
-              id: applicant.student_id,
-              name: applicant.full_name,
-              status: applicant.status,
-              department: applicant.department,
-              degree_program: applicant.degree_program,
-              image: "/defaultpfp.jpeg",
-              isReview: false,
-              reviewScore: null,
-              liked: reviewedResponse.payload.find(
-                // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                (r: any) => r.application.application_id === applicant.application_id
-              )?.liked ?? false,
-            }),
-          );
+              // eslint-disable-next-line @typescript-eslint/no-explicit-any
+              (applicant: any) => ({
+                id: applicant.student_id,
+                app_id: applicant.application_id,
+                name: applicant.full_name,
+                status: applicant.status,
+                department: applicant.department,
+                degree_program: applicant.degree_program,
+                image: "/defaultpfp.jpeg",
+                isReview: false,
+                reviewScore: null,
+                liked:
+                  reviewedResponse.payload.find(
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    (r: any) =>
+                      r.application.application_id === applicant.application_id,
+                  )?.liked ?? false,
+              }),
+            );
           setProfiles(fetchedProfiles);
         } else {
           console.log("GET error: ", response.error);
@@ -100,7 +93,7 @@ export default function Home() {
   }, [webService.STUDENTS_APPLICANT_LIST, webService.REVIEW_SUBMITTED]);
 
   const handleProfileClick = (profile: Profile) => {
-    router.push(`/studentList/application?id=${profile.id}`);
+    router.push(`/studentList/application?id=${profile.app_id}`);
   };
 
   // Filtered and paginated profiles
@@ -117,7 +110,7 @@ export default function Home() {
         case "degree":
           return p.degree_program.toLowerCase().includes(query);
         //case "liked":
-          //return p.liked === true;
+        //return p.liked === true;
         default:
           return true;
       }
@@ -195,7 +188,9 @@ export default function Home() {
           <PaginationItem>
             <PaginationPrevious
               onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
-              className={currentPage === 1 ? "pointer-events-none opacity-50" : ""}
+              className={
+                currentPage === 1 ? "pointer-events-none opacity-50" : ""
+              }
             />
           </PaginationItem>
 
@@ -221,13 +216,14 @@ export default function Home() {
                 setCurrentPage((prev) => Math.min(prev + 1, totalPages))
               }
               className={
-                currentPage === totalPages ? "pointer-events-none opacity-50" : ""
+                currentPage === totalPages
+                  ? "pointer-events-none opacity-50"
+                  : ""
               }
             />
           </PaginationItem>
         </PaginationContent>
       </Pagination>
-
 
       <Button asChild>
         <Link href="/facultyHome">Return to Home</Link>

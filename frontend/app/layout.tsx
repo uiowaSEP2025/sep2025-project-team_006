@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { cookies } from "next/headers";
-import { CookiesProvider } from 'next-client-cookies/server';
+import { CookiesProvider } from "next-client-cookies/server";
 import { unstable_noStore } from "next/cache";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
@@ -55,7 +55,7 @@ export default async function RootLayout({
 }>) {
   // this supposedly forces rerendering of the page, which is required
   // as we want to inject the user info on every load.
-  // that said, i do not think it does anything. frustrating. 
+  // that said, i do not think it does anything. frustrating.
   unstable_noStore();
 
   const cookieStore = await cookies();
@@ -65,47 +65,45 @@ export default async function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <UserContextProvider user={await getUserInfo()}>
-        <CookiesProvider>
+          <CookiesProvider>
+            <header className="bg-black text-[#F1BE48] h-20 text-4xl px-6 sm:px-12 py-4 flex justify-between items-center">
+              <Link href={"/"}>
+                <Image
+                  src={gapOffical}
+                  alt="GAP Official logo"
+                  width={48}
+                  height={48}
+                  className="h-12 w-auto"
+                />
+              </Link>
+              <div className="flex items-center space-x-6">
+                <span>Graduate Admission Portal</span>
+                {(cookieStore.get("gap_token") ||
+                  cookieStore.get("gap_session")) && <LogoutButton />}
+              </div>
+            </header>
 
-        <header className="bg-black text-[#F1BE48] h-20 text-4xl px-6 sm:px-12 py-4 flex justify-between items-center">
-          <Link href={"/"}>
-          <Image
-            src={gapOffical}
-            alt="GAP Official logo"
-            width={48}
-            height={48}
-            className="h-12 w-auto"
-          />
-          </Link>
-          <div className="flex items-center space-x-6">
-            <span>Graduate Admission Portal</span>
-            {(cookieStore.get("gap_token") || cookieStore.get("gap_session")) && (
-              <LogoutButton />
-            )}
-          </div>
-        </header>
+            {children}
 
-        {children}
-        
-        <footer className="bg-black text-[#F1BE48] h-20 text-4xl px-6 sm:px-12 py-4 flex justify-between items-center">
-          <Image
-            src={iowaBlackLogo}
-            alt="Iowa Logo"
-            width={48}
-            height={48}
-            className="h-12 w-auto"
-          />
-          <div className="flex items-center space-x-4">
-            <Image
-              src={tigerHawk}
-              alt="Tiger Hawk"
-              width={48}
-              height={48}
-              className="h-12 w-auto"
-            />
-          </div>
-        </footer>
-        </CookiesProvider>
+            <footer className="bg-black text-[#F1BE48] h-20 text-4xl px-6 sm:px-12 py-4 flex justify-between items-center">
+              <Image
+                src={iowaBlackLogo}
+                alt="Iowa Logo"
+                width={48}
+                height={48}
+                className="h-12 w-auto"
+              />
+              <div className="flex items-center space-x-4">
+                <Image
+                  src={tigerHawk}
+                  alt="Tiger Hawk"
+                  width={48}
+                  height={48}
+                  className="h-12 w-auto"
+                />
+              </div>
+            </footer>
+          </CookiesProvider>
         </UserContextProvider>
       </body>
     </html>

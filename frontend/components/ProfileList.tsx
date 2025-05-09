@@ -1,9 +1,10 @@
 import React from "react";
 import Image from "next/image";
 
-interface Profile {
-  id: number;
-  name: string;
+export interface Profile {
+  id: number; //corresponds to student_id
+  app_id: number;
+  name: string; //corresponds to full_name
   status: string;
   department: string;
   degree_program: string;

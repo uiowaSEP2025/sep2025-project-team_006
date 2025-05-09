@@ -16,6 +16,7 @@ import { MetricResponse } from "@/types/MetricData";
 import React from "react";
 import { loadQsRankings } from "@/utils/qsRanking";
 import LikeButton from "@/components/LikeButton";
+import { ApplicationData } from "@/types/ApplicationData";
 
 interface DocumentInfo {
   document_id: string | null;
@@ -24,9 +25,12 @@ interface DocumentInfo {
 
 export default function StudentPageContent() {
   const searchParams = useSearchParams();
-  const studentId = searchParams.get("id"); // will be a string or null
+  const applicationId = searchParams.get("id"); // will be a string or null
   const webService = new WebService();
+
   const [studentData, setStudentData] = useState<StudentData | null>(null);
+  const [applicationData, setApplicationData] =
+    useState<ApplicationData | null>();
   const [currentDocIndex, setCurrentDocIndex] = useState<number>(0);
   const [documentList, setDocumentList] = useState<DocumentInfo[]>([]);
   const [reviewMetrics, setReviewMetrics] = useState<MetricResponse[]>([]);
@@ -38,12 +42,12 @@ export default function StudentPageContent() {
   //const [department, setDepartment] = useState<string>("");
   const [faculty_id, setFacultyId] = useState<string>("");
   const [reviewScores, setReviewScores] = useState<{
-      overall_score: number | null;
-      faculty_score: number | null;
-    }>({
-      overall_score: null,
-      faculty_score: null,
-    });
+    overall_score: number | null;
+    faculty_score: number | null;
+  }>({
+    overall_score: null,
+    faculty_score: null,
+  });
 
   const [qsRankings, setQsRankings] = useState<Record<string, string>>({});
 
@@ -61,45 +65,49 @@ export default function StudentPageContent() {
    * Calls the student applicant information
    */
   useEffect(() => {
-    const id = (window.__USER__?.id + "") || "";
+    const id = window.__USER__?.id + "" || "";
     setFacultyId(id);
+    if (!applicationId) return;
 
-    if (!studentId) return;
-    const fetchStudentInfo = async (student_id: string) => {
+    const fetchStudentInfo = async (application_id: string) => {
       try {
-        const response = await apiGET(
-          webService.STUDENTS_APPLICANT_INFO,
-          student_id,
+        const appResponse = await apiGET(
+          webService.APPLICATION_GET,
+          application_id,
         );
-        if (response.success) {
-          setStudentData(response.payload);
-          console.log("Showing review with payload:", response.payload);
-          const applications = response.payload.applications;
-          //const department = applications?.[0]?.department || "";
-          const docs = applications?.[0]?.documents || [];
-          const formattedDocs = docs.map((doc: DocumentInfo) => ({
-            document_id: String(doc.document_id),
-            document_type: String(doc.document_type),
-          }));
-          //setDepartment(department);
-          setDocumentList([...formattedDocs]);
-        } else {
-          console.error("STUDENTS_APPLICANT_INFO error:", response.error);
-        }
+        if (!appResponse.success)
+          return console.error("APPLICATION_GET error:", appResponse.error);
+
+        const app = appResponse.payload;
+        setApplicationData(app);
+        setStudentData(app.student);
+        //const apps = response.payload.applications || [];
+        //setDepartment(app.department || "");
+        //setStudentData(app.student);
+        console.log("Showing review with payload:", appResponse.payload);
+
+        const docs = app.documents || [];
+        const formattedDocs = docs.map((doc: DocumentInfo) => ({
+          document_id: String(doc.document_id),
+          document_type: String(doc.document_type),
+        }));
+        //setDepartment(department);
+        setDocumentList([...formattedDocs]);
       } catch (error) {
         console.error("An unexpected error occurred:", error);
       }
     };
 
-    fetchStudentInfo(studentId);
-  }, [studentId, webService.STUDENTS_APPLICANT_INFO]);
+    fetchStudentInfo(applicationId);
+  }, [applicationId, webService.APPLICATION_GET]);
 
   /**
    * Fetches any of the reviews the faculty has left previously (if any)
    */
   useEffect(() => {
-    if (!studentData || !studentData.applications?.length) return;
-    const applicationId = studentData.applications[0].application_id;
+    if (!applicationData) return;
+    const applicationId = applicationData.application_id;
+
     const fetchReviewMetrics = async () => {
       try {
         const response = await apiDoubleIdGET(
@@ -122,12 +130,13 @@ export default function StudentPageContent() {
           setLiked(response.payload.liked ?? false);
           setReviewId(response.payload.review_id);
 
-          const facultyScore = calculateFacultyScore(response.payload.review_metrics);
+          const facultyScore = calculateFacultyScore(
+            response.payload.review_metrics,
+          );
           setReviewScores({
             overall_score: response.payload.overall_score,
             faculty_score: facultyScore,
-          })
-
+          });
         } else {
           console.error("Error fetching review metrics: ", response.error);
         }
@@ -136,25 +145,29 @@ export default function StudentPageContent() {
       }
     };
     fetchReviewMetrics();
-  }, [studentData, webService.REVIEW_METRICS_FOR_FACULTY, faculty_id]);
+  }, [
+    studentData,
+    applicationData,
+    webService.REVIEW_METRICS_FOR_FACULTY,
+    faculty_id,
+  ]);
 
   const calculateFacultyScore = (metrics: MetricResponse[]): number => {
     if (!metrics || metrics.length === 0) return 0;
-  
+
     let faculty_score = 0;
     for (const metric of metrics) {
       faculty_score += metric.selected_weight * metric.value;
     }
-  
+
     faculty_score = (faculty_score / 5) * 100;
-    return Math.trunc(faculty_score)
+    return Math.trunc(faculty_score);
   };
 
   /**
    * Save all review updates by sending the current comments and metrics back to the server.
    * This function acts as our overall save call.
    */
-
 
   return (
     <div className="flex w-full h-screen">
@@ -191,7 +204,8 @@ export default function StudentPageContent() {
       <div className="w-1/2 h-full p-6 overflow-auto">
         <div className="p-6">
           <h1 className="text-2xl font-bold mb-4">
-            Reviewed Application for {studentData?.first_name} {studentData?.last_name}
+            Reviewed Application for {studentData?.first_name}{" "}
+            {studentData?.last_name}
           </h1>
 
           {(studentData?.original_gpa !== undefined ||
@@ -242,22 +256,22 @@ export default function StudentPageContent() {
               />
               <div className="mt-6 mb-4">
                 <h3 className="text-lg font-semibold mb-2">Score Breakdown:</h3>
-                  <div className="p-4 border rounded-lg shadow-sm bg-gray-50">
-                    <p className="font-medium">Overall Score</p>
-                    <p className="text-xl font-bold text-black">
-                      {reviewScores.overall_score !== null
+                <div className="p-4 border rounded-lg shadow-sm bg-gray-50">
+                  <p className="font-medium">Overall Score</p>
+                  <p className="text-xl font-bold text-black">
+                    {reviewScores.overall_score !== null
                       ? reviewScores.overall_score.toFixed(2)
                       : "—"}
-                    </p>
-                  </div>
-                  <div className="p-4 border rounded-lg shadow-sm bg-gray-50">
-                    <p className="font-medium">Faculty Score</p>
-                    <p className="text-xl font-bold text-red-800">
-                      {reviewScores.faculty_score !== null
+                  </p>
+                </div>
+                <div className="p-4 border rounded-lg shadow-sm bg-gray-50">
+                  <p className="font-medium">Faculty Score</p>
+                  <p className="text-xl font-bold text-red-800">
+                    {reviewScores.faculty_score !== null
                       ? reviewScores.faculty_score.toFixed(2)
                       : "—"}
-                    </p>
-                  </div>
+                  </p>
+                </div>
               </div>
 
               <div className="gap-6 mb-4 mt-4">
@@ -277,9 +291,10 @@ export default function StudentPageContent() {
                   updateUrl={webService.REVIEW_LIKE_TOGGLE}
                   onToggle={(newLiked) => setLiked(newLiked)}
                 />
-                <span className="ml-2 text-sm text-gray-600">Mark as Liked</span>
+                <span className="ml-2 text-sm text-gray-600">
+                  Mark as Liked
+                </span>
               </div>
-
             </>
           )}
           <div className="w-48 flex flex-col gap-2">

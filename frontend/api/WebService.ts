@@ -25,17 +25,19 @@ export default class WebService {
   STUDENTS_APPLICANT_LIST = `${this.serverUrl}/api/students/applicants`; // GET
   STUDENTS_APPLICANT_INFO = `${this.serverUrl}/api/students/:id`; // GET
   CREATE_APPLICATION = `${this.serverUrl}/api/applications`; //POST
-  GET_STUDENT_APPLICATIONS = `${this.serverUrl}/api/students/applications/:id` //GET
+  GET_STUDENT_APPLICATIONS = `${this.serverUrl}/api/students/applications/:id`; //GET
   APPLICATION_DOCUMENT_GET = `${this.serverUrl}/api/documents/:id`; // GET
   APPLICATION_DOCUMENT_POST = `${this.serverUrl}/api/documents`; // POST
+  APPLICATION_GET = `${this.serverUrl}/api/applications/:id`;
   // These might have to change slightly for the template migration
   REVIEW_CREATE_POST = `${this.serverUrl}/api/reviews`; // POST
   REVIEW_UPDATE_PUT = `${this.serverUrl}/api/reviews/:id`; // PUT
   REVIEW_SUBMIT = `${this.serverUrl}/api/reviews/:id/submit`; // PUT
   REVIEW_METRICS_FOR_FACULTY = `${this.serverUrl}/api/reviews/metrics/app/:id1/faculty/:id2`; // GET
   REVIEW_SUBMITTED = `${this.serverUrl}/api/reviews/submitted/:id`; // GET
-  REVIEW_GET_SCORES = `${this.serverUrl}/api/reviews/:id/scores`
+  REVIEW_GET_SCORES = `${this.serverUrl}/api/reviews/:id/scores`;
   REVIEW_LIKE_TOGGLE = `${this.serverUrl}/api/reviews/:id/like`; // PUT
+  REVIEW_GET_FOR = `${this.serverUrl}/api/reviews/for/:id`;
   TEMPLATE = `${this.serverUrl}/api/templates`; // POST, GET
   TEMPLATE_GET_BY_DEPARTMENT = `${this.serverUrl}/api/templates/department/:id`; // GET, unused
   TEMPLATE_BY_ID = `${this.serverUrl}/api/templates/:id`; // GET, PUT, DELETE

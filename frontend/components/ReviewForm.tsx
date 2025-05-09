@@ -7,7 +7,11 @@ interface ReviewFormProps {
   isReview: boolean;
 }
 
-const ReviewForm: React.FC<ReviewFormProps> = ({ metrics, onChangeMetric, isReview }) => {
+const ReviewForm: React.FC<ReviewFormProps> = ({
+  metrics,
+  onChangeMetric,
+  isReview,
+}) => {
   const [localMetrics, setLocalMetrics] = useState<MetricResponse[]>(metrics);
 
   // Update local state when the incoming metrics prop changes.

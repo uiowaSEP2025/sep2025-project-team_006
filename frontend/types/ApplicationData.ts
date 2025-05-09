@@ -1,4 +1,6 @@
 import { DocumentData } from "./DocumentData";
+import { StudentData } from "./StudentData";
+import { ReviewData } from "./ReviewData";
 
 export interface ApplicationData {
   application_id: number;
@@ -6,5 +8,7 @@ export interface ApplicationData {
   submission_date: Date;
   department: string;
   degree_program: string;
-  documents: DocumentData[];
+  student: StudentData | undefined;
+  documents: DocumentData[] | undefined;
+  reviews: ReviewData[] | undefined;
 }
