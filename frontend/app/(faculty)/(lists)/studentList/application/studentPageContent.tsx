@@ -85,6 +85,7 @@ export default function StudentPageContent() {
 
         const app = appResponse.payload;
         setApplicationData(app);
+        app.student.standardized_gpa ??= 0;
         setStudentData(app.student);
         //const apps = response.payload.applications || [];
         setDepartment(app.department || "");
@@ -289,7 +290,6 @@ export default function StudentPageContent() {
           <h1 className="text-2xl font-bold mb-4">
             Review for {studentData?.first_name} {studentData?.last_name}
           </h1>
-
           {(studentData?.original_gpa !== undefined ||
             studentData?.standardized_gpa !== undefined ||
             studentData?.school) && (
